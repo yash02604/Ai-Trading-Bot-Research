@@ -1,0 +1,49 @@
+{
+  "manifest_sha256": "0140d29d72cab03a2fc2239997b9e35c748db27d2324798cced7749a8dd5f991",
+  "generated_utc": "2026-10-18T18:50:43.369118+00:00",
+  "classification_scope": "NSE CM timestamp/session/coverage only; does not authenticate feed values",
+  "results": [
+    {
+      "input": "data\\research\\extended_historical_robustness_candles.csv",
+      "timestamp_convention": "start",
+      "rows": 518570,
+      "classifications": {
+        "VERIFIED_VALID": 518570
+      },
+      "coverage_days": 6972,
+      "coverage_invalid_days": 15
+    },
+    {
+      "input": "data\\research\\extended_historical_robustness_candles.csv",
+      "timestamp_convention": "end",
+      "rows": 518570,
+      "classifications": {
+        "VERIFIED_VALID": 511585,
+        "VERIFIED_INVALID": 6985
+      },
+      "coverage_days": 6972,
+      "coverage_invalid_days": 6972
+    },
+    {
+      "input": "data\\research\\extended_historical_robustness_oos_candles.csv",
+      "timestamp_convention": "start",
+      "rows": 217350,
+      "classifications": {
+        "VERIFIED_VALID": 217350
+      },
+      "coverage_days": 2898,
+      "coverage_invalid_days": 0
+    },
+    {
+      "input": "data\\research\\extended_historical_robustness_oos_candles.csv",
+      "timestamp_convention": "end",
+      "rows": 217350,
+      "classifications": {
+        "VERIFIED_VALID": 214452,
+        "VERIFIED_INVALID": 2898
+      },
+      "coverage_days": 2898,
+      "coverage_invalid_days": 2898
+    }
+  ]
+}

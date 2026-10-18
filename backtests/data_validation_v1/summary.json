@@ -1,6 +1,6 @@
 {
-  "manifest_sha256": "0140d29d72cab03a2fc2239997b9e35c748db27d2324798cced7749a8dd5f991",
-  "generated_utc": "2026-10-18T18:50:43.369118+00:00",
+  "manifest_sha256": "2ac081ab4ad4e07891ae10727c2d9247f3ed3f55b329274a933aade491d56e16",
+  "generated_utc": "2026-10-18T18:55:35.846278+00:00",
   "classification_scope": "NSE CM timestamp/session/coverage only; does not authenticate feed values",
   "results": [
     {

@@ -76,6 +76,14 @@ def test_missing_manifest_and_unknown_manifest_status_fail_closed():
     assert result.rows.classification.iloc[0] == "UNRESOLVED"
 
 
+def test_session_with_unregistered_source_fails_closed():
+    altered = json.loads(json.dumps(MANIFEST))
+    session = next(x for x in altered["sessions"] if x["date"] == "2025-02-03")
+    session["source_ids"] = ["not-in-source-register"]
+    result = validate_frame(frame(["2025-02-03T09:15:00+05:30"]), altered, timestamp_convention="start")
+    assert result.rows.classification.iloc[0] == "UNRESOLVED"
+    assert result.rows.reason.iloc[0] == "timestamp_or_manifest_unverified"
+    assert result.coverage.empty
 def test_unknown_label_convention_fails_closed():
     result = validate_frame(frame(["2025-02-03T09:15:00+05:30"]), MANIFEST, timestamp_convention=None)
     assert result.rows.classification.iloc[0] == "UNRESOLVED"

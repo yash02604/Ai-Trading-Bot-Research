@@ -40,6 +40,20 @@ def _labels(interval: dict, convention: str, minutes: int) -> set[datetime]:
     raise ValueError("timestamp_convention must be 'start', 'end', or None")
 
 
+def _session_has_trusted_sources(day: dict[str, Any], manifest: dict[str, Any]) -> bool:
+    sources = manifest.get("sources", [])
+    source_map = {item.get("source_id"): item for item in sources if isinstance(item, dict) and item.get("source_id")}
+    source_ids = day.get("source_ids")
+    if not isinstance(source_ids, list) or not source_ids or any(source_id not in source_map for source_id in source_ids):
+        return False
+    session_date = day.get("date", "")
+    for source_id in source_ids:
+        source = source_map[source_id]
+        bounds = source.get("effective_dates", "").split("/")
+        if not source.get("url") or len(bounds) not in (1, 2) or (session_date != bounds[0] if len(bounds) == 1 else not (bounds[0] <= session_date <= bounds[1])):
+            return False
+    return True
+
 def validate_frame(frame: pd.DataFrame, manifest: dict[str, Any], *, instrument: str | None = None,
                    timestamp_convention: str | None = None, interval_minutes: int = 5) -> AuditResult:
     """Classify input rows and expected coverage, without authenticating feed values."""
@@ -64,7 +78,7 @@ def validate_frame(frame: pd.DataFrame, manifest: dict[str, Any], *, instrument:
             continue
         day = records[day_value]
         idx = list(indices)
-        if day.get("verification_status") != "VERIFIED" or day.get("session_type") == "UNRESOLVED":
+        if day.get("verification_status") != "VERIFIED" or day.get("session_type") == "UNRESOLVED" or not _session_has_trusted_sources(day, manifest):
             continue
         mask = valid_clock.loc[idx]
         eligible = [i for i in idx if mask.loc[i]]
@@ -103,7 +117,7 @@ def validate_frame(frame: pd.DataFrame, manifest: dict[str, Any], *, instrument:
             for day_value, day in records.items():
                 if day_value < first_day or day_value > last_day:
                     continue
-                if day.get("verification_status") != "VERIFIED" or day.get("session_type") in ("HOLIDAY", "WEEKEND_CLOSED", "UNRESOLVED"):
+                if day.get("verification_status") != "VERIFIED" or day.get("session_type") in ("HOLIDAY", "WEEKEND_CLOSED", "UNRESOLVED") or not _session_has_trusted_sources(day, manifest):
                     continue
                 expected = set()
                 for interval in day.get("normal_market_intervals", []):

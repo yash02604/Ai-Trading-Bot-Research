@@ -24,6 +24,7 @@ class RiskLimits:
     min_holding_bars: int = 1
     max_holding_bars: int = 12
     max_data_age_seconds: int = 300
+    entry_slippage_bps: float = 5.0
 
     def __post_init__(self):
         for field_name in ("max_risk_per_trade", "max_allocation", "max_daily_loss"):
@@ -38,6 +39,8 @@ class RiskLimits:
             raise ValueError("target or holding limits are invalid")
         if self.max_data_age_seconds <= 0:
             raise ValueError("max_data_age_seconds must be positive")
+        if not math.isfinite(self.entry_slippage_bps) or self.entry_slippage_bps < 0:
+            raise ValueError("entry_slippage_bps must be finite and non-negative")
 
 
 @dataclass
@@ -123,8 +126,9 @@ class SafetyGate:
             return GateResult(False, "BUY requires finite entry, stop, and target")
         if entry <= 0 or not 0 < stop < entry or target <= entry:
             return GateResult(False, "BUY has invalid stop/target direction")
-        stop_pct = (entry - stop) / entry * 100
-        target_pct = (target - entry) / entry * 100
+        estimated_entry = entry * (1 + self.limits.entry_slippage_bps / 10_000)
+        stop_pct = (estimated_entry - stop) / estimated_entry * 100
+        target_pct = (target - estimated_entry) / estimated_entry * 100
         if not self.limits.min_stop_distance_pct <= stop_pct <= self.limits.max_stop_distance_pct:
             return GateResult(False, "stop distance is outside configured bounds")
         if target_pct > self.limits.max_target_distance_pct:
@@ -138,14 +142,19 @@ class SafetyGate:
         if len(self.state.open_positions) >= self.limits.max_open_positions:
             return GateResult(False, "maximum open positions reached")
         risk_budget = self.state.capital * self.limits.max_risk_per_trade
-        allocation_cap = self.state.capital * self.limits.max_allocation
-        risk_qty = math.floor(risk_budget / (entry - stop))
-        allocation_qty = math.floor(allocation_cap / entry)
+        used_allocation = sum(
+            float(position.get("allocation", position.get("quantity", 0) * position.get("entry_price", 0)))
+            for position in self.state.open_positions.values()
+        )
+        available_capital = max(0.0, self.state.capital - used_allocation)
+        allocation_cap = min(self.state.capital * self.limits.max_allocation, available_capital)
+        risk_qty = math.floor(risk_budget / (estimated_entry - stop))
+        allocation_qty = math.floor(allocation_cap / estimated_entry)
         quantity = min(risk_qty, allocation_qty)
         if quantity < 1:
             return GateResult(False, "risk or allocation limits do not permit one share")
-        allocation = quantity * entry
-        planned_risk = quantity * (entry - stop)
+        allocation = quantity * estimated_entry
+        planned_risk = quantity * (estimated_entry - stop)
         self.state.seen_signal_ids.add(signal_id)
         return GateResult(True, "BUY approved by independent Python risk gate", quantity, allocation, planned_risk)
 

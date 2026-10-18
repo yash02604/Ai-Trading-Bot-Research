@@ -51,8 +51,12 @@ class V2AuditLedger:
     def close(self):
         self.db.close()
 
-    def append_decision(self, signal_id: str, recorded_at: str, envelope, gate_result) -> bool:
-        payload = _safe_payload({"envelope": envelope, "risk_result": gate_result, "paper_only": True})
+    def append_decision(self, signal_id: str, recorded_at: str, envelope, gate_result,
+                        final_decision: str | None = None) -> bool:
+        recommendation = envelope.recommendation.action.value
+        final_decision = final_decision or (recommendation if gate_result.approved else "HOLD")
+        payload = _safe_payload({"envelope": envelope, "risk_result": gate_result,
+                                 "final_decision": final_decision, "paper_only": True})
         try:
             self.db.execute("INSERT INTO decisions VALUES(?,?,?)", (signal_id, recorded_at, payload))
             self.db.commit()

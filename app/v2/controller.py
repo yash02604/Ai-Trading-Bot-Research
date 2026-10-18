@@ -16,6 +16,7 @@ class DuplicateDecisionError(RuntimeError):
 class EvaluationResult:
     envelope: object
     risk_result: object
+    final_decision: str
     paper_result: dict | None
 
 
@@ -31,7 +32,8 @@ class V2ResearchController:
         envelope = self.service.decide(request, now=now)
         risk = self.gate.approve(request, envelope.recommendation, now=now, signal_id=signal_id)
         recorded = now.isoformat()
-        if not self.audit.append_decision(signal_id, recorded, envelope, risk):
+        final_decision = envelope.recommendation.action.value if risk.approved else "HOLD"
+        if not self.audit.append_decision(signal_id, recorded, envelope, risk, final_decision):
             raise DuplicateDecisionError("signal has already been recorded")
         paper_result = None
         recommendation = envelope.recommendation
@@ -48,4 +50,4 @@ class V2ResearchController:
                     reference_exit=recommendation.entry_price, recorded_at=now,
                     exit_reason="AI_EXIT",
                 )
-        return EvaluationResult(envelope, risk, paper_result)
+        return EvaluationResult(envelope, risk, final_decision, paper_result)

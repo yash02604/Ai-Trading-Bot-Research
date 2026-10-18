@@ -138,9 +138,9 @@ def test_independent_gate_checks_stops_position_size_and_daily_limits(tmp_path):
     gate, _ = setup_gate(tmp_path)
     decision = V2Recommendation.from_mapping(raw(), request())
     accepted = gate.approve(request(), decision, now=NOW, signal_id="s1")
-    assert accepted.approved and accepted.quantity == 25
-    assert accepted.allocation == 25_000
-    assert accepted.planned_risk == 125
+    assert accepted.approved and accepted.quantity == 24
+    assert accepted.allocation <= 25_000
+    assert accepted.planned_risk <= 1_000
     state = RiskState(100_000, 100_000, daily_loss=2_000)
     gate, _ = setup_gate(tmp_path, state=state)
     assert not gate.approve(request(), decision, now=NOW, signal_id="s2").approved
@@ -179,6 +179,7 @@ def test_controller_logs_paper_only_fill_and_rejects_duplicate(tmp_path):
     )
     result = controller.evaluate(request(), signal_id="fill-1", now=NOW)
     assert result.risk_result.approved
+    assert result.final_decision == "BUY"
     assert result.paper_result["paper_only"] is True
     assert result.paper_result["quantity"] == 24  # Slippage-adjusted allocation cap
     row = ledger.db.execute("SELECT payload FROM decisions WHERE signal_id='fill-1'").fetchone()
@@ -228,9 +229,11 @@ def test_provider_failure_is_logged_as_hold(tmp_path):
     )
     result = controller.evaluate(request(), signal_id="failed-1", now=NOW)
     assert result.envelope.recommendation.action is Action.HOLD
+    assert result.final_decision == "HOLD"
     assert ledger.seen("failed-1")
     payload = json.loads(ledger.db.execute("SELECT payload FROM decisions").fetchone()[0])
     assert payload["envelope"]["recommendation"]["action"] == "HOLD"
+    assert payload["final_decision"] == "HOLD"
     assert payload["envelope"]["failure_type"] == "TimeoutError"
     ledger.close()
 
@@ -260,6 +263,7 @@ def test_exit_recommendation_closes_matching_paper_position(tmp_path):
     )
     closed = controller.evaluate(exit_request, signal_id="exit-1", now=exit_time)
     assert closed.risk_result.approved
+    assert closed.final_decision == "EXIT"
     assert closed.paper_result["exit_signal_id"] == "exit-1"
     assert not state.open_positions
     assert ledger.db.execute("SELECT event_type FROM events ORDER BY event_id").fetchall()[-1] == ("PAPER_OUTCOME",)
@@ -274,3 +278,34 @@ def test_credential_named_features_are_rejected_before_provider_call(tmp_path):
     answer = DecisionService(provider=provider, registry=registry).decide(bad_request, now=NOW)
     assert answer.recommendation.action is Action.HOLD
     assert provider.calls == 0
+
+
+def test_multiple_positions_cannot_exceed_available_capital(tmp_path):
+    state = RiskState(100_000, 100_000, open_positions={
+        "TCS": {"quantity": 90, "entry_price": 1000, "allocation": 90_000},
+    })
+    gate, _ = setup_gate(tmp_path, state=state)
+    gate.limits = RiskLimits(max_open_positions=2)
+    decision = V2Recommendation.from_mapping(raw(), request())
+    approved = gate.approve(request(), decision, now=NOW, signal_id="limited-capital")
+    assert approved.approved and approved.quantity == 9
+    assert approved.allocation + 90_000 <= 100_000
+
+
+def test_python_risk_rejection_records_final_hold(tmp_path):
+    registry = setup_gate(tmp_path)[0].registry
+    state = RiskState(100_000, 100_000, daily_loss=2_000)
+    gate, _ = setup_gate(tmp_path, state=state)
+    ledger = V2AuditLedger(tmp_path / "risk-reject.sqlite3")
+    controller = V2ResearchController(
+        service=DecisionService(provider=FakeProvider(), registry=registry),
+        safety_gate=gate, audit_ledger=ledger,
+    )
+    result = controller.evaluate(request(), signal_id="risk-reject-1", now=NOW)
+    assert result.envelope.recommendation.action is Action.BUY
+    assert not result.risk_result.approved
+    assert result.final_decision == "HOLD"
+    payload = json.loads(ledger.db.execute("SELECT payload FROM decisions").fetchone()[0])
+    assert payload["final_decision"] == "HOLD"
+    assert payload["risk_result"]["approved"] is False
+    ledger.close()

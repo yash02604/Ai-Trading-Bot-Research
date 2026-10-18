@@ -15,6 +15,8 @@ class PaperOnlyExecutor:
         self.state = risk_state
         self.limits = limits or RiskLimits()
         self.costs = cost_assumptions or CostAssumptions()
+        if self.costs.slippage_bps_per_side != self.limits.entry_slippage_bps:
+            raise ValueError("paper slippage must match the independently approved risk assumption")
         self.open_positions: dict[str, dict] = {}
 
     def open_position(self, *, signal_id: str, decision, gate_result: GateResult,
@@ -26,8 +28,17 @@ class PaperOnlyExecutor:
         reference = float(decision.entry_price)
         fill = reference * (1 + self.costs.slippage_bps_per_side / 10_000)
         stop = float(decision.stop_loss)
+        stop_pct = (fill - stop) / fill * 100 if fill > stop else math.inf
+        if not self.limits.min_stop_distance_pct <= stop_pct <= self.limits.max_stop_distance_pct:
+            raise ValueError("slippage-adjusted stop is outside configured bounds")
+        used_allocation = sum(
+            float(position.get("allocation", position.get("quantity", 0) * position.get("entry_price", 0)))
+            for position in self.state.open_positions.values()
+        )
+        available_capital = max(0.0, self.state.capital - used_allocation)
+        allocation_cap = min(self.state.capital * self.limits.max_allocation, available_capital)
         risk_qty = math.floor(self.state.capital * self.limits.max_risk_per_trade / (fill - stop)) if fill > stop else 0
-        allocation_qty = math.floor(self.state.capital * self.limits.max_allocation / fill)
+        allocation_qty = math.floor(allocation_cap / fill)
         quantity = min(gate_result.quantity, risk_qty, allocation_qty)
         if quantity < 1:
             raise ValueError("slippage-adjusted paper fill violates risk/allocation limits")
@@ -41,7 +52,10 @@ class PaperOnlyExecutor:
             "gross_pnl": None, "estimated_costs": None, "net_pnl": None,
         }
         self.open_positions[signal_id] = position
-        self.state.open_positions[decision.symbol] = {"signal_id": signal_id, "quantity": quantity}
+        self.state.open_positions[decision.symbol] = {
+            "signal_id": signal_id, "quantity": quantity, "entry_price": fill,
+            "allocation": quantity * fill,
+        }
         self.state.trades_today += 1
         self.audit.append_event(signal_id, "PAPER_FILL", recorded_at.isoformat(), position)
         return dict(position)

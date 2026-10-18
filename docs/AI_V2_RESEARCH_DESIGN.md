@@ -18,7 +18,7 @@ Status: implementation interface only; no V2 backtest, provider call, or runner 
 - Prompt: `ai-led-v2.1`
 - Configuration: `ai-v2-risk-2026-10-18.1`
 - Default max risk per trade: 1% of current capital
-- Default max allocation: 25% of current capital
+- Default max allocation: 25% of current capital per position, further capped by unallocated portfolio capital
 - Default daily loss limit: 2% of day-start capital
 - Default maximum positions/trades per day: 1 / 3
 - Default stop distance: 0.05%–1.00%; target distance at most 5%; holding horizon 1–12 bars

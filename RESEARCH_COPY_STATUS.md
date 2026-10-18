@@ -13,7 +13,7 @@ The Stage A audit found a `.venv` directory in this copy, contrary to the origin
 
 No persistent SQLite database was copied. The SQLite ledger defaults to this copy's `logs/paper_state.sqlite3`; that directory was not copied and any future runtime state will be created under this research copy. Python sources contain no hard-coded path to the original checkout. Some research outputs are relative to the working directory, so run future research only with this directory as the working directory and inspect each script's output path first.
 
-The original virtual environment was not copied because it may contain machine-specific paths. To recreate it later from this directory, run:
+The present `.venv` is machine-local and excluded from Git. If it is removed or unusable, recreate it from this directory with:
 
 ```powershell
 python -m venv .venv
@@ -21,4 +21,4 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ```
 
-No dependencies were installed and no runner, market API, or historical analysis was started for this copy. Keep the project paper-only; real broker order placement, modification, and cancellation must remain disabled. Passing tests or matching historical reports does not establish profitability.
+No dependencies were installed and no runner, market API, or historical analysis was started for this copy during Stage A/B. Git was initialized in this research copy only; `.env`, `.venv`, logs, large raw equity candle CSVs, duplicate raw snapshot data, and `complete.json` are ignored. Existing research files and reports remain on disk. Keep the project paper-only; real broker order placement, modification, and cancellation must remain disabled. Passing tests or matching historical reports does not establish profitability.

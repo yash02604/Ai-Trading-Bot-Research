@@ -1,0 +1,2 @@
+trade_count,iterations,random_seed,probability_positive_pct,median_cumulative_pnl,percentile_5_cumulative_pnl,percentile_95_cumulative_pnl,mean_cumulative_pnl
+19,100000,20261007,4.654,-3314.404097476621,-6747.997347507402,-63.0957918549483,-3353.1905829056436

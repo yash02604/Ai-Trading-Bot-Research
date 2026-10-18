@@ -1,0 +1,12 @@
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+logs/
+.pytest_cache/
+.pytest-*-tmp/
+complete.json
+data/research/*.csv
+scripts/data/research/**/*.csv
+backtests/boundary_correction_review/**/workspace/data/

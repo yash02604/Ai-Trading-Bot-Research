@@ -1,0 +1,42 @@
+[
+  {
+    "path": "VALIDATION_REPORT.md",
+    "sha256": "C10FC74BDF3E148D80B386380E8C17797F7D43B6C11AF4FD7C23350E31F42968",
+    "bytes": 12176
+  },
+  {
+    "path": "backtests\\validation\\VALIDATION_REPORT.md",
+    "sha256": "C10FC74BDF3E148D80B386380E8C17797F7D43B6C11AF4FD7C23350E31F42968",
+    "bytes": 12176
+  },
+  {
+    "path": "backtests\\validation\\summary.json",
+    "sha256": "461742BB9118448050298568AE46A661FA88C77EE33F73FB10E5B10172C284F6",
+    "bytes": 69471
+  },
+  {
+    "path": "backtests\\validation\\metrics.csv",
+    "sha256": "6DB4FDC0467F7C2285F3B74D2D8CBD196BE69B7E63A33C7A0E9B13089AA23758",
+    "bytes": 28285
+  },
+  {
+    "path": "backtests\\validation\\signal_counts.csv",
+    "sha256": "E0DF3B69272ADA2C96BAB0BA1E083509F94B5123B8728CF653BEFF631FA6038C",
+    "bytes": 1141
+  },
+  {
+    "path": "backtests\\validation\\trades.csv",
+    "sha256": "2E9011ED7AAE0F131B17DEAF1F8F9E4836EFB94E0556FB361B672322C7BE6DB1",
+    "bytes": 54045
+  },
+  {
+    "path": "backtests\\validation\\dataset_audit.json",
+    "sha256": "254F317BCCDD66EFD50244A91063FC69CDA962275DAF9D5694F17159917AA90F",
+    "bytes": 1483
+  },
+  {
+    "path": "data\\research\\extended_historical_robustness_candles.csv",
+    "sha256": "30924B7F53E295DE813B859BC81998E196D9EE33CDE64EE83D94585911100065",
+    "bytes": 47032720
+  }
+]

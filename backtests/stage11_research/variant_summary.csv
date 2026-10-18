@@ -1,0 +1,16 @@
+category,variant,development_trades,development_net_pnl,walk_forward_finalist,walk_forward_folds_tested,walk_forward_trades,walk_forward_net_pnl,positive_walk_forward_folds,net_pnl_per_trade
+exit,baseline_stop_1pct_h6,13,-5328.920137324521,True,4,18,-4347.1893249612385,1,-241.51051805340214
+exit,target_1_5R_h6,13,-4608.702353651149,True,4,18,-4347.1893249612385,1,-241.51051805340214
+exit,target_2R_h6,13,-5328.920137324521,False,0,0,0.0,0,
+exit,target_3R_h6,13,-5328.920137324521,False,0,0,0.0,0,
+exit,trailing_1R_activate_h24,13,-6744.1800818304,False,0,0,0.0,0,
+exit,baseline_stop_1pct_h12,13,-7596.749802431826,False,0,0,0.0,0,
+exit,baseline_stop_1pct_h24,13,-8402.12718458724,False,0,0,0.0,0,
+filter,no_filter,13,-5328.920137324521,True,4,18,-4347.1893249612385,1,-241.51051805340214
+filter,atr_at_least_0_5pct,3,-1191.36231036054,False,0,0,0.0,0,
+filter,atr_at_least_1pct,1,-1174.225684527344,False,0,0,0.0,0,
+filter,first_90_minutes,10,-4682.492031069369,True,4,18,-4347.1893249612385,1,-241.51051805340214
+filter,20bar_turnover_at_least_25lakh,13,-5328.920137324521,False,0,0,0.0,0,
+filter,combined_predeclared_filters,1,-536.4894088352024,False,0,0,0.0,0,
+strategy,15m_frozen_reversal,12,-4152.741294782328,True,4,12,-6105.930298173589,0,-508.8275248477991
+strategy,5m_opening_range_breakout,663,-75627.95730683114,False,0,0,0.0,0,

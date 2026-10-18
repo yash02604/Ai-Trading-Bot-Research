@@ -1,0 +1,62 @@
+{
+  "source": "C:\\Users\\Priyanka\\Desktop\\ai-trading-bot - Copy\\ai-tarding-assistant\\backtests\\boundary_correction_review\\corrected\\workspace\\data\\research\\extended_historical_robustness_candles.csv",
+  "raw_rows": 518570,
+  "valid_rows": 518567,
+  "invalid_rows_excluded": 3,
+  "invalid_row_details": [
+    {
+      "symbol": "BHARTIARTL",
+      "timestamp": "2024-06-25 09:15:00+05:30",
+      "reason": "invalid_ohlc_or_volume"
+    },
+    {
+      "symbol": "HDFCBANK",
+      "timestamp": "2024-06-25 09:15:00+05:30",
+      "reason": "invalid_ohlc_or_volume"
+    },
+    {
+      "symbol": "ICICIBANK",
+      "timestamp": "2024-06-25 09:15:00+05:30",
+      "reason": "invalid_ohlc_or_volume"
+    }
+  ],
+  "duplicate_rows": 0,
+  "zero_volume_rows_retained": 4,
+  "unknown_symbols_ignored": [],
+  "symbols": [
+    "AXISBANK",
+    "BHARTIARTL",
+    "HDFCBANK",
+    "ICICIBANK",
+    "INFY",
+    "ITC",
+    "KOTAKBANK",
+    "LT",
+    "MARUTI",
+    "RELIANCE",
+    "SBIN",
+    "SUNPHARMA",
+    "TCS",
+    "TITAN"
+  ],
+  "timeframe_minutes": 5,
+  "start": "2023-12-01T09:15:00+05:30",
+  "end": "2025-12-01T15:25:00+05:30",
+  "candles_by_symbol": {
+    "AXISBANK": 37041,
+    "BHARTIARTL": 37040,
+    "HDFCBANK": 37040,
+    "ICICIBANK": 37040,
+    "INFY": 37041,
+    "ITC": 37037,
+    "KOTAKBANK": 37041,
+    "LT": 37041,
+    "MARUTI": 37041,
+    "RELIANCE": 37041,
+    "SBIN": 37041,
+    "SUNPHARMA": 37041,
+    "TCS": 37041,
+    "TITAN": 37041
+  },
+  "same_day_gaps_over_5m": 28
+}

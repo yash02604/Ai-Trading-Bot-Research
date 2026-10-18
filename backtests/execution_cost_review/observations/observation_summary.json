@@ -1,0 +1,45 @@
+{
+  "observations": 0,
+  "unique_signals": 0,
+  "collection_start": null,
+  "collection_end": null,
+  "valid_quotes": 0,
+  "valid_quote_rate": null,
+  "missing_quotes": 0,
+  "missing_quote_rate": null,
+  "quotes_with_spread": 0,
+  "spread_available_rate": null,
+  "provider_response_age_ms": {
+    "median": null,
+    "p95": null
+  },
+  "spread_bps": {
+    "median": null,
+    "p95": null
+  },
+  "bid_depth_missing": 0,
+  "ask_depth_missing": 0,
+  "bid_quantity": {
+    "median": null,
+    "p95": null
+  },
+  "ask_quantity": {
+    "median": null,
+    "p95": null
+  },
+  "ask_vs_reference_bps": {
+    "median": null,
+    "p95": null
+  },
+  "ask_quantity_sufficiency": {
+    "comparable_observations": 0,
+    "sufficient": 0,
+    "insufficient": 0
+  },
+  "paper_entry_eligible": 0,
+  "paper_entry_eligibility_rate": null,
+  "source_quote_timestamp_available": 0,
+  "quote_reasons": {},
+  "eligibility_reasons": {},
+  "timestamp_note": "quote_age_ms uses Upstox's response-generated timestamp; source order-book age is not exposed by this endpoint."
+}

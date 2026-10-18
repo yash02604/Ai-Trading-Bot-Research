@@ -1,0 +1,12 @@
+symbol,signal_timestamp,entry_timestamp,context_veto,baseline_status,baseline_rejection_reason,baseline_net_pnl,baseline_exit_reason,baseline_trade_index
+INFY,2025-12-23 09:25:00+05:30,2025-12-23 09:30:00+05:30,True,accepted,,-134.59857231998907,horizon_exit,1.0
+BHARTIARTL,2026-03-04 09:20:00+05:30,2026-03-04 09:25:00+05:30,True,accepted,,470.9938480267976,horizon_exit,7.0
+TCS,2026-03-09 09:20:00+05:30,2026-03-09 09:25:00+05:30,True,accepted,,-305.57893949919287,horizon_exit,8.0
+SBIN,2026-04-30 09:25:00+05:30,2026-04-30 09:30:00+05:30,True,accepted,,19.39944883998365,horizon_exit,15.0
+MARUTI,2026-07-13 09:20:00+05:30,2026-07-13 09:25:00+05:30,True,accepted,,-414.81228604800003,horizon_exit,23.0
+AXISBANK,2026-07-22 09:20:00+05:30,2026-07-22 09:25:00+05:30,True,accepted,,-254.3035872752,horizon_exit,24.0
+SUNPHARMA,2026-07-22 09:25:00+05:30,2026-07-22 09:30:00+05:30,True,risk_rejected,maximum_open_positions,,,
+BHARTIARTL,2026-07-24 09:20:00+05:30,2026-07-24 09:25:00+05:30,True,accepted,,-875.87297304,horizon_exit,25.0
+SUNPHARMA,2026-07-31 14:40:00+05:30,2026-07-31 14:45:00+05:30,True,accepted,,323.7329699687957,horizon_exit,26.0
+HDFCBANK,2026-08-27 09:25:00+05:30,2026-08-27 09:30:00+05:30,True,accepted,,-83.91797963680901,horizon_exit,27.0
+ITC,2026-09-02 09:20:00+05:30,2026-09-02 09:25:00+05:30,True,accepted,,383.89352740360414,horizon_exit,28.0

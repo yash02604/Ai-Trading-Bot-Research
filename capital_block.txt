@@ -1,0 +1,14 @@
+        # Cannot execute fractional/zero shares.
+        if quantity <= 0:
+            print(
+                f"SKIPPED CAPITAL | "
+                f"{row['signal_timestamp']} | "
+                f"{row['symbol']} | "
+                f"Entry={entry_price:.2f} | "
+                f"Portfolio={portfolio:.2f} | "
+                f"Risk/share={risk_per_share:.2f} | "
+                f"RiskQty={risk_quantity} | "
+                f"CapitalQty={capital_quantity} | "
+                f"Stop={stop_pct:.2f}%"
+            )
+            continue

@@ -1,0 +1,5 @@
+analysis_type,category,variant,cost_multiplier,trades,gross_pnl,costs,net_pnl,positive_walk_forward_windows,time_period_or_symbol,win_rate_pct,ci_2_5_pct,ci_97_5_pct,probability_positive_pct,status
+eligibility,all,none,,0,0.0,0.0,0.0,0.0,,,,,,"no candidate passed the preregistered gate: net positive, >=3/4 positive folds, >=30 walk-forward trades"
+existing_stage9_oos_cost_sensitivity,frozen_stage9_baseline_only,stage9_reported_trades,1.0,19,5.180000000008022,3367.47246156808,-3362.2924615680718,,existing OOS artifact; arithmetic sensitivity only,,,,,not a variant test and not used for candidate selection
+existing_stage9_oos_cost_sensitivity,frozen_stage9_baseline_only,stage9_reported_trades,1.5,19,5.180000000008022,5051.20869235212,-5046.028692352113,,existing OOS artifact; arithmetic sensitivity only,,,,,not a variant test and not used for candidate selection
+existing_stage9_oos_cost_sensitivity,frozen_stage9_baseline_only,stage9_reported_trades,2.0,19,5.180000000008022,6734.94492313616,-6729.764923136152,,existing OOS artifact; arithmetic sensitivity only,,,,,not a variant test and not used for candidate selection

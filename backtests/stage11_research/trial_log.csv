@@ -1,0 +1,39 @@
+trial_id,category,variant,variant_count_in_category,split,role,trades,net_pnl,finalist_selected_on_development,holdout_status
+1,exit,baseline_stop_1pct_h6,7,development_2023_2024,development,13,-5328.920137324521,True,NOT RUN: no uncontaminated holdout in available history
+2,exit,target_1_5R_h6,7,development_2023_2024,development,13,-4608.702353651149,True,NOT RUN: no uncontaminated holdout in available history
+3,exit,target_2R_h6,7,development_2023_2024,development,13,-5328.920137324521,False,NOT RUN: no uncontaminated holdout in available history
+4,exit,target_3R_h6,7,development_2023_2024,development,13,-5328.920137324521,False,NOT RUN: no uncontaminated holdout in available history
+5,exit,trailing_1R_activate_h24,7,development_2023_2024,development,13,-6744.1800818304,False,NOT RUN: no uncontaminated holdout in available history
+6,exit,baseline_stop_1pct_h12,7,development_2023_2024,development,13,-7596.749802431826,False,NOT RUN: no uncontaminated holdout in available history
+7,exit,baseline_stop_1pct_h24,7,development_2023_2024,development,13,-8402.12718458724,False,NOT RUN: no uncontaminated holdout in available history
+8,exit,baseline_stop_1pct_h6,7,walk_forward_2025_Q1,walk_forward,4,-1765.743756708789,True,NOT RUN: no uncontaminated holdout in available history
+9,exit,baseline_stop_1pct_h6,7,walk_forward_2025_Q2,walk_forward,7,-2192.7082330528606,True,NOT RUN: no uncontaminated holdout in available history
+10,exit,baseline_stop_1pct_h6,7,walk_forward_2025_Q3,walk_forward,5,-401.9778786891918,True,NOT RUN: no uncontaminated holdout in available history
+11,exit,baseline_stop_1pct_h6,7,walk_forward_2025_Q4_partial,walk_forward,2,13.240543489602942,True,NOT RUN: no uncontaminated holdout in available history
+12,exit,target_1_5R_h6,7,walk_forward_2025_Q1,walk_forward,4,-1765.743756708789,True,NOT RUN: no uncontaminated holdout in available history
+13,exit,target_1_5R_h6,7,walk_forward_2025_Q2,walk_forward,7,-2192.7082330528606,True,NOT RUN: no uncontaminated holdout in available history
+14,exit,target_1_5R_h6,7,walk_forward_2025_Q3,walk_forward,5,-401.9778786891918,True,NOT RUN: no uncontaminated holdout in available history
+15,exit,target_1_5R_h6,7,walk_forward_2025_Q4_partial,walk_forward,2,13.240543489602942,True,NOT RUN: no uncontaminated holdout in available history
+16,filter,no_filter,6,development_2023_2024,development,13,-5328.920137324521,True,NOT RUN: no uncontaminated holdout in available history
+17,filter,atr_at_least_0_5pct,6,development_2023_2024,development,3,-1191.36231036054,False,NOT RUN: no uncontaminated holdout in available history
+18,filter,atr_at_least_1pct,6,development_2023_2024,development,1,-1174.225684527344,False,NOT RUN: no uncontaminated holdout in available history
+19,filter,first_90_minutes,6,development_2023_2024,development,10,-4682.492031069369,True,NOT RUN: no uncontaminated holdout in available history
+20,filter,20bar_turnover_at_least_25lakh,6,development_2023_2024,development,13,-5328.920137324521,False,NOT RUN: no uncontaminated holdout in available history
+21,filter,combined_predeclared_filters,6,development_2023_2024,development,1,-536.4894088352024,False,NOT RUN: no uncontaminated holdout in available history
+22,filter,no_filter,6,walk_forward_2025_Q1,walk_forward,4,-1765.743756708789,True,NOT RUN: no uncontaminated holdout in available history
+23,filter,no_filter,6,walk_forward_2025_Q2,walk_forward,7,-2192.7082330528606,True,NOT RUN: no uncontaminated holdout in available history
+24,filter,no_filter,6,walk_forward_2025_Q3,walk_forward,5,-401.9778786891918,True,NOT RUN: no uncontaminated holdout in available history
+25,filter,no_filter,6,walk_forward_2025_Q4_partial,walk_forward,2,13.240543489602942,True,NOT RUN: no uncontaminated holdout in available history
+26,filter,first_90_minutes,6,walk_forward_2025_Q1,walk_forward,4,-1765.743756708789,True,NOT RUN: no uncontaminated holdout in available history
+27,filter,first_90_minutes,6,walk_forward_2025_Q2,walk_forward,7,-2192.7082330528606,True,NOT RUN: no uncontaminated holdout in available history
+28,filter,first_90_minutes,6,walk_forward_2025_Q3,walk_forward,5,-401.9778786891918,True,NOT RUN: no uncontaminated holdout in available history
+29,filter,first_90_minutes,6,walk_forward_2025_Q4_partial,walk_forward,2,13.240543489602942,True,NOT RUN: no uncontaminated holdout in available history
+30,strategy,15m_frozen_reversal,2,development_2023_2024,development,12,-4152.741294782328,True,NOT RUN: no uncontaminated holdout in available history
+31,strategy,5m_opening_range_breakout,2,development_2023_2024,development,663,-75627.95730683114,False,NOT RUN: no uncontaminated holdout in available history
+32,strategy,15m_frozen_reversal,2,walk_forward_2025_Q1,walk_forward,3,-1679.729189121406,True,NOT RUN: no uncontaminated holdout in available history
+33,strategy,15m_frozen_reversal,2,walk_forward_2025_Q2,walk_forward,6,-3193.379550099801,True,NOT RUN: no uncontaminated holdout in available history
+34,strategy,15m_frozen_reversal,2,walk_forward_2025_Q3,walk_forward,3,-1232.8215589523825,True,NOT RUN: no uncontaminated holdout in available history
+35,strategy,15m_frozen_reversal,2,walk_forward_2025_Q4_partial,walk_forward,0,0.0,True,NOT RUN: no uncontaminated holdout in available history
+36,cost_sensitivity,stage9_reported_trades,1,existing_stage9_oos_baseline,robustness_diagnostic,19,-3362.292461568072,False,NOT RUN
+37,cost_sensitivity,stage9_reported_trades,1,existing_stage9_oos_baseline,robustness_diagnostic,19,-5046.028692352113,False,NOT RUN
+38,cost_sensitivity,stage9_reported_trades,1,existing_stage9_oos_baseline,robustness_diagnostic,19,-6729.764923136152,False,NOT RUN

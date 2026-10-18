@@ -1,0 +1,12 @@
+metric,value
+frozen_reversal_signals,37
+context_vetoed_signals,11
+context_passed_signals,26
+risk_accepted_entries,19
+risk_rejected_signals,7
+data_rejected_signals,0
+ai_confirmed_buy_signals,
+ai_rejected_signals,
+sell_signals,0
+hold_signals,
+ai_replay,unavailable

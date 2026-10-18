@@ -1,0 +1,16 @@
+book,symbol,frozen_reversal_signals,risk_accepted_entries,risk_rejected_signals,data_rejected_signals,ai_confirmed_buy_signals,ai_rejected_signals,sell_signals,hold_signals,ai_replay,risk_rejection_reasons,data_rejection_reasons,frozen_signals,risk_accepted,quantitative_buy_entries,data_rejected,risk_rejected
+portfolio,ALL,58.0,46.0,12.0,0.0,,,0,,unavailable; quantitative/risk backtest is reported independently,{'maximum_open_positions': 12},{},,,,,
+standalone,RELIANCE,,,,,,,0,,,,,3.0,3.0,3.0,0.0,
+standalone,HDFCBANK,,,,,,,0,,,,,5.0,4.0,4.0,0.0,1.0
+standalone,ICICIBANK,,,,,,,0,,,,,4.0,4.0,4.0,0.0,
+standalone,INFY,,,,,,,0,,,,,10.0,10.0,10.0,0.0,
+standalone,TCS,,,,,,,0,,,,,9.0,9.0,9.0,0.0,
+standalone,SBIN,,,,,,,0,,,,,1.0,1.0,1.0,0.0,
+standalone,BHARTIARTL,,,,,,,0,,,,,7.0,6.0,6.0,0.0,1.0
+standalone,ITC,,,,,,,0,,,,,2.0,2.0,2.0,0.0,
+standalone,KOTAKBANK,,,,,,,0,,,,,2.0,2.0,2.0,0.0,
+standalone,LT,,,,,,,0,,,,,4.0,4.0,4.0,0.0,
+standalone,AXISBANK,,,,,,,0,,,,,2.0,2.0,2.0,0.0,
+standalone,MARUTI,,,,,,,0,,,,,4.0,4.0,4.0,0.0,
+standalone,SUNPHARMA,,,,,,,0,,,,,3.0,3.0,3.0,0.0,
+standalone,TITAN,,,,,,,0,,,,,2.0,2.0,2.0,0.0,

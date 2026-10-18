@@ -1,0 +1,42 @@
+# AI Trading Assistant - Python dependencies
+# Install with:
+#   python3 -m venv .venv
+#   source .venv/bin/activate
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+
+# --- Trading / broker API ---
+upstox-python-sdk
+
+# --- HTTP / API communication ---
+requests
+httpx
+
+# --- Market data & quantitative analysis ---
+pandas
+numpy
+ta
+
+# --- Backtesting / performance analysis ---
+backtesting
+
+# --- AI / LLM integration ---
+openai
+
+# --- Configuration / environment variables ---
+python-dotenv
+PyYAML
+
+# --- Validation / data models ---
+pydantic
+
+# --- Logging / utilities ---
+tenacity
+
+# --- Testing ---
+pytest
+
+# --- Optional: Jupyter-based research/backtesting ---
+# jupyterlab
+# matplotlib
+# seaborn

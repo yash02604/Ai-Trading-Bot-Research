@@ -1,0 +1,6 @@
+scenario,net_pnl,gross_pnl,total_costs,total_slippage,assumption
+Actual net P&L,-3362.292461568072,5.180000000008022,3367.47246156808,1818.60679,Observed Stage 9 economics
+Gross P&L before costs,5.180000000008022,5.180000000008022,3367.47246156808,1818.60679,Sum of realized gross trade P&L
+Net P&L excluding slippage,-1543.6856715680722,5.180000000008022,3367.47246156808,1818.60679,Actual net plus all recorded slippage
+Net P&L at 50% slippage,-2452.9890665680723,5.180000000008022,3367.47246156808,1818.60679,All non-slippage costs unchanged
+Net P&L at 2x slippage,-5180.899251568072,5.180000000008022,3367.47246156808,1818.60679,All non-slippage costs unchanged

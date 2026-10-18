@@ -1,0 +1,303 @@
+{
+  "baseline_metrics": {
+    "total_trades": 46,
+    "winning_trades": 14,
+    "losing_trades": 32,
+    "breakeven_trades": 0,
+    "win_rate": 0.30434782608695654,
+    "gross_pnl": -2514.1684999999934,
+    "total_estimated_costs": 7994.617588701393,
+    "net_pnl": -10508.786088701385,
+    "profit_factor": 0.37505236732439134,
+    "gross_profit_factor": 0.7854341575571556,
+    "maximum_drawdown_pct": -10.508786088701383
+  },
+  "corrected_metrics": {
+    "total_trades": 46,
+    "winning_trades": 14,
+    "losing_trades": 32,
+    "breakeven_trades": 0,
+    "win_rate": 0.30434782608695654,
+    "gross_pnl": -2514.1684999999934,
+    "total_estimated_costs": 7994.617588701393,
+    "net_pnl": -10508.786088701385,
+    "profit_factor": 0.37505236732439134,
+    "gross_profit_factor": 0.7854341575571556,
+    "maximum_drawdown_pct": -10.508786088701383
+  },
+  "saved_metrics": {
+    "total_trades": 46,
+    "winning_trades": 14,
+    "losing_trades": 32,
+    "breakeven_trades": 0,
+    "win_rate": 0.30434782608695654,
+    "gross_pnl": -2514.1684999999934,
+    "total_estimated_costs": 7994.617588701393,
+    "net_pnl": -10508.786088701385,
+    "profit_factor": 0.37505236732439134,
+    "gross_profit_factor": 0.7854341575571556,
+    "maximum_drawdown_pct": -10.508786088701383
+  },
+  "baseline_trade_rows": 102,
+  "corrected_trade_rows": 102,
+  "trade_rows_identical": true,
+  "signal_count_rows_identical": true,
+  "metrics_rows_identical": true,
+  "baseline_signals": {
+    "frozen_reversal_signals": 58,
+    "risk_accepted_entries": 46,
+    "risk_rejected_signals": 12,
+    "data_rejected_signals": 0,
+    "ai_confirmed_buy_signals": null,
+    "ai_rejected_signals": null,
+    "sell_signals": 0,
+    "hold_signals": null,
+    "ai_replay": "unavailable; quantitative/risk backtest is reported independently",
+    "risk_rejection_reasons": {
+      "maximum_open_positions": 12
+    },
+    "data_rejection_reasons": {},
+    "per_symbol": {
+      "RELIANCE": {
+        "frozen_signals": 3,
+        "risk_rejected": 1,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "HDFCBANK": {
+        "frozen_signals": 5,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "ICICIBANK": {
+        "frozen_signals": 4,
+        "risk_accepted": 3,
+        "quantitative_buy_entries": 3,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "INFY": {
+        "frozen_signals": 10,
+        "risk_accepted": 8,
+        "quantitative_buy_entries": 8,
+        "risk_rejected": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "TCS": {
+        "frozen_signals": 9,
+        "risk_accepted": 7,
+        "quantitative_buy_entries": 7,
+        "risk_rejected": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "SBIN": {
+        "frozen_signals": 1,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "BHARTIARTL": {
+        "frozen_signals": 7,
+        "risk_accepted": 6,
+        "quantitative_buy_entries": 6,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "ITC": {
+        "frozen_signals": 2,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "KOTAKBANK": {
+        "frozen_signals": 2,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "LT": {
+        "frozen_signals": 4,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "AXISBANK": {
+        "frozen_signals": 2,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "MARUTI": {
+        "frozen_signals": 4,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "SUNPHARMA": {
+        "frozen_signals": 3,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "TITAN": {
+        "frozen_signals": 2,
+        "risk_rejected": 1,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      }
+    }
+  },
+  "corrected_signals": {
+    "frozen_reversal_signals": 58,
+    "risk_accepted_entries": 46,
+    "risk_rejected_signals": 12,
+    "data_rejected_signals": 0,
+    "ai_confirmed_buy_signals": null,
+    "ai_rejected_signals": null,
+    "sell_signals": 0,
+    "hold_signals": null,
+    "ai_replay": "unavailable; quantitative/risk backtest is reported independently",
+    "risk_rejection_reasons": {
+      "maximum_open_positions": 12
+    },
+    "data_rejection_reasons": {},
+    "per_symbol": {
+      "RELIANCE": {
+        "frozen_signals": 3,
+        "risk_rejected": 1,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "HDFCBANK": {
+        "frozen_signals": 5,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "ICICIBANK": {
+        "frozen_signals": 4,
+        "risk_accepted": 3,
+        "quantitative_buy_entries": 3,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "INFY": {
+        "frozen_signals": 10,
+        "risk_accepted": 8,
+        "quantitative_buy_entries": 8,
+        "risk_rejected": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "TCS": {
+        "frozen_signals": 9,
+        "risk_accepted": 7,
+        "quantitative_buy_entries": 7,
+        "risk_rejected": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "SBIN": {
+        "frozen_signals": 1,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "BHARTIARTL": {
+        "frozen_signals": 7,
+        "risk_accepted": 6,
+        "quantitative_buy_entries": 6,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "ITC": {
+        "frozen_signals": 2,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "KOTAKBANK": {
+        "frozen_signals": 2,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "LT": {
+        "frozen_signals": 4,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "AXISBANK": {
+        "frozen_signals": 2,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "MARUTI": {
+        "frozen_signals": 4,
+        "risk_accepted": 4,
+        "quantitative_buy_entries": 4,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "SUNPHARMA": {
+        "frozen_signals": 3,
+        "risk_accepted": 2,
+        "quantitative_buy_entries": 2,
+        "risk_rejected": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      },
+      "TITAN": {
+        "frozen_signals": 2,
+        "risk_rejected": 1,
+        "risk_accepted": 1,
+        "quantitative_buy_entries": 1,
+        "data_rejected": 0,
+        "sell_signals": 0
+      }
+    }
+  },
+  "baseline_endpoint_rows": [],
+  "corrected_endpoint_rows": [],
+  "changed_boundary_candidates": 0,
+  "trade_count_delta": 0,
+  "gross_pnl_delta": 0.0,
+  "cost_delta": 0.0,
+  "net_pnl_delta": 0.0
+}

@@ -1,0 +1,24 @@
+# Research Copy Status
+
+Copy date: 2026-10-18
+
+This is an isolated copy for offline research. The baseline project remains at:
+`C:\Users\Priyanka\Desktop\ai-trading-bot - Copy\ai-tarding-assistant`
+
+The copy preserves durable source, tests, documentation, datasets, historical reports, and existing research artifacts. `.env` was omitted because it contains credentials; `.env.example` contains blank credential fields. Do not commit or share secrets.
+
+## Environment reconciliation (2026-10-18)
+
+The Stage A audit found a `.venv` directory in this copy, contrary to the original copy note below. Its dependency availability was checked without running project code: the declared runtime and test packages are present. The environment is machine-specific and is excluded from Git; the prior statement that it was omitted describes the intended copy process, not the current observed filesystem. No `.env` exists in this research copy. The original project's `.env` was not accessed.
+
+No persistent SQLite database was copied. The SQLite ledger defaults to this copy's `logs/paper_state.sqlite3`; that directory was not copied and any future runtime state will be created under this research copy. Python sources contain no hard-coded path to the original checkout. Some research outputs are relative to the working directory, so run future research only with this directory as the working directory and inspect each script's output path first.
+
+The original virtual environment was not copied because it may contain machine-specific paths. To recreate it later from this directory, run:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
+
+No dependencies were installed and no runner, market API, or historical analysis was started for this copy. Keep the project paper-only; real broker order placement, modification, and cancellation must remain disabled. Passing tests or matching historical reports does not establish profitability.

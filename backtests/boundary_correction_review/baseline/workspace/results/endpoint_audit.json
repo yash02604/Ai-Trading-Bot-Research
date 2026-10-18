@@ -1,0 +1,23 @@
+{
+  "endpoint_rows": [],
+  "endpoint_count": 0,
+  "frozen_signal_counts": {
+    "RELIANCE": 3,
+    "HDFCBANK": 5,
+    "ICICIBANK": 4,
+    "INFY": 10,
+    "TCS": 9,
+    "SBIN": 1,
+    "BHARTIARTL": 7,
+    "ITC": 2,
+    "KOTAKBANK": 2,
+    "LT": 4,
+    "AXISBANK": 2,
+    "MARUTI": 4,
+    "SUNPHARMA": 3,
+    "TITAN": 2
+  },
+  "data_rejects": {},
+  "signal_count_total": 58,
+  "eligible_events": 58
+}

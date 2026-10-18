@@ -1,0 +1,16 @@
+metric,value,unit
+stage9_trade_count,19.0,trades
+average_cost_per_trade,177.23539271410945,INR/trade
+average_gross_win,356.1181818181828,INR/winning gross trade
+average_gross_loss_abs,489.0150000000003,INR/losing gross trade
+gross_win_rate,57.89473684210527,percent of trades
+gross_pnl_per_trade,0.2726315789477906,INR/trade
+net_pnl_per_trade,-176.96276113516168,INR/trade
+break_even_win_rate_including_average_cost,78.83377520224296,"percent, using average gross win/loss"
+gross_pnl_per_trade_needed_to_cover_costs,177.23539271410945,INR/trade
+average_gross_move_needed_to_cover_costs,177.23539271410945,"INR/trade, currency P&L proxy"
+average_capital_exposure,95716.0105263158,INR/trade
+average_cost_as_pct_of_exposure,0.1851679690153624,percent of average deployed capital
+observed_gross_pnl,5.180000000008022,INR
+observed_costs,3367.47246156808,INR
+observed_net_pnl,-3362.292461568072,INR

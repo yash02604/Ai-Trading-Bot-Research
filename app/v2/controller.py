@@ -38,16 +38,23 @@ class V2ResearchController:
         paper_result = None
         recommendation = envelope.recommendation
         if risk.approved and self.paper is not None:
-            if recommendation.action is Action.BUY:
-                paper_result = self.paper.open_position(
-                    signal_id=signal_id, decision=recommendation,
-                    gate_result=risk, recorded_at=now,
-                )
-            elif recommendation.action is Action.EXIT:
-                open_position = self.gate.state.open_positions[recommendation.symbol]
-                paper_result = self.paper.close_position(
-                    position_signal_id=open_position["signal_id"], exit_signal_id=signal_id,
-                    reference_exit=recommendation.entry_price, recorded_at=now,
-                    exit_reason="AI_EXIT",
-                )
+            try:
+                if recommendation.action is Action.BUY:
+                    paper_result = self.paper.open_position(
+                        request=request, signal_id=signal_id, decision=recommendation,
+                        gate_result=risk, recorded_at=now,
+                    )
+                elif recommendation.action is Action.EXIT:
+                    open_position = self.gate.state.open_positions[recommendation.symbol]
+                    paper_result = self.paper.close_position(
+                        request=request, decision=recommendation, gate_result=risk,
+                        position_signal_id=open_position["signal_id"], exit_signal_id=signal_id,
+                        reference_exit=recommendation.entry_price, recorded_at=now,
+                        exit_reason="AI_EXIT",
+                    )
+            except Exception as error:
+                self.audit.append_event(signal_id, "PAPER_FAILURE", now.isoformat(), {
+                    "paper_only": True, "error_type": type(error).__name__,
+                })
+                raise
         return EvaluationResult(envelope, risk, final_decision, paper_result)

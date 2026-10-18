@@ -69,6 +69,8 @@ class DecisionRequest:
             raise ValueError("request contains a future or contradictory timestamp")
         if not self.eligible_symbols or not self.strategy_ids:
             raise ValueError("eligible_symbols and strategy_ids cannot be empty")
+        if not isinstance(self.request_id, str) or not self.request_id.strip():
+            raise ValueError("request_id must be a non-empty string")
         if len(set(self.eligible_symbols)) != len(self.eligible_symbols):
             raise ValueError("eligible_symbols contains duplicates")
         if len(set(self.strategy_ids)) != len(self.strategy_ids):
@@ -77,6 +79,8 @@ class DecisionRequest:
             raise ValueError("market data is stale")
         if set(self.features) - set(self.eligible_symbols) - {"MARKET"}:
             raise ValueError("features contain an ineligible symbol")
+        if set(self.eligible_symbols) - set(self.features):
+            raise ValueError("every eligible symbol requires timestamped feature data")
         if set(self.feature_timestamps) != set(self.features):
             raise ValueError("each feature record must have its own timestamp")
         for key, timestamp in self.feature_timestamps.items():
@@ -143,7 +147,9 @@ class V2Recommendation:
             if not isinstance(item, dict) or set(item) != {"symbol", "rank", "evidence"}:
                 raise ValueError("ranked_symbols contains an invalid item")
             symbol, rank, evidence = item["symbol"], item["rank"], item["evidence"]
-            if symbol not in request.eligible_symbols or symbol in seen or rank != expected_rank:
+            if (not isinstance(symbol, str) or symbol not in request.eligible_symbols
+                    or symbol in seen or isinstance(rank, bool)
+                    or not isinstance(rank, int) or rank != expected_rank):
                 raise ValueError("ranking contains an ineligible, duplicate, or misordered symbol")
             if not isinstance(evidence, list) or any(not isinstance(x, str) or not x.strip() for x in evidence):
                 raise ValueError("ranking evidence must contain non-empty strings")

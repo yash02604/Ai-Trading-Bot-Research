@@ -37,6 +37,8 @@ class V2AuditLedger:
           CREATE TABLE IF NOT EXISTS events (
             event_id INTEGER PRIMARY KEY AUTOINCREMENT, signal_id TEXT NOT NULL,
             event_type TEXT NOT NULL, recorded_at TEXT NOT NULL, payload TEXT NOT NULL);
+          CREATE UNIQUE INDEX IF NOT EXISTS events_paper_idempotency
+            ON events(signal_id,event_type) WHERE event_type IN ('PAPER_FILL','PAPER_OUTCOME');
           CREATE TRIGGER IF NOT EXISTS decisions_no_update BEFORE UPDATE ON decisions
             BEGIN SELECT RAISE(ABORT, 'V2 decisions are append-only'); END;
           CREATE TRIGGER IF NOT EXISTS decisions_no_delete BEFORE DELETE ON decisions
@@ -65,11 +67,39 @@ class V2AuditLedger:
             self.db.rollback()
             return False
 
-    def append_event(self, signal_id: str, event_type: str, recorded_at: str, payload) -> None:
+    def append_event(self, signal_id: str, event_type: str, recorded_at: str, payload) -> bool:
         body = _safe_payload(payload)
-        self.db.execute("INSERT INTO events(signal_id,event_type,recorded_at,payload) VALUES(?,?,?,?)",
-                        (signal_id, event_type, recorded_at, body))
-        self.db.commit()
+        try:
+            self.db.execute("INSERT INTO events(signal_id,event_type,recorded_at,payload) VALUES(?,?,?,?)",
+                            (signal_id, event_type, recorded_at, body))
+            self.db.commit()
+            return True
+        except sqlite3.IntegrityError:
+            self.db.rollback()
+            return False
+
+    def unclosed_paper_fills(self) -> dict[str, dict]:
+        """Validate ledger fill/outcome pairs; do not silently recover partial/corrupt state."""
+        open_fills: dict[str, dict] = {}
+        rows = self.db.execute(
+            "SELECT signal_id,event_type,payload FROM events WHERE event_type IN ('PAPER_FILL','PAPER_OUTCOME') ORDER BY event_id"
+        ).fetchall()
+        for signal_id, event_type, payload in rows:
+            try:
+                item = json.loads(payload)
+                if not isinstance(item, dict) or item.get("paper_only") is not True:
+                    raise ValueError
+                if event_type == "PAPER_FILL":
+                    if signal_id in open_fills:
+                        raise ValueError
+                    open_fills[signal_id] = item
+                elif signal_id not in open_fills:
+                    raise ValueError
+                else:
+                    del open_fills[signal_id]
+            except (TypeError, ValueError, json.JSONDecodeError) as error:
+                raise ValueError("paper ledger contains malformed or contradictory records") from error
+        return open_fills
 
     def seen(self, signal_id: str) -> bool:
         return self.db.execute("SELECT 1 FROM decisions WHERE signal_id=?", (signal_id,)).fetchone() is not None

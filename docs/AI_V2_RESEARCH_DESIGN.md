@@ -12,6 +12,14 @@ Status: implementation interface only; no V2 backtest, provider call, or runner 
 
 `V2ResearchController` writes an append-only SQLite decision record before any optional simulated fill. `PaperOnlyExecutor` has no broker interface; it records simulated entry/exit slippage, estimated transaction costs and net outcome. The ledger rejects updates/deletes via SQLite triggers and rejects credential-like payload keys. The controller is a callable research interface; it does not start itself, fetch market data, or connect to a broker.
 
+## Stage C safety findings and limits
+
+`DecisionRequest` now requires timestamped feature data for every eligible symbol. An omitted candle/feature causes a safe HOLD before the provider is called. The response parser rejects bool-as-rank and contradictory or out-of-range fields. `SafetyGate` accepts only a validator explicitly marked as authoritative; `regular_weekday_session` is deliberately marked non-authoritative. The weekday/clock helper would accept any weekday during its clock window, including a holiday, and rejects weekends even if an exchange announces a special session. No authoritative exchange calendar is bundled or inferred here; callers without a separately verified calendar must fail closed.
+
+Paper fills/closes require an unforgeable in-process one-use permit issued by the same `SafetyGate`, bound to the request, recommendation, signal ID and approved quantity. The executor shares the gate's exact state and limits, consumes the permit only after rechecking request freshness, session and kill switch, and refuses repeated fill/outcome ledger events. On startup, an unmatched or malformed paper fill disables executor construction: automatic state reconstruction is intentionally not attempted because account/day-start state and risk counters are not durably checkpointed. Operator-reviewed recovery is therefore a prerequisite after an interrupted open simulated position.
+
+These controls establish only code-path behavior covered by the Stage C tests. They do not provide an authoritative NSE calendar, atomic multi-process risk locking, durable risk-state checkpoint/recovery, calibrated model probabilities, trading performance evidence, or live-trading readiness. No provider, broker, runner, or backtest is part of Stage C.
+
 ## Versions and risk defaults
 
 - Contract: `ai-decision-v2.1`

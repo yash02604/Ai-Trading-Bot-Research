@@ -1,0 +1,4645 @@
+{
+  "analysis": {
+    "aggregate_reconciliation": {
+      "frozen_reversal_v1": {
+        "all_observed_deltas_recorded_minus_ledger": {
+          "average_net_trade": 2.5579538487363607e-13,
+          "costs": -7.275957614183426e-12,
+          "gross_pnl": 1.2505552149377763e-11,
+          "max_closed_drawdown_pct": 0.0,
+          "net_pnl": 1.8189894035458565e-11,
+          "net_profit_factor": -2.220446049250313e-16,
+          "trade_count": 0,
+          "turnover": 0.0,
+          "win_rate_pct": 0.0
+        },
+        "partition_metrics_comparability": {
+          "reason": "capital and position sizes are reinitialized for each window, while trades.csv stores only all_observed fills",
+          "rows": [
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 2.5579538487363607e-13,
+                "costs": -7.275957614183426e-12,
+                "gross_pnl": 1.2505552149377763e-11,
+                "max_closed_drawdown_pct": 0.0,
+                "net_pnl": 1.8189894035458565e-11,
+                "net_profit_factor": -2.220446049250313e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "all_observed",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -1.4210854715202004e-12,
+                "costs": 4.18367562815547e-11,
+                "gross_pnl": 1.0913936421275139e-11,
+                "max_closed_drawdown_pct": 1.0658141036401503e-14,
+                "net_pnl": -3.001332515850663e-11,
+                "net_profit_factor": -8.326672684688674e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": -3.552713678800501e-15
+              },
+              "group": "development_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -5.900082449261788,
+                "costs": 174.27114368079674,
+                "gross_pnl": 20.868999999989455,
+                "max_closed_drawdown_pct": -0.15340214368080396,
+                "net_pnl": -153.40214368080615,
+                "net_profit_factor": 0.006715376345897306,
+                "trade_count": 0,
+                "turnover": 256550.86899999995,
+                "win_rate_pct": 7.105427357601002e-15
+              },
+              "group": "walk_forward_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -9.397068493999512,
+                "costs": 376.92378084400025,
+                "gross_pnl": 132.60000000001241,
+                "max_closed_drawdown_pct": -0.29860558594593245,
+                "net_pnl": -244.32378084398715,
+                "net_profit_factor": 0.012165036125072692,
+                "trade_count": 0,
+                "turnover": 554869.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "previous_oos_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            }
+          ],
+          "status": "cash metrics are independent partition replays; do not reconcile to all_observed trade fills"
+        },
+        "recorded_all_observed_row_present": true,
+        "regime": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.9895196601282805e-13,
+              "costs": 0.0,
+              "gross_pnl": 1.8189894035458565e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 2.2737367544323206e-12,
+              "net_profit_factor": -9.71445146547012e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bearish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.8758328224066645e-12,
+              "costs": -1.6370904631912708e-11,
+              "gross_pnl": 1.7280399333685637e-11,
+              "max_closed_drawdown_pct": 4.440892098500626e-14,
+              "net_pnl": 3.2741809263825417e-11,
+              "net_profit_factor": 1.0547118733938987e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "dimension": "trend_regime",
+            "group": "bullish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.8474111129762605e-13,
+              "costs": 1.000444171950221e-11,
+              "gross_pnl": 3.183231456205249e-12,
+              "max_closed_drawdown_pct": -1.1546319456101628e-14,
+              "net_pnl": -7.275957614183426e-12,
+              "net_profit_factor": -8.881784197001252e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "dimension": "trend_regime",
+            "group": "sideways"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -4.888534022029489e-12,
+              "costs": 5.684341886080802e-14,
+              "gross_pnl": -9.72022462519817e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -9.777068044058979e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "warmup"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.950617610826157e-12,
+              "costs": 0.0,
+              "gross_pnl": -1.5916157281026244e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -1.5802470443304628e-11,
+              "net_profit_factor": NaN,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "high_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 6.821210263296962e-13,
+              "costs": -7.275957614183426e-12,
+              "gross_pnl": 3.8198777474462986e-11,
+              "max_closed_drawdown_pct": 5.5067062021407764e-14,
+              "net_pnl": 4.3655745685100555e-11,
+              "net_profit_factor": 7.216449660063518e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "low_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -4.888534022029489e-12,
+              "costs": 5.684341886080802e-14,
+              "gross_pnl": -9.72022462519817e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -9.777068044058979e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "warmup"
+          }
+        ],
+        "stock": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 6.536993168992922e-13,
+              "costs": 0.0,
+              "gross_pnl": 2.5011104298755527e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 2.6147972675971687e-12,
+              "net_profit_factor": 1.1102230246251565e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "AXISBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.3642420526593924e-12,
+              "costs": 3.865352482534945e-12,
+              "gross_pnl": -7.275957614183426e-12,
+              "max_closed_drawdown_pct": -3.375077994860476e-14,
+              "net_pnl": -1.1823431123048067e-11,
+              "net_profit_factor": -6.106226635438361e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "BHARTIARTL"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 9.663381206337363e-13,
+              "costs": 0.0,
+              "gross_pnl": 5.8264504332328215e-12,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": 5.9117155615240335e-12,
+              "net_profit_factor": -3.0808688933348094e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "HDFCBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.8990143619012088e-12,
+              "costs": 0.0,
+              "gross_pnl": 1.432454155292362e-11,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": 1.4551915228366852e-11,
+              "net_profit_factor": 3.191891195797325e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "ICICIBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.609557097661309e-12,
+              "costs": 0.0,
+              "gross_pnl": 2.864908310584724e-11,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 2.864908310584724e-11,
+              "net_profit_factor": 1.2212453270876722e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "INFY"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.637978807091713e-12,
+              "costs": 0.0,
+              "gross_pnl": -1.0913936421275139e-11,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": -1.0913936421275139e-11,
+              "net_profit_factor": -1.2789769243681803e-13,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -1.4210854715202004e-14
+            },
+            "group": "ITC"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 6.934897101018578e-12,
+              "costs": 0.0,
+              "gross_pnl": 6.821210263296962e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 6.934897101018578e-12,
+              "net_profit_factor": NaN,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "KOTAKBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -5.684341886080801e-13,
+              "costs": 1.3869794202037156e-11,
+              "gross_pnl": 1.000444171950221e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -3.183231456205249e-12,
+              "net_profit_factor": 9.818534874028728e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -1.7763568394002505e-15
+            },
+            "group": "LT"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -9.094947017729282e-13,
+              "costs": 0.0,
+              "gross_pnl": -5.9117155615240335e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -5.4569682106375694e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "MARUTI"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.8848035071860068e-12,
+              "costs": 0.0,
+              "gross_pnl": -5.7411853049416095e-12,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": -5.7696070143720135e-12,
+              "net_profit_factor": -8.881784197001252e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "RELIANCE"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.240074875066057e-12,
+              "costs": 0.0,
+              "gross_pnl": -6.480149750132114e-12,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": -6.480149750132114e-12,
+              "net_profit_factor": -1.9421964037036332e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SBIN"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.495870259939693e-12,
+              "costs": 0.0,
+              "gross_pnl": -1.4026113603904378e-11,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": -1.3983481039758772e-11,
+              "net_profit_factor": -8.1601392309949e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SUNPHARMA"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.1652900866465643e-12,
+              "costs": 1.6143530956469476e-11,
+              "gross_pnl": 2.0463630789890885e-12,
+              "max_closed_drawdown_pct": -3.3306690738754696e-14,
+              "net_pnl": -1.4011902749189176e-11,
+              "net_profit_factor": -5.10702591327572e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "group": "TCS"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 8.08597633294994e-12,
+              "costs": -3.9904080040287226e-11,
+              "gross_pnl": -7.503331289626658e-12,
+              "max_closed_drawdown_pct": 4.440892098500626e-14,
+              "net_pnl": 3.234390533179976e-11,
+              "net_profit_factor": 1.942890293094024e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "TITAN"
+          }
+        ]
+      },
+      "sharp_reversal_3bar_1to3_rsi30_stop075_h6_v1": {
+        "all_observed_deltas_recorded_minus_ledger": {
+          "average_net_trade": -2.8421709430404007e-13,
+          "costs": -1.4551915228366852e-11,
+          "gross_pnl": 1.3096723705530167e-10,
+          "max_closed_drawdown_pct": 4.973799150320701e-14,
+          "net_pnl": -5.093170329928398e-11,
+          "net_profit_factor": -8.326672684688674e-16,
+          "trade_count": 0,
+          "turnover": 0.0,
+          "win_rate_pct": 0.0
+        },
+        "partition_metrics_comparability": {
+          "reason": "capital and position sizes are reinitialized for each window, while trades.csv stores only all_observed fills",
+          "rows": [
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -2.8421709430404007e-13,
+                "costs": -1.4551915228366852e-11,
+                "gross_pnl": 1.3096723705530167e-10,
+                "max_closed_drawdown_pct": 4.973799150320701e-14,
+                "net_pnl": -5.093170329928398e-11,
+                "net_profit_factor": -8.326672684688674e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "all_observed",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 9.947598300641403e-13,
+                "costs": 1.4551915228366852e-11,
+                "gross_pnl": 7.639755494892597e-11,
+                "max_closed_drawdown_pct": 1.2256862191861728e-13,
+                "net_pnl": 6.002665031701326e-11,
+                "net_profit_factor": 2.220446049250313e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "development_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -24.156622768087914,
+                "costs": 1138.6532433171305,
+                "gross_pnl": -286.5874999999576,
+                "max_closed_drawdown_pct": -1.4252407433172785,
+                "net_pnl": -1425.2407433171884,
+                "net_profit_factor": 0.01278971775887261,
+                "trade_count": 0,
+                "turnover": 1676321.2125000004,
+                "win_rate_pct": 0.0
+              },
+              "group": "walk_forward_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -63.622470184032835,
+                "costs": 1774.9752351217312,
+                "gross_pnl": -1724.2606249999744,
+                "max_closed_drawdown_pct": -3.499235860121807,
+                "net_pnl": -3499.235860121804,
+                "net_profit_factor": 0.01875095009947983,
+                "trade_count": 0,
+                "turnover": 2613319.0393750006,
+                "win_rate_pct": -3.552713678800501e-15
+              },
+              "group": "previous_oos_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            }
+          ],
+          "status": "cash metrics are independent partition replays; do not reconcile to all_observed trade fills"
+        },
+        "recorded_all_observed_row_present": true,
+        "regime": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.865352482534945e-12,
+              "costs": 3.8198777474462986e-11,
+              "gross_pnl": 1.546140993013978e-11,
+              "max_closed_drawdown_pct": -8.881784197001252e-14,
+              "net_pnl": -1.2369127944111824e-10,
+              "net_profit_factor": -4.718447854656915e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bearish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 4.035882739117369e-12,
+              "costs": -1.1004885891452432e-10,
+              "gross_pnl": 8.139977580867708e-11,
+              "max_closed_drawdown_pct": 2.4513724383723456e-13,
+              "net_pnl": 1.9099388737231493e-10,
+              "net_profit_factor": 3.941291737419306e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bullish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -7.958078640513122e-13,
+              "costs": -1.8189894035458565e-12,
+              "gross_pnl": 3.171862772433087e-11,
+              "max_closed_drawdown_pct": -5.5067062021407764e-14,
+              "net_pnl": -6.730260793119669e-11,
+              "net_profit_factor": -2.3314683517128287e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -3.552713678800501e-15
+            },
+            "dimension": "trend_regime",
+            "group": "sideways"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.637978807091713e-12,
+              "costs": 5.775291356258094e-11,
+              "gross_pnl": 3.183231456205249e-12,
+              "max_closed_drawdown_pct": -3.375077994860476e-14,
+              "net_pnl": -5.4569682106375694e-11,
+              "net_profit_factor": -1.8041124150158794e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "warmup"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -4.661160346586257e-12,
+              "costs": 6.298250809777528e-11,
+              "gross_pnl": 6.366462912410498e-12,
+              "max_closed_drawdown_pct": -6.661338147750939e-14,
+              "net_pnl": -5.638867150992155e-11,
+              "net_profit_factor": -2.0261570199409107e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "high_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.684341886080802e-14,
+              "costs": -9.094947017729282e-11,
+              "gross_pnl": 1.1732481652870774e-10,
+              "max_closed_drawdown_pct": 1.0658141036401503e-13,
+              "net_pnl": 7.275957614183426e-12,
+              "net_profit_factor": -5.551115123125783e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "low_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.0800249583553523e-12,
+              "costs": 1.1937117960769683e-11,
+              "gross_pnl": 7.73070496506989e-12,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": -4.320099833421409e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "warmup"
+          }
+        ],
+        "stock": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.268496584496461e-13,
+              "costs": -1.0686562745831907e-11,
+              "gross_pnl": -6.59383658785373e-12,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 3.751665644813329e-12,
+              "net_profit_factor": -1.5543122344752192e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "AXISBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.2168933355715126e-12,
+              "costs": 7.457856554538012e-11,
+              "gross_pnl": 4.411049303598702e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -3.092281986027956e-11,
+              "net_profit_factor": 4.440892098500626e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -3.552713678800501e-15
+            },
+            "group": "BHARTIARTL"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.183231456205249e-12,
+              "costs": 5.502442945726216e-11,
+              "gross_pnl": 7.73070496506989e-12,
+              "max_closed_drawdown_pct": -3.3306690738754696e-14,
+              "net_pnl": -4.6838977141305804e-11,
+              "net_profit_factor": -2.9976021664879227e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "HDFCBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.126388037344441e-12,
+              "costs": 0.0,
+              "gross_pnl": 2.1600499167107046e-11,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 2.1827872842550278e-11,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "ICICIBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.0800249583553523e-12,
+              "costs": -1.4551915228366852e-11,
+              "gross_pnl": 2.0463630789890885e-11,
+              "max_closed_drawdown_pct": 4.440892098500626e-14,
+              "net_pnl": 3.456079866737127e-11,
+              "net_profit_factor": 3.885780586188048e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -3.552713678800501e-15
+            },
+            "group": "INFY"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.1600499167107046e-12,
+              "costs": 3.319655661471188e-11,
+              "gross_pnl": 1.3642420526593924e-12,
+              "max_closed_drawdown_pct": -2.220446049250313e-14,
+              "net_pnl": -3.183231456205249e-11,
+              "net_profit_factor": -1.5265566588595902e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -1.7763568394002505e-15
+            },
+            "group": "ITC"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.183231456205249e-12,
+              "costs": -1.5006662579253316e-11,
+              "gross_pnl": 1.3415046851150692e-11,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 2.864908310584724e-11,
+              "net_profit_factor": 5.828670879282072e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "KOTAKBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.5650592760939617e-12,
+              "costs": -5.4569682106375694e-12,
+              "gross_pnl": 2.5011104298755527e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 3.069544618483633e-11,
+              "net_profit_factor": 6.439293542825908e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "group": "LT"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.4779288903810084e-12,
+              "costs": -1.1368683772161603e-11,
+              "gross_pnl": 7.73070496506989e-12,
+              "max_closed_drawdown_pct": 4.440892098500626e-14,
+              "net_pnl": 1.9554136088117957e-11,
+              "net_profit_factor": 1.0547118733938987e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "MARUTI"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.7980287238024175e-12,
+              "costs": -3.410605131648481e-11,
+              "gross_pnl": 6.508571459562518e-12,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 4.058620106661692e-11,
+              "net_profit_factor": 1.1601830607332886e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "RELIANCE"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -3.410605131648481e-12,
+              "costs": 2.000888343900442e-11,
+              "gross_pnl": 6.59383658785373e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -1.3642420526593924e-11,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SBIN"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.7853275241795927e-12,
+              "costs": -6.798472895752639e-11,
+              "gross_pnl": 1.5063505998114124e-12,
+              "max_closed_drawdown_pct": -2.220446049250313e-14,
+              "net_pnl": -3.069544618483633e-11,
+              "net_profit_factor": -4.385380947269368e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -3.552713678800501e-15
+            },
+            "group": "SUNPHARMA"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.5579538487363607e-13,
+              "costs": -1.000444171950221e-11,
+              "gross_pnl": -6.59383658785373e-12,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": 3.637978807091713e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "group": "TCS"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -5.4569682106375694e-12,
+              "costs": -3.001332515850663e-11,
+              "gross_pnl": -1.1368683772161603e-11,
+              "max_closed_drawdown_pct": -8.881784197001252e-14,
+              "net_pnl": -8.094502845779061e-11,
+              "net_profit_factor": -1.672273430841642e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "TITAN"
+          }
+        ]
+      },
+      "sharp_reversal_3bar_2to4_rsi30_stop1_h12_v1": {
+        "all_observed_deltas_recorded_minus_ledger": {
+          "average_net_trade": 1.4779288903810084e-12,
+          "costs": -8.36735125631094e-11,
+          "gross_pnl": -5.4569682106375694e-12,
+          "max_closed_drawdown_pct": 1.2434497875801753e-13,
+          "net_pnl": 8.36735125631094e-11,
+          "net_profit_factor": 1.1102230246251565e-16,
+          "trade_count": 0,
+          "turnover": 0.0,
+          "win_rate_pct": 0.0
+        },
+        "partition_metrics_comparability": {
+          "reason": "capital and position sizes are reinitialized for each window, while trades.csv stores only all_observed fills",
+          "rows": [
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 1.4779288903810084e-12,
+                "costs": -8.36735125631094e-11,
+                "gross_pnl": -5.4569682106375694e-12,
+                "max_closed_drawdown_pct": 1.2434497875801753e-13,
+                "net_pnl": 8.36735125631094e-11,
+                "net_profit_factor": 1.1102230246251565e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "all_observed",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 5.6843418860808015e-12,
+                "costs": -9.185896487906575e-11,
+                "gross_pnl": -1.3642420526593924e-12,
+                "max_closed_drawdown_pct": 9.947598300641403e-14,
+                "net_pnl": 9.185896487906575e-11,
+                "net_profit_factor": 3.3861802251067274e-15,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "development_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -17.4915801428769,
+                "costs": 92.8752021431601,
+                "gross_pnl": -169.49849999999333,
+                "max_closed_drawdown_pct": -0.2623737021431598,
+                "net_pnl": -262.3737021431534,
+                "net_profit_factor": 0.0019518882008364713,
+                "trade_count": 0,
+                "turnover": 136754.20149999997,
+                "win_rate_pct": 0.0
+              },
+              "group": "walk_forward_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -30.115653762533668,
+                "costs": 340.4866903007978,
+                "gross_pnl": -382.28900000001113,
+                "max_closed_drawdown_pct": -0.8632923172148148,
+                "net_pnl": -722.7756903008085,
+                "net_profit_factor": 0.006366289552057314,
+                "trade_count": 0,
+                "turnover": 501311.31099999975,
+                "win_rate_pct": 0.0
+              },
+              "group": "previous_oos_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            }
+          ],
+          "status": "cash metrics are independent partition replays; do not reconcile to all_observed trade fills"
+        },
+        "recorded_all_observed_row_present": true,
+        "regime": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 6.252776074688882e-13,
+              "costs": 6.366462912410498e-12,
+              "gross_pnl": 1.6825651982799172e-11,
+              "max_closed_drawdown_pct": 1.0658141036401503e-14,
+              "net_pnl": 1.0913936421275139e-11,
+              "net_profit_factor": -1.6653345369377348e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bearish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.0800249583553523e-12,
+              "costs": -4.001776687800884e-11,
+              "gross_pnl": -2.637534635141492e-11,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 1.3642420526593924e-11,
+              "net_profit_factor": 2.220446049250313e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 7.105427357601002e-15
+            },
+            "dimension": "trend_regime",
+            "group": "bullish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.9895196601282805e-12,
+              "costs": -5.002220859751105e-11,
+              "gross_pnl": 0.0,
+              "max_closed_drawdown_pct": 7.638334409421077e-14,
+              "net_pnl": 5.093170329928398e-11,
+              "net_profit_factor": 2.220446049250313e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "sideways"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.4569682106375694e-12,
+              "costs": -2.842170943040401e-14,
+              "gross_pnl": 5.4569682106375694e-12,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 5.4569682106375694e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "warmup"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.0061285138363019e-11,
+              "costs": -8.003553375601768e-11,
+              "gross_pnl": -1.978150976356119e-11,
+              "max_closed_drawdown_pct": 4.440892098500626e-14,
+              "net_pnl": 6.02540239924565e-11,
+              "net_profit_factor": 2.7200464103316335e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "high_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.979039320256561e-13,
+              "costs": -3.637978807091713e-12,
+              "gross_pnl": 1.546140993013978e-11,
+              "max_closed_drawdown_pct": 7.815970093361102e-14,
+              "net_pnl": 2.000888343900442e-11,
+              "net_profit_factor": -1.6653345369377348e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "low_volatility"
+          }
+        ],
+        "stock": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.5579538487363607e-12,
+              "costs": -2.000888343900442e-11,
+              "gross_pnl": -7.048583938740194e-12,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 1.2960299500264227e-11,
+              "net_profit_factor": -1.942890293094024e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "AXISBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.6200374375330284e-12,
+              "costs": 8.071765478234738e-12,
+              "gross_pnl": -3.979039320256561e-13,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": -8.29913915367797e-12,
+              "net_profit_factor": -3.3306690738754696e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "BHARTIARTL"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.2278178473934531e-11,
+              "costs": 2.7966962079517543e-11,
+              "gross_pnl": -8.86757334228605e-12,
+              "max_closed_drawdown_pct": -3.3306690738754696e-14,
+              "net_pnl": -3.660716174636036e-11,
+              "net_profit_factor": -5.134781488891349e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "HDFCBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -9.237055564881302e-13,
+              "costs": 0.0,
+              "gross_pnl": -2.7284841053187847e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -2.7569058147491887e-12,
+              "net_profit_factor": -1.021405182655144e-14,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "ICICIBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -9.094947017729282e-13,
+              "costs": 1.4097167877480388e-11,
+              "gross_pnl": 1.5916157281026244e-12,
+              "max_closed_drawdown_pct": -1.1546319456101628e-14,
+              "net_pnl": -1.2732925824820995e-11,
+              "net_profit_factor": -1.7208456881689926e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "INFY"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.6147972675971687e-12,
+              "costs": 0.0,
+              "gross_pnl": 2.6290081223123707e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 2.6147972675971687e-12,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "ITC"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.6711965145077556e-11,
+              "costs": -2.1941559680271894e-11,
+              "gross_pnl": 1.1368683772161603e-11,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 3.342393029015511e-11,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "KOTAKBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.240074875066057e-12,
+              "costs": -1.2050804798491299e-11,
+              "gross_pnl": 4.092726157978177e-12,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 1.6370904631912708e-11,
+              "net_profit_factor": 8.881784197001252e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "LT"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 6.821210263296962e-12,
+              "costs": -2.7966962079517543e-11,
+              "gross_pnl": 5.9117155615240335e-12,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 3.410605131648481e-11,
+              "net_profit_factor": 9.43689570931383e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "MARUTI"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.387867764104158e-11,
+              "costs": -3.998934516857844e-11,
+              "gross_pnl": -6.139089236967266e-12,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 3.387867764104158e-11,
+              "net_profit_factor": 0.0,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SBIN"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.6843418860808015e-12,
+              "costs": -3.603872755775228e-11,
+              "gross_pnl": -7.503331289626658e-12,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 2.8421709430404007e-11,
+              "net_profit_factor": 4.9960036108132044e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SUNPHARMA"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -5.002220859751105e-12,
+              "costs": 2.3931079340400174e-11,
+              "gross_pnl": 8.86757334228605e-12,
+              "max_closed_drawdown_pct": -3.3306690738754696e-14,
+              "net_pnl": -1.5006662579253316e-11,
+              "net_profit_factor": 4.6629367034256575e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "TCS"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.8421709430404007e-12,
+              "costs": 0.0,
+              "gross_pnl": -5.7411853049416095e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": -5.6843418860808015e-12,
+              "net_profit_factor": -6.106226635438361e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "TITAN"
+          }
+        ]
+      },
+      "sharp_reversal_4bar_1to3_rsi35_stop1_h6_v1": {
+        "all_observed_deltas_recorded_minus_ledger": {
+          "average_net_trade": 3.126388037344441e-13,
+          "costs": 6.548361852765083e-11,
+          "gross_pnl": 5.4569682106375694e-11,
+          "max_closed_drawdown_pct": 4.973799150320701e-14,
+          "net_pnl": 8.731149137020111e-11,
+          "net_profit_factor": 6.106226635438361e-16,
+          "trade_count": 0,
+          "turnover": 0.0,
+          "win_rate_pct": 0.0
+        },
+        "partition_metrics_comparability": {
+          "reason": "capital and position sizes are reinitialized for each window, while trades.csv stores only all_observed fills",
+          "rows": [
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 3.126388037344441e-13,
+                "costs": 6.548361852765083e-11,
+                "gross_pnl": 5.4569682106375694e-11,
+                "max_closed_drawdown_pct": 4.973799150320701e-14,
+                "net_pnl": 8.731149137020111e-11,
+                "net_profit_factor": 6.106226635438361e-16,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "all_observed",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": 1.5347723092418164e-12,
+                "costs": -1.8189894035458565e-11,
+                "gross_pnl": 4.001776687800884e-11,
+                "max_closed_drawdown_pct": 7.638334409421077e-14,
+                "net_pnl": 1.5643308870494366e-10,
+                "net_profit_factor": 3.4416913763379853e-15,
+                "trade_count": 0,
+                "turnover": 0.0,
+                "win_rate_pct": 0.0
+              },
+              "group": "development_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -14.845799664364563,
+                "costs": 1412.335072477883,
+                "gross_pnl": 194.97949999999184,
+                "max_closed_drawdown_pct": -1.2374727874954967,
+                "net_pnl": -1217.3555724778926,
+                "net_profit_factor": 0.018523236505460505,
+                "trade_count": 0,
+                "turnover": 2079145.4794999994,
+                "win_rate_pct": 0.0
+              },
+              "group": "walk_forward_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            },
+            {
+              "cash_metric_deltas_recorded_minus_all_observed_ledger": {
+                "average_net_trade": -44.46080670673092,
+                "costs": 2604.4200700721594,
+                "gross_pnl": -1174.7484999999688,
+                "max_closed_drawdown_pct": -4.112025209471259,
+                "net_pnl": -3779.1685700721264,
+                "net_profit_factor": 0.02672688768489423,
+                "trade_count": 0,
+                "turnover": 3834301.9515000004,
+                "win_rate_pct": 2.352941176470587
+              },
+              "group": "previous_oos_reused",
+              "trade_count_delta_recorded_minus_all_observed_ledger": 0
+            }
+          ],
+          "status": "cash metrics are independent partition replays; do not reconcile to all_observed trade fills"
+        },
+        "recorded_all_observed_row_present": true,
+        "regime": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -1.0516032489249483e-12,
+              "costs": 4.18367562815547e-11,
+              "gross_pnl": -7.275957614183426e-12,
+              "max_closed_drawdown_pct": -5.5067062021407764e-14,
+              "net_pnl": -4.9112713895738125e-11,
+              "net_profit_factor": -1.1102230246251565e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bearish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -8.526512829121202e-14,
+              "costs": 1.4551915228366852e-11,
+              "gross_pnl": 1.2164491636212915e-11,
+              "max_closed_drawdown_pct": -6.572520305780927e-14,
+              "net_pnl": -3.637978807091713e-12,
+              "net_profit_factor": -2.7755575615628914e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "bullish"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.0089706847793423e-12,
+              "costs": 1.8189894035458565e-11,
+              "gross_pnl": 4.5929482439532876e-11,
+              "max_closed_drawdown_pct": 1.8829382497642655e-13,
+              "net_pnl": 1.2732925824820995e-10,
+              "net_profit_factor": 1.9984014443252818e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "sideways"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 4.547473508864641e-13,
+              "costs": -7.275957614183426e-12,
+              "gross_pnl": 4.092726157978177e-12,
+              "max_closed_drawdown_pct": 2.220446049250313e-14,
+              "net_pnl": 1.2278178473934531e-11,
+              "net_profit_factor": 1.7763568394002505e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "trend_regime",
+            "group": "warmup"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 3.382183422218077e-12,
+              "costs": -3.183231456205249e-11,
+              "gross_pnl": 1.9099388737231493e-11,
+              "max_closed_drawdown_pct": 7.771561172376096e-14,
+              "net_pnl": 5.093170329928398e-11,
+              "net_profit_factor": 1.942890293094024e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "high_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 8.526512829121202e-14,
+              "costs": 1.1641532182693481e-10,
+              "gross_pnl": 4.3655745685100555e-11,
+              "max_closed_drawdown_pct": -5.684341886080802e-14,
+              "net_pnl": 2.1827872842550278e-11,
+              "net_profit_factor": 3.3306690738754696e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "low_volatility"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.4779288903810084e-12,
+              "costs": -2.000888343900442e-11,
+              "gross_pnl": -8.185452315956354e-12,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": 1.1823431123048067e-11,
+              "net_profit_factor": 1.4988010832439613e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "dimension": "volatility_regime",
+            "group": "warmup"
+          }
+        ],
+        "stock": [
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.115907697472721e-13,
+              "costs": 5.9117155615240335e-12,
+              "gross_pnl": 1.8189894035458565e-11,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": 1.1823431123048067e-11,
+              "net_profit_factor": 2.1094237467877974e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "AXISBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.8990143619012088e-12,
+              "costs": 4.18367562815547e-11,
+              "gross_pnl": 6.139089236967266e-12,
+              "max_closed_drawdown_pct": 6.661338147750939e-14,
+              "net_pnl": 6.411937647499144e-11,
+              "net_profit_factor": 6.661338147750939e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "BHARTIARTL"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -4.376943252282217e-12,
+              "costs": 6.002665031701326e-11,
+              "gross_pnl": 6.821210263296962e-12,
+              "max_closed_drawdown_pct": -5.595524044110789e-14,
+              "net_pnl": -5.275069270282984e-11,
+              "net_profit_factor": -1.9845236565174673e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -3.552713678800501e-15
+            },
+            "group": "HDFCBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.2737367544323206e-12,
+              "costs": 1.1823431123048067e-11,
+              "gross_pnl": -2.0691004465334117e-11,
+              "max_closed_drawdown_pct": 1.1102230246251565e-14,
+              "net_pnl": -3.228706191293895e-11,
+              "net_profit_factor": -4.3298697960381105e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "ICICIBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.1884716261411086e-12,
+              "costs": -6.366462912410498e-11,
+              "gross_pnl": 1.0345502232667059e-11,
+              "max_closed_drawdown_pct": 6.572520305780927e-14,
+              "net_pnl": 7.366907084360719e-11,
+              "net_profit_factor": 1.9984014443252818e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 3.552713678800501e-15
+            },
+            "group": "INFY"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.5579538487363607e-12,
+              "costs": 4.001776687800884e-11,
+              "gross_pnl": -8.640199666842818e-12,
+              "max_closed_drawdown_pct": -4.440892098500626e-14,
+              "net_pnl": -4.865796654485166e-11,
+              "net_profit_factor": -3.941291737419306e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "ITC"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -7.673861546209082e-13,
+              "costs": 0.0,
+              "gross_pnl": -1.1908696251339279e-11,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": -1.1823431123048067e-11,
+              "net_profit_factor": -1.27675647831893e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "KOTAKBANK"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 4.476419235288631e-13,
+              "costs": 0.0,
+              "gross_pnl": 1.000444171950221e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 9.663381206337363e-12,
+              "net_profit_factor": 1.3322676295501878e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "LT"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 1.4637180356658064e-12,
+              "costs": -2.5920599000528455e-11,
+              "gross_pnl": 3.410605131648481e-12,
+              "max_closed_drawdown_pct": 3.3306690738754696e-14,
+              "net_pnl": 2.9331204132176936e-11,
+              "net_profit_factor": 4.884981308350689e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "MARUTI"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 5.229594535194337e-12,
+              "costs": -6.639311322942376e-11,
+              "gross_pnl": 1.2050804798491299e-11,
+              "max_closed_drawdown_pct": 8.881784197001252e-14,
+              "net_pnl": 7.821654435247183e-11,
+              "net_profit_factor": 4.218847493575595e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "RELIANCE"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.1032064978498966e-12,
+              "costs": 0.0,
+              "gross_pnl": 1.4722445484949276e-11,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 1.4779288903810084e-11,
+              "net_profit_factor": 6.661338147750939e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "SBIN"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -2.4158453015843406e-12,
+              "costs": 3.5925040720030665e-11,
+              "gross_pnl": -4.764189043271472e-12,
+              "max_closed_drawdown_pct": -1.1102230246251565e-14,
+              "net_pnl": -4.092726157978177e-11,
+              "net_profit_factor": -3.219646771412954e-15,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": -7.105427357601002e-15
+            },
+            "group": "SUNPHARMA"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": 2.8421709430404007e-13,
+              "costs": 4.547473508864641e-13,
+              "gross_pnl": 6.59383658785373e-12,
+              "max_closed_drawdown_pct": 0.0,
+              "net_pnl": 6.821210263296962e-12,
+              "net_profit_factor": 6.661338147750939e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "TCS"
+          },
+          {
+            "deltas_recorded_minus_ledger": {
+              "average_net_trade": -5.968558980384842e-13,
+              "costs": 2.8194335754960775e-11,
+              "gross_pnl": 1.2505552149377763e-11,
+              "max_closed_drawdown_pct": -4.440892098500626e-14,
+              "net_pnl": -1.546140993013978e-11,
+              "net_profit_factor": 5.551115123125783e-16,
+              "trade_count": 0,
+              "turnover": 0.0,
+              "win_rate_pct": 0.0
+            },
+            "group": "TITAN"
+          }
+        ]
+      }
+    },
+    "aggregate_reconciliation_mismatches": [],
+    "errors": {},
+    "strategies": {
+      "frozen_reversal_v1": {
+        "average_net_trade": -182.81842865966027,
+        "by_entry_time_label": [
+          {
+            "average_net_trade": -158.8017838939579,
+            "costs": 6436.7207879704,
+            "gross_pnl": 402.2530000000001,
+            "group": "09:25",
+            "max_closed_drawdown_pct": -6.03446778797041,
+            "net_pnl": -6034.4677879703995,
+            "net_profit_factor": 0.46416579196959673,
+            "trade_count": 38,
+            "turnover": 6835331.353,
+            "win_rate_pct": 36.8421052631579
+          },
+          {
+            "average_net_trade": -306.8724183085208,
+            "costs": 4117.5910394045,
+            "gross_pnl": -3247.3469999999998,
+            "group": "09:30",
+            "max_closed_drawdown_pct": -7.494193394658888,
+            "net_pnl": -7364.9380394045,
+            "net_profit_factor": 0.14166773124071833,
+            "trade_count": 24,
+            "turnover": 4394602.853,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -1084.0918021014,
+            "costs": 170.5838021014,
+            "gross_pnl": -913.508,
+            "group": "09:35",
+            "max_closed_drawdown_pct": -1.0840918021013946,
+            "net_pnl": -1084.0918021014,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 181788.092,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 276.8857222904,
+            "costs": 164.1142777096,
+            "gross_pnl": 441.0,
+            "group": "09:40",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 276.8857222904,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 172044.6,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -83.2922049536,
+            "costs": 169.6922049536,
+            "gross_pnl": 86.4,
+            "group": "09:50",
+            "max_closed_drawdown_pct": -0.08329220495360001,
+            "net_pnl": -83.2922049536,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 180313.6,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 18.3102148192,
+            "costs": 167.2897851808,
+            "gross_pnl": 185.6,
+            "group": "10:25",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 18.3102148192,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 176760.80000000002,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -261.229306796,
+            "costs": 174.229306796,
+            "gross_pnl": -87.0,
+            "group": "10:45",
+            "max_closed_drawdown_pct": -0.2612293067959959,
+            "net_pnl": -261.229306796,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 187021.0,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 603.135759736,
+            "costs": 182.064240264,
+            "gross_pnl": 785.2,
+            "group": "11:15",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 603.135759736,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 198414.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -1174.2256845273,
+            "costs": 181.3091845273,
+            "gross_pnl": -992.9165,
+            "group": "12:20",
+            "max_closed_drawdown_pct": -1.174225684527297,
+            "net_pnl": -1174.2256845273,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 197590.3835,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 1597.0923795716,
+            "costs": 181.6076204284,
+            "gross_pnl": 1778.7,
+            "group": "12:30",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 1597.0923795716,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 197580.90000000002,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 292.1642065672,
+            "costs": 163.6357934328,
+            "gross_pnl": 455.8,
+            "group": "14:45",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 292.1642065672,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 171337.8,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -65.5443746932,
+            "costs": 345.6887493864,
+            "gross_pnl": 214.6,
+            "group": "15:15",
+            "max_closed_drawdown_pct": -0.1310887493863988,
+            "net_pnl": -131.0887493864,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 369901.4,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_exit_reason": [
+          {
+            "average_net_trade": -98.88560850500615,
+            "costs": 11051.7145528254,
+            "gross_pnl": 4624.150000000001,
+            "group": "horizon_exit",
+            "max_closed_drawdown_pct": -7.7518065895251675,
+            "net_pnl": -6427.5645528254,
+            "net_profit_factor": 0.5895051153628371,
+            "trade_count": 65,
+            "turnover": 11752521.65,
+            "win_rate_pct": 41.53846153846154
+          },
+          {
+            "average_net_trade": -65.5443746932,
+            "costs": 345.6887493864,
+            "gross_pnl": 214.6,
+            "group": "session_exit",
+            "max_closed_drawdown_pct": -0.1310887493863988,
+            "net_pnl": -131.0887493864,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 369901.4,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1131.1819983239,
+            "costs": 1057.1234899434,
+            "gross_pnl": -5729.9685,
+            "group": "stop_exit",
+            "max_closed_drawdown_pct": -6.7870919899433835,
+            "net_pnl": -6787.0919899434,
+            "net_profit_factor": 0.0,
+            "trade_count": 6,
+            "turnover": 1140263.7315,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_holding_label_minutes": [
+          {
+            "average_net_trade": -1136.3125908892,
+            "costs": 530.3932726676001,
+            "gross_pnl": -2878.5445,
+            "group": "0",
+            "max_closed_drawdown_pct": -3.4089377726675862,
+            "net_pnl": -3408.9377726676003,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 572830.3555000001,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -593.305758400925,
+            "costs": 695.6560336037,
+            "gross_pnl": -1677.567,
+            "group": "10",
+            "max_closed_drawdown_pct": -2.3732230336036886,
+            "net_pnl": -2373.2230336037,
+            "net_profit_factor": 0.0,
+            "trade_count": 4,
+            "turnover": 746442.633,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -98.88560850500615,
+            "costs": 11051.7145528254,
+            "gross_pnl": 4624.150000000001,
+            "group": "25",
+            "max_closed_drawdown_pct": -7.7518065895251675,
+            "net_pnl": -6427.5645528254,
+            "net_profit_factor": 0.5895051153628371,
+            "trade_count": 65,
+            "turnover": 11752521.65,
+            "win_rate_pct": 41.53846153846154
+          },
+          {
+            "average_net_trade": -1136.0199330585,
+            "costs": 176.7629330585,
+            "gross_pnl": -959.257,
+            "group": "5",
+            "max_closed_drawdown_pct": -1.1360199330585075,
+            "net_pnl": -1136.0199330585,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 190892.14299999998,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_stock": [
+          {
+            "average_net_trade": 138.83613909205,
+            "costs": 675.1054436318,
+            "gross_pnl": 1230.45,
+            "group": "AXISBANK",
+            "max_closed_drawdown_pct": -0.2336284069910155,
+            "net_pnl": 555.3445563682,
+            "net_profit_factor": 3.3583914439266516,
+            "trade_count": 4,
+            "turnover": 715718.05,
+            "win_rate_pct": 75.0
+          },
+          {
+            "average_net_trade": -518.8959135723888,
+            "costs": 1539.8672221515,
+            "gross_pnl": -3130.196,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -4.816702124284067,
+            "net_pnl": -4670.0632221515,
+            "net_profit_factor": 0.10982497653603047,
+            "trade_count": 9,
+            "turnover": 1642059.404,
+            "win_rate_pct": 22.22222222222222
+          },
+          {
+            "average_net_trade": -194.54703145,
+            "costs": 1038.0821887,
+            "gross_pnl": -129.19999999999996,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -1.1672821887000029,
+            "net_pnl": -1167.2821887,
+            "net_profit_factor": 0.202732611602307,
+            "trade_count": 6,
+            "turnover": 1111325.0,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -414.13239229188,
+            "costs": 865.2119614594001,
+            "gross_pnl": -1205.45,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -2.070661961459408,
+            "net_pnl": -2070.6619614594,
+            "net_profit_factor": 0.11652349882639651,
+            "trade_count": 5,
+            "turnover": 926493.1499999999,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -76.85524651665,
+            "costs": 1379.5419721332,
+            "gross_pnl": 764.7,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -1.289837540586014,
+            "net_pnl": -614.8419721332,
+            "net_profit_factor": 0.5652490804475291,
+            "trade_count": 8,
+            "turnover": 1474890.7,
+            "win_rate_pct": 37.5
+          },
+          {
+            "average_net_trade": 620.4229212454001,
+            "costs": 521.7812362638,
+            "gross_pnl": 2383.05,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -0.238822168780084,
+            "net_pnl": 1861.2687637362,
+            "net_profit_factor": 8.671021007007463,
+            "trade_count": 3,
+            "turnover": 559300.05,
+            "win_rate_pct": 66.66666666666667
+          },
+          {
+            "average_net_trade": 603.135759736,
+            "costs": 182.064240264,
+            "gross_pnl": 785.2,
+            "group": "KOTAKBANK",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 603.135759736,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 198414.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -532.9848941193715,
+            "costs": 1212.3707588356,
+            "gross_pnl": -2518.5235,
+            "group": "LT",
+            "max_closed_drawdown_pct": -3.730894258835582,
+            "net_pnl": -3730.8942588356003,
+            "net_profit_factor": 0.03009768291101227,
+            "trade_count": 7,
+            "turnover": 1298806.0765,
+            "win_rate_pct": 14.285714285714286
+          },
+          {
+            "average_net_trade": -363.3300958502667,
+            "costs": 977.3805751016,
+            "gross_pnl": -1202.6,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.179980575101592,
+            "net_pnl": -2179.9805751016,
+            "net_profit_factor": 0.0,
+            "trade_count": 6,
+            "turnover": 1022136.6,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -80.71739560379999,
+            "costs": 343.7347912076,
+            "gross_pnl": 182.3,
+            "group": "RELIANCE",
+            "max_closed_drawdown_pct": -0.3507027869116053,
+            "net_pnl": -161.43479120759997,
+            "net_profit_factor": 0.5405546839808887,
+            "trade_count": 2,
+            "turnover": 367030.10000000003,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -373.0492402286,
+            "costs": 348.3984804572,
+            "gross_pnl": -397.70000000000005,
+            "group": "SBIN",
+            "max_closed_drawdown_pct": -0.7595779782892054,
+            "net_pnl": -746.0984804572,
+            "net_profit_factor": 0.017746035584601753,
+            "trade_count": 2,
+            "turnover": 373989.7,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -149.0630953344,
+            "costs": 679.6523813376,
+            "gross_pnl": 83.40000000000002,
+            "group": "SUNPHARMA",
+            "max_closed_drawdown_pct": -0.8884165879047945,
+            "net_pnl": -596.2523813376,
+            "net_profit_factor": 0.3288594681198224,
+            "trade_count": 4,
+            "turnover": 722597.6,
+            "win_rate_pct": 25.0
+          },
+          {
+            "average_net_trade": -11.396266642691666,
+            "costs": 2027.5961997123,
+            "gross_pnl": 1890.8410000000001,
+            "group": "TCS",
+            "max_closed_drawdown_pct": -1.1580424821158952,
+            "net_pnl": -136.7551997123,
+            "net_profit_factor": 0.9451530515734061,
+            "trade_count": 12,
+            "turnover": 2150802.041,
+            "win_rate_pct": 41.666666666666664
+          },
+          {
+            "average_net_trade": -72.80733522489999,
+            "costs": 663.7393408995999,
+            "gross_pnl": 372.51,
+            "group": "TITAN",
+            "max_closed_drawdown_pct": -1.1104049003516026,
+            "net_pnl": -291.22934089959995,
+            "net_profit_factor": 0.7377268951106171,
+            "trade_count": 4,
+            "turnover": 699124.31,
+            "win_rate_pct": 75.0
+          }
+        ],
+        "by_trend_regime": [
+          {
+            "average_net_trade": -253.00518422085716,
+            "costs": 2317.872579092,
+            "gross_pnl": -1224.1999999999998,
+            "group": "bearish",
+            "max_closed_drawdown_pct": -3.949693182999603,
+            "net_pnl": -3542.072579092,
+            "net_profit_factor": 0.2479587686590346,
+            "trade_count": 14,
+            "turnover": 2439667.0,
+            "win_rate_pct": 35.714285714285715
+          },
+          {
+            "average_net_trade": -271.7770400656,
+            "costs": 3112.2707211808,
+            "gross_pnl": -1779.716,
+            "group": "bullish",
+            "max_closed_drawdown_pct": -5.0108589715248115,
+            "net_pnl": -4891.9867211808,
+            "net_profit_factor": 0.21776615602029462,
+            "trade_count": 18,
+            "turnover": 3331291.684,
+            "win_rate_pct": 38.888888888888886
+          },
+          {
+            "average_net_trade": -112.11034246213333,
+            "costs": 6659.8008560232,
+            "gross_pnl": 2287.4975,
+            "group": "sideways",
+            "max_closed_drawdown_pct": -5.0783585198329595,
+            "net_pnl": -4372.3033560232,
+            "net_profit_factor": 0.605140922356702,
+            "trade_count": 39,
+            "turnover": 7093948.8975,
+            "win_rate_pct": 38.46153846153846
+          },
+          {
+            "average_net_trade": -269.6913179296,
+            "costs": 364.58263585919997,
+            "gross_pnl": -174.8,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -0.5393826358592091,
+            "net_pnl": -539.3826358592,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 397779.19999999995,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_volatility_regime": [
+          {
+            "average_net_trade": 234.28958034285,
+            "costs": 660.4916786286,
+            "gross_pnl": 1597.65,
+            "group": "high_volatility",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 937.1583213714,
+            "net_profit_factor": "Infinity",
+            "trade_count": 4,
+            "turnover": 694144.85,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -205.12717877115523,
+            "costs": 11429.4524776674,
+            "gross_pnl": -2314.0685,
+            "group": "low_volatility",
+            "max_closed_drawdown_pct": -14.408891811796654,
+            "net_pnl": -13743.5209776674,
+            "net_profit_factor": 0.37634012201876993,
+            "trade_count": 67,
+            "turnover": 12170762.7315,
+            "win_rate_pct": 34.32835820895522
+          },
+          {
+            "average_net_trade": -269.6913179296,
+            "costs": 364.58263585919997,
+            "gross_pnl": -174.8,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -0.5393826358592091,
+            "net_pnl": -539.3826358592,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 397779.19999999995,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "cost_components": {
+          "brokerage": 2920.0,
+          "exchange": 427.0585143643,
+          "gst": 604.8578162063,
+          "ipft": 13.2626867815,
+          "sebi": 1.3262686781,
+          "slippage": 6631.34339075,
+          "stamp_duty": 198.95367,
+          "stt": 1657.724445375
+        },
+        "cost_pct_of_absolute_turnover": 0.09390651379574089,
+        "costs": 12454.5267921552,
+        "gross_losing_trades": 38,
+        "gross_pnl": -891.2184999999998,
+        "gross_positive_to_net_negative_trades": 8,
+        "max_closed_drawdown_pct": -13.637909498722378,
+        "net_losing_trades": 46,
+        "net_pnl": -13345.7452921552,
+        "net_profit_erased_or_added_by_costs": 12454.5267921552,
+        "net_profit_factor": 0.408859536118329,
+        "reconstructed_risk_violations": {},
+        "top_five_negative_stock_groups": [
+          {
+            "average_net_trade": -518.8959135723888,
+            "costs": 1539.8672221515,
+            "gross_pnl": -3130.196,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -4.816702124284067,
+            "net_pnl": -4670.0632221515,
+            "net_profit_factor": 0.10982497653603047,
+            "trade_count": 9,
+            "turnover": 1642059.404,
+            "win_rate_pct": 22.22222222222222
+          },
+          {
+            "average_net_trade": -532.9848941193715,
+            "costs": 1212.3707588356,
+            "gross_pnl": -2518.5235,
+            "group": "LT",
+            "max_closed_drawdown_pct": -3.730894258835582,
+            "net_pnl": -3730.8942588356003,
+            "net_profit_factor": 0.03009768291101227,
+            "trade_count": 7,
+            "turnover": 1298806.0765,
+            "win_rate_pct": 14.285714285714286
+          },
+          {
+            "average_net_trade": -363.3300958502667,
+            "costs": 977.3805751016,
+            "gross_pnl": -1202.6,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.179980575101592,
+            "net_pnl": -2179.9805751016,
+            "net_profit_factor": 0.0,
+            "trade_count": 6,
+            "turnover": 1022136.6,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -414.13239229188,
+            "costs": 865.2119614594001,
+            "gross_pnl": -1205.45,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -2.070661961459408,
+            "net_pnl": -2070.6619614594,
+            "net_profit_factor": 0.11652349882639651,
+            "trade_count": 5,
+            "turnover": 926493.1499999999,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -194.54703145,
+            "costs": 1038.0821887,
+            "gross_pnl": -129.19999999999996,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -1.1672821887000029,
+            "net_pnl": -1167.2821887,
+            "net_profit_factor": 0.202732611602307,
+            "trade_count": 6,
+            "turnover": 1111325.0,
+            "win_rate_pct": 50.0
+          }
+        ],
+        "top_five_negative_stock_share_of_negative_stock_net": 0.8443913695570832,
+        "trade_count": 73,
+        "turnover": 13262686.7815,
+        "win_rate_pct": 36.986301369863014
+      },
+      "sharp_reversal_3bar_1to3_rsi30_stop075_h6_v1": {
+        "average_net_trade": -214.48987413802544,
+        "by_entry_time_label": [
+          {
+            "average_net_trade": -184.12174952500462,
+            "costs": 9984.2619691253,
+            "gross_pnl": -1983.65175,
+            "group": "09:25",
+            "max_closed_drawdown_pct": -11.967913719125312,
+            "net_pnl": -11967.9137191253,
+            "net_profit_factor": 0.2689502742785108,
+            "trade_count": 65,
+            "turnover": 10182135.34825,
+            "win_rate_pct": 29.23076923076923
+          },
+          {
+            "average_net_trade": -237.445538571265,
+            "costs": 9211.1053142759,
+            "gross_pnl": -5035.627,
+            "group": "09:30",
+            "max_closed_drawdown_pct": -14.269014680079096,
+            "net_pnl": -14246.7323142759,
+            "net_profit_factor": 0.2280458114408016,
+            "trade_count": 60,
+            "turnover": 9391851.373,
+            "win_rate_pct": 21.666666666666668
+          },
+          {
+            "average_net_trade": -288.71947718041247,
+            "costs": 1213.3030674433,
+            "gross_pnl": -1096.45275,
+            "group": "09:35",
+            "max_closed_drawdown_pct": -2.342673992063027,
+            "net_pnl": -2309.7558174432997,
+            "net_profit_factor": 0.09484668944676815,
+            "trade_count": 8,
+            "turnover": 1230462.54725,
+            "win_rate_pct": 25.0
+          },
+          {
+            "average_net_trade": 40.542376302399994,
+            "costs": 434.17287109280005,
+            "gross_pnl": 555.8,
+            "group": "09:40",
+            "max_closed_drawdown_pct": -0.20060154674880204,
+            "net_pnl": 121.62712890719999,
+            "net_profit_factor": 1.60631201941581,
+            "trade_count": 3,
+            "turnover": 430622.8,
+            "win_rate_pct": 66.66666666666667
+          },
+          {
+            "average_net_trade": -15.848554559119993,
+            "costs": 744.5015227956001,
+            "gross_pnl": 665.2587500000001,
+            "group": "09:45",
+            "max_closed_drawdown_pct": -0.7217605827487206,
+            "net_pnl": -79.24277279559996,
+            "net_profit_factor": 0.8909013577352479,
+            "trade_count": 5,
+            "turnover": 748485.65875,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -596.4040370085,
+            "costs": 131.1152870086,
+            "gross_pnl": -465.28875,
+            "group": "09:50",
+            "max_closed_drawdown_pct": -0.5964040370085022,
+            "net_pnl": -596.4040370085,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 123611.71125,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -411.16298165729995,
+            "costs": 918.9801399439,
+            "gross_pnl": -1547.99775,
+            "group": "10:00",
+            "max_closed_drawdown_pct": -3.057900238213407,
+            "net_pnl": -2466.9778899437997,
+            "net_profit_factor": 0.1981323638471275,
+            "trade_count": 6,
+            "turnover": 936218.00225,
+            "win_rate_pct": 16.666666666666668
+          },
+          {
+            "average_net_trade": -843.5810428763,
+            "costs": 168.8825428763,
+            "gross_pnl": -674.6985,
+            "group": "10:05",
+            "max_closed_drawdown_pct": -0.8435810428763069,
+            "net_pnl": -843.5810428763,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 179244.90149999998,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -839.7938867228,
+            "costs": 168.3038867228,
+            "gross_pnl": -671.49,
+            "group": "10:10",
+            "max_closed_drawdown_pct": -0.839793886722795,
+            "net_pnl": -839.7938867228,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 178392.51,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 499.5427383022666,
+            "costs": 484.0717850932,
+            "gross_pnl": 1982.7,
+            "group": "10:25",
+            "max_closed_drawdown_pct": -0.028770933778210495,
+            "net_pnl": 1498.6282149068,
+            "net_profit_factor": 52.30442283411772,
+            "trade_count": 3,
+            "turnover": 503850.69999999995,
+            "win_rate_pct": 66.66666666666667
+          },
+          {
+            "average_net_trade": -239.088344024,
+            "costs": 161.088344024,
+            "gross_pnl": -78.0,
+            "group": "10:45",
+            "max_closed_drawdown_pct": -0.2390883440239966,
+            "net_pnl": -239.088344024,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 167674.0,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -769.9727495779,
+            "costs": 343.6004991558,
+            "gross_pnl": -1196.345,
+            "group": "10:55",
+            "max_closed_drawdown_pct": -1.5399454991558037,
+            "net_pnl": -1539.9454991558,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 367055.655,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -840.0364488513,
+            "costs": 168.3409488513,
+            "gross_pnl": -671.6955,
+            "group": "11:05",
+            "max_closed_drawdown_pct": -0.8400364488513001,
+            "net_pnl": -840.0364488513,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 178447.10450000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -111.3544995,
+            "costs": 176.3544995,
+            "gross_pnl": 65.0,
+            "group": "11:10",
+            "max_closed_drawdown_pct": -0.11135449949999376,
+            "net_pnl": -111.3544995,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 190125.0,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 542.839729032,
+            "costs": 169.560270968,
+            "gross_pnl": 712.4,
+            "group": "11:15",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 542.839729032,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 180018.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -695.0843307058,
+            "costs": 146.1930807058,
+            "gross_pnl": -548.89125,
+            "group": "11:20",
+            "max_closed_drawdown_pct": -0.6950843307057974,
+            "net_pnl": -695.0843307058,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 145822.10875,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 252.7111507136,
+            "costs": 145.6888492864,
+            "gross_pnl": 398.4,
+            "group": "11:25",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 252.7111507136,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 144926.40000000002,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -399.4156248352,
+            "costs": 180.2156248352,
+            "gross_pnl": -219.2,
+            "group": "11:50",
+            "max_closed_drawdown_pct": -0.39941562483519766,
+            "net_pnl": -399.4156248352,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 195855.19999999998,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 765.4505060004,
+            "costs": 335.0989879992,
+            "gross_pnl": 1866.0,
+            "group": "12:25",
+            "max_closed_drawdown_pct": -0.05649716307092323,
+            "net_pnl": 1530.9010120008,
+            "net_profit_factor": 27.673302828478175,
+            "trade_count": 2,
+            "turnover": 354044.2,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -563.4274073102,
+            "costs": 327.40531462039996,
+            "gross_pnl": -799.4495,
+            "group": "12:55",
+            "max_closed_drawdown_pct": -1.1268548146203927,
+            "net_pnl": -1126.8548146204,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 343149.5505,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -897.1722238178,
+            "costs": 177.0709738178,
+            "gross_pnl": -720.10125,
+            "group": "13:10",
+            "max_closed_drawdown_pct": -0.8971722238177993,
+            "net_pnl": -897.1722238178,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 191306.89875,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -639.9014464534,
+            "costs": 137.7614464534,
+            "gross_pnl": -502.14,
+            "group": "13:25",
+            "max_closed_drawdown_pct": -0.6399014464533948,
+            "net_pnl": -639.9014464534,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 133401.86,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -724.0718329662,
+            "costs": 150.6222079662,
+            "gross_pnl": -573.449625,
+            "group": "13:40",
+            "max_closed_drawdown_pct": -0.7240718329661999,
+            "net_pnl": -724.0718329662,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 152346.450375,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 369.4330888,
+            "costs": 146.5669112,
+            "gross_pnl": 516.0,
+            "group": "14:05",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 369.4330888,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 146200.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -528.6165769264,
+            "costs": 168.1165769264,
+            "gross_pnl": -360.5,
+            "group": "14:35",
+            "max_closed_drawdown_pct": -0.5286165769263995,
+            "net_pnl": -528.6165769264,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 178066.4,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 46.5675641084,
+            "costs": 152.3324358916,
+            "gross_pnl": 198.9,
+            "group": "14:40",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 46.5675641084,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 154739.1,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -308.7021903106,
+            "costs": 177.7521903106,
+            "gross_pnl": -130.95,
+            "group": "14:55",
+            "max_closed_drawdown_pct": -0.30870219031060575,
+            "net_pnl": -308.7021903106,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 192214.34999999998,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -257.26048511,
+            "costs": 134.76048511,
+            "gross_pnl": -122.5,
+            "group": "15:00",
+            "max_closed_drawdown_pct": -0.2572604851100002,
+            "net_pnl": -257.26048511,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 128922.5,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -331.22207896085,
+            "costs": 303.35790792169996,
+            "gross_pnl": -359.08624999999995,
+            "group": "15:15",
+            "max_closed_drawdown_pct": -0.6624441579217044,
+            "net_pnl": -662.4441579217,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 307676.71375,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -7.0656555092,
+            "costs": 149.8656555092,
+            "gross_pnl": 142.8,
+            "group": "15:20",
+            "max_closed_drawdown_pct": -0.007065655509197466,
+            "net_pnl": -7.0656555092,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 151116.69999999998,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_exit_reason": [
+          {
+            "average_net_trade": -84.71915301286572,
+            "costs": 21611.3814218012,
+            "gross_pnl": 9750.699999999999,
+            "group": "horizon_exit",
+            "max_closed_drawdown_pct": -11.86068142180121,
+            "net_pnl": -11860.6814218012,
+            "net_profit_factor": 0.554459973991604,
+            "trade_count": 140,
+            "turnover": 22085733.7,
+            "win_rate_pct": 32.857142857142854
+          },
+          {
+            "average_net_trade": -27.4656610218,
+            "costs": 319.3313220436,
+            "gross_pnl": 264.4,
+            "group": "session_exit",
+            "max_closed_drawdown_pct": -0.0549313220436054,
+            "net_pnl": -54.9313220436,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 331091.1,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -744.25985653102,
+            "costs": 5379.7388535859,
+            "gross_pnl": -20669.356125,
+            "group": "stop_exit",
+            "max_closed_drawdown_pct": -26.049094978585718,
+            "net_pnl": -26049.0949785857,
+            "net_profit_factor": 0.0,
+            "trade_count": 35,
+            "turnover": 5491158.943875,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_holding_label_minutes": [
+          {
+            "average_net_trade": -769.2699806446334,
+            "costs": 472.5846919339,
+            "gross_pnl": -1835.22525,
+            "group": "0",
+            "max_closed_drawdown_pct": -2.3078099419339027,
+            "net_pnl": -2307.8099419339,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 487558.17475,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -629.9870797365166,
+            "costs": 939.6434784191999,
+            "gross_pnl": -2840.279,
+            "group": "10",
+            "max_closed_drawdown_pct": -3.7799224784191066,
+            "net_pnl": -3779.9224784191,
+            "net_profit_factor": 0.0,
+            "trade_count": 6,
+            "turnover": 966846.921,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -727.1777790542666,
+            "costs": 453.29033716280003,
+            "gross_pnl": -1728.243,
+            "group": "15",
+            "max_closed_drawdown_pct": -2.181533337162811,
+            "net_pnl": -2181.5333371628,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 459136.557,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -859.2186278884001,
+            "costs": 513.8156336652,
+            "gross_pnl": -2063.84025,
+            "group": "20",
+            "max_closed_drawdown_pct": -2.5776558836651975,
+            "net_pnl": -2577.6558836652002,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 548293.55975,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -117.0158721538932,
+            "costs": 22707.3197066223,
+            "gross_pnl": 5505.9865,
+            "group": "25",
+            "max_closed_drawdown_pct": -17.201333206622326,
+            "net_pnl": -17201.3332066223,
+            "net_profit_factor": 0.4618118872628795,
+            "trade_count": 147,
+            "turnover": 23213412.5865,
+            "win_rate_pct": 31.292517006802722
+          },
+          {
+            "average_net_trade": -661.09685830848,
+            "costs": 2223.7977496273,
+            "gross_pnl": -7692.655125,
+            "group": "5",
+            "max_closed_drawdown_pct": -9.916452874627213,
+            "net_pnl": -9916.4528746272,
+            "net_profit_factor": 0.0,
+            "trade_count": 15,
+            "turnover": 2232735.944875,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_stock": [
+          {
+            "average_net_trade": -63.26352288064545,
+            "costs": 1684.3913766871,
+            "gross_pnl": 988.4926249999999,
+            "group": "AXISBANK",
+            "max_closed_drawdown_pct": -0.8735724336543016,
+            "net_pnl": -695.8987516871,
+            "net_profit_factor": 0.7055915733050321,
+            "trade_count": 11,
+            "turnover": 1715182.992625,
+            "win_rate_pct": 45.45454545454545
+          },
+          {
+            "average_net_trade": -293.43998565243567,
+            "costs": 2214.8660491341,
+            "gross_pnl": -1893.29375,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -4.108159799134093,
+            "net_pnl": -4108.1597991341,
+            "net_profit_factor": 0.1410786190696822,
+            "trade_count": 14,
+            "turnover": 2288133.70625,
+            "win_rate_pct": 28.571428571428573
+          },
+          {
+            "average_net_trade": -225.13021734375334,
+            "costs": 2298.1145101563,
+            "gross_pnl": -1078.83875,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -3.399235625959496,
+            "net_pnl": -3376.9532601563,
+            "net_profit_factor": 0.128268765403059,
+            "trade_count": 15,
+            "turnover": 2341070.76125,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -319.9377898429143,
+            "costs": 1101.7645289004,
+            "gross_pnl": -1137.8,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -2.2395645289004062,
+            "net_pnl": -2239.5645289004,
+            "net_profit_factor": 0.0,
+            "trade_count": 7,
+            "turnover": 1135752.9,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -163.1282025249909,
+            "costs": 5059.0791833247,
+            "gross_pnl": -324.15150000000017,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -6.005269644830047,
+            "net_pnl": -5383.2306833247,
+            "net_profit_factor": 0.41380009265689804,
+            "trade_count": 33,
+            "turnover": 5154774.8485,
+            "win_rate_pct": 27.272727272727273
+          },
+          {
+            "average_net_trade": -340.97975356193575,
+            "costs": 2226.1432998671,
+            "gross_pnl": -2547.57325,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -5.525819073971094,
+            "net_pnl": -4773.7165498671,
+            "net_profit_factor": 0.13610697600410315,
+            "trade_count": 14,
+            "turnover": 2304841.52675,
+            "win_rate_pct": 14.285714285714286
+          },
+          {
+            "average_net_trade": -241.45244434168887,
+            "costs": 1420.0257490752,
+            "gross_pnl": -753.04625,
+            "group": "KOTAKBANK",
+            "max_closed_drawdown_pct": -2.847704213331026,
+            "net_pnl": -2173.0719990752,
+            "net_profit_factor": 0.2421663419703698,
+            "trade_count": 9,
+            "turnover": 1465249.15375,
+            "win_rate_pct": 22.22222222222222
+          },
+          {
+            "average_net_trade": -60.36818405238333,
+            "costs": 1922.6845836286,
+            "gross_pnl": 1198.2663750000002,
+            "group": "LT",
+            "max_closed_drawdown_pct": -2.0243229184714995,
+            "net_pnl": -724.4182086285999,
+            "net_profit_factor": 0.7921879563410009,
+            "trade_count": 12,
+            "turnover": 1996467.966375,
+            "win_rate_pct": 41.666666666666664
+          },
+          {
+            "average_net_trade": -180.9732773360154,
+            "costs": 1897.8004803682,
+            "gross_pnl": -454.8521249999999,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.944267615099183,
+            "net_pnl": -2352.6526053682,
+            "net_profit_factor": 0.3090532340698469,
+            "trade_count": 13,
+            "turnover": 1890616.647875,
+            "win_rate_pct": 30.76923076923077
+          },
+          {
+            "average_net_trade": -143.76249478685716,
+            "costs": 1082.365963508,
+            "gross_pnl": 76.02849999999998,
+            "group": "RELIANCE",
+            "max_closed_drawdown_pct": -1.143315018339941,
+            "net_pnl": -1006.337463508,
+            "net_profit_factor": 0.37615509614811743,
+            "trade_count": 7,
+            "turnover": 1106998.6285,
+            "win_rate_pct": 42.857142857142854
+          },
+          {
+            "average_net_trade": -598.452083941375,
+            "costs": 659.9283357655,
+            "gross_pnl": -1733.88,
+            "group": "SBIN",
+            "max_closed_drawdown_pct": -2.3938083357655127,
+            "net_pnl": -2393.8083357655,
+            "net_profit_factor": 0.0,
+            "trade_count": 4,
+            "turnover": 693855.02,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -148.44610915302727,
+            "costs": 1735.1142006834,
+            "gross_pnl": 102.20699999999997,
+            "group": "SUNPHARMA",
+            "max_closed_drawdown_pct": -1.9865864935421085,
+            "net_pnl": -1632.9072006832998,
+            "net_profit_factor": 0.49064895667192315,
+            "trade_count": 11,
+            "turnover": 1789998.407,
+            "win_rate_pct": 27.272727272727273
+          },
+          {
+            "average_net_trade": -178.40586839560834,
+            "costs": 1715.5479207473,
+            "gross_pnl": -425.3225,
+            "group": "TCS",
+            "max_closed_drawdown_pct": -2.3251602223833157,
+            "net_pnl": -2140.8704207473,
+            "net_profit_factor": 0.1767084280042129,
+            "trade_count": 12,
+            "turnover": 1691793.4775,
+            "win_rate_pct": 41.666666666666664
+          },
+          {
+            "average_net_trade": -330.8745277056467,
+            "costs": 2292.6254155848,
+            "gross_pnl": -2670.4925,
+            "group": "TITAN",
+            "max_closed_drawdown_pct": -4.963117915584691,
+            "net_pnl": -4963.1179155847,
+            "net_profit_factor": 0.04265392418058596,
+            "trade_count": 15,
+            "turnover": 2333247.7075,
+            "win_rate_pct": 6.666666666666667
+          }
+        ],
+        "by_trend_regime": [
+          {
+            "average_net_trade": -294.34857044084686,
+            "costs": 4478.8047541072,
+            "gross_pnl": -4940.3495,
+            "group": "bearish",
+            "max_closed_drawdown_pct": -9.41915425410711,
+            "net_pnl": -9419.1542541071,
+            "net_profit_factor": 0.0921540104598981,
+            "trade_count": 32,
+            "turnover": 4370753.8505,
+            "win_rate_pct": 18.75
+          },
+          {
+            "average_net_trade": -210.5478642041383,
+            "costs": 7443.7521175945,
+            "gross_pnl": -2451.9975,
+            "group": "bullish",
+            "max_closed_drawdown_pct": -9.895749617594507,
+            "net_pnl": -9895.7496175945,
+            "net_profit_factor": 0.29961827566898097,
+            "trade_count": 47,
+            "turnover": 7692928.702500001,
+            "win_rate_pct": 29.78723404255319
+          },
+          {
+            "average_net_trade": -164.72000731491445,
+            "costs": 12737.855982138,
+            "gross_pnl": -933.904625,
+            "group": "sideways",
+            "max_closed_drawdown_pct": -13.671760607137918,
+            "net_pnl": -13671.7606071379,
+            "net_profit_factor": 0.39142203535901465,
+            "trade_count": 83,
+            "turnover": 12984940.895375,
+            "win_rate_pct": 28.91566265060241
+          },
+          {
+            "average_net_trade": -331.8695495727333,
+            "costs": 2650.038743591,
+            "gross_pnl": -2328.0045,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -4.978043243591001,
+            "net_pnl": -4978.043243591,
+            "net_profit_factor": 0.13507861107512484,
+            "trade_count": 15,
+            "turnover": 2859360.2955,
+            "win_rate_pct": 13.333333333333334
+          }
+        ],
+        "by_volatility_regime": [
+          {
+            "average_net_trade": -323.6803759504,
+            "costs": 1706.7587614048,
+            "gross_pnl": -2177.40575,
+            "group": "high_volatility",
+            "max_closed_drawdown_pct": -3.8841645114047973,
+            "net_pnl": -3884.1645114048,
+            "net_profit_factor": 0.15018466305288064,
+            "trade_count": 12,
+            "turnover": 1679138.19425,
+            "win_rate_pct": 25.0
+          },
+          {
+            "average_net_trade": -199.2041389011764,
+            "costs": 24885.7539880896,
+            "gross_pnl": -7186.112375,
+            "group": "low_volatility",
+            "max_closed_drawdown_pct": -32.40423665878078,
+            "net_pnl": -32071.8663630894,
+            "net_profit_factor": 0.30498632413377336,
+            "trade_count": 161,
+            "turnover": 25449661.787625,
+            "win_rate_pct": 26.70807453416149
+          },
+          {
+            "average_net_trade": -502.169211984075,
+            "costs": 717.9388479363,
+            "gross_pnl": -1290.738,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -2.008676847936308,
+            "net_pnl": -2008.6768479363,
+            "net_profit_factor": 0.0,
+            "trade_count": 4,
+            "turnover": 779183.762,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "cost_components": {
+          "brokerage": 7080.0,
+          "exchange": 898.6370765525,
+          "gst": 1441.1781108537,
+          "ipft": 27.9079837443,
+          "sebi": 2.7907983744,
+          "slippage": 13953.9918719375,
+          "stamp_duty": 418.77957,
+          "stt": 3487.1661859688
+        },
+        "cost_pct_of_absolute_turnover": 0.09785892040095716,
+        "costs": 27310.4515974307,
+        "gross_losing_trades": 103,
+        "gross_pnl": -10654.256125,
+        "gross_positive_to_net_negative_trades": 27,
+        "max_closed_drawdown_pct": -37.96470772243051,
+        "net_losing_trades": 131,
+        "net_pnl": -37964.7077224305,
+        "net_profit_erased_or_added_by_costs": 27310.451597430503,
+        "net_profit_factor": 0.2799477894627789,
+        "reconstructed_risk_violations": {},
+        "top_five_negative_stock_groups": [
+          {
+            "average_net_trade": -163.1282025249909,
+            "costs": 5059.0791833247,
+            "gross_pnl": -324.15150000000017,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -6.005269644830047,
+            "net_pnl": -5383.2306833247,
+            "net_profit_factor": 0.41380009265689804,
+            "trade_count": 33,
+            "turnover": 5154774.8485,
+            "win_rate_pct": 27.272727272727273
+          },
+          {
+            "average_net_trade": -330.8745277056467,
+            "costs": 2292.6254155848,
+            "gross_pnl": -2670.4925,
+            "group": "TITAN",
+            "max_closed_drawdown_pct": -4.963117915584691,
+            "net_pnl": -4963.1179155847,
+            "net_profit_factor": 0.04265392418058596,
+            "trade_count": 15,
+            "turnover": 2333247.7075,
+            "win_rate_pct": 6.666666666666667
+          },
+          {
+            "average_net_trade": -340.97975356193575,
+            "costs": 2226.1432998671,
+            "gross_pnl": -2547.57325,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -5.525819073971094,
+            "net_pnl": -4773.7165498671,
+            "net_profit_factor": 0.13610697600410315,
+            "trade_count": 14,
+            "turnover": 2304841.52675,
+            "win_rate_pct": 14.285714285714286
+          },
+          {
+            "average_net_trade": -293.43998565243567,
+            "costs": 2214.8660491341,
+            "gross_pnl": -1893.29375,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -4.108159799134093,
+            "net_pnl": -4108.1597991341,
+            "net_profit_factor": 0.1410786190696822,
+            "trade_count": 14,
+            "turnover": 2288133.70625,
+            "win_rate_pct": 28.571428571428573
+          },
+          {
+            "average_net_trade": -225.13021734375334,
+            "costs": 2298.1145101563,
+            "gross_pnl": -1078.83875,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -3.399235625959496,
+            "net_pnl": -3376.9532601563,
+            "net_profit_factor": 0.128268765403059,
+            "trade_count": 15,
+            "turnover": 2341070.76125,
+            "win_rate_pct": 20.0
+          }
+        ],
+        "top_five_negative_stock_share_of_negative_stock_net": 0.5954261092522831,
+        "trade_count": 177,
+        "turnover": 27907983.743875,
+        "win_rate_pct": 25.98870056497175
+      },
+      "sharp_reversal_3bar_2to4_rsi30_stop1_h12_v1": {
+        "average_net_trade": -325.3523003565055,
+        "by_entry_time_label": [
+          {
+            "average_net_trade": -348.94581931116664,
+            "costs": 4528.4906214015,
+            "gross_pnl": -4893.0464999999995,
+            "group": "09:25",
+            "max_closed_drawdown_pct": -10.182447184267485,
+            "net_pnl": -9421.5371214015,
+            "net_profit_factor": 0.3225919404963963,
+            "trade_count": 27,
+            "turnover": 4791320.2535,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -332.929330231205,
+            "costs": 3335.9691046241,
+            "gross_pnl": -3322.6175,
+            "group": "09:30",
+            "max_closed_drawdown_pct": -7.309748750365852,
+            "net_pnl": -6658.5866046241,
+            "net_profit_factor": 0.27174126174841934,
+            "trade_count": 20,
+            "turnover": 3521888.8825000003,
+            "win_rate_pct": 25.0
+          },
+          {
+            "average_net_trade": 180.3121715792,
+            "costs": 180.8878284208,
+            "gross_pnl": 361.2,
+            "group": "09:35",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 180.3121715792,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 196750.80000000002,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -1153.4545456511,
+            "costs": 178.8375456511,
+            "gross_pnl": -974.617,
+            "group": "11:05",
+            "max_closed_drawdown_pct": -1.1534545456511003,
+            "net_pnl": -1153.4545456511,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 193948.78300000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1150.0300517584,
+            "costs": 178.4300517584,
+            "gross_pnl": -971.6,
+            "group": "12:05",
+            "max_closed_drawdown_pct": -1.1500300517583995,
+            "net_pnl": -1150.0300517584,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 193348.4,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 817.537738728,
+            "costs": 353.724522544,
+            "gross_pnl": 1988.8,
+            "group": "12:25",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 1635.075477456,
+            "net_profit_factor": "Infinity",
+            "trade_count": 2,
+            "turnover": 381444.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -1039.0523862371,
+            "costs": 165.2243862371,
+            "gross_pnl": -873.828,
+            "group": "13:40",
+            "max_closed_drawdown_pct": -1.0390523862371048,
+            "net_pnl": -1039.0523862371,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 173891.772,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 141.5932285228,
+            "costs": 157.7067714772,
+            "gross_pnl": 299.3,
+            "group": "14:40",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 141.5932285228,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 162634.69999999998,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -428.6966874936,
+            "costs": 158.8966874936,
+            "gross_pnl": -269.8,
+            "group": "15:15",
+            "max_closed_drawdown_pct": -0.42869668749360157,
+            "net_pnl": -428.6966874936,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 164478.60000000003,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_exit_reason": [
+          {
+            "average_net_trade": -14.317786611551355,
+            "costs": 6224.1081046274,
+            "gross_pnl": 5694.35,
+            "group": "horizon_exit",
+            "max_closed_drawdown_pct": -3.2133663116467925,
+            "net_pnl": -529.7581046274001,
+            "net_profit_factor": 0.9431370246412938,
+            "trade_count": 37,
+            "turnover": 6590961.15,
+            "win_rate_pct": 45.945945945945944
+          },
+          {
+            "average_net_trade": -143.55172948540002,
+            "costs": 316.60345897080003,
+            "gross_pnl": 29.5,
+            "group": "session_exit",
+            "max_closed_drawdown_pct": -0.42869668749360157,
+            "net_pnl": -287.10345897080003,
+            "net_profit_factor": 0.3302876664399555,
+            "trade_count": 2,
+            "turnover": 327113.30000000005,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -1067.3446847506,
+            "costs": 2697.4559560096,
+            "gross_pnl": -14380.059,
+            "group": "stop_exit",
+            "max_closed_drawdown_pct": -17.077514956009587,
+            "net_pnl": -17077.5149560096,
+            "net_profit_factor": 0.0,
+            "trade_count": 16,
+            "turnover": 2861631.741,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_holding_label_minutes": [
+          {
+            "average_net_trade": -1151.74229870475,
+            "costs": 357.2675974095,
+            "gross_pnl": -1946.217,
+            "group": "0",
+            "max_closed_drawdown_pct": -2.3034845974094886,
+            "net_pnl": -2303.4845974095,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 387297.183,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -704.1394986207999,
+            "costs": 317.04449724159997,
+            "gross_pnl": -1091.2345,
+            "group": "10",
+            "max_closed_drawdown_pct": -1.4082789972416077,
+            "net_pnl": -1408.2789972415999,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 327944.0655,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1043.8058531491,
+            "costs": 497.37005944730004,
+            "gross_pnl": -2634.0474999999997,
+            "group": "15",
+            "max_closed_drawdown_pct": -3.1314175594472915,
+            "net_pnl": -3131.4175594473,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 524175.4525,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -995.1276051101,
+            "costs": 159.9976051101,
+            "gross_pnl": -835.13,
+            "group": "20",
+            "max_closed_drawdown_pct": -0.9951276051101021,
+            "net_pnl": -995.1276051101,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 166190.87000000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1069.2939476502002,
+            "costs": 337.6458953004,
+            "gross_pnl": -1800.942,
+            "group": "30",
+            "max_closed_drawdown_pct": -2.1385878953004034,
+            "net_pnl": -2138.5878953004003,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 358387.458,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1044.40876233245,
+            "costs": 331.72352466489997,
+            "gross_pnl": -1757.094,
+            "group": "35",
+            "max_closed_drawdown_pct": -2.08881752466491,
+            "net_pnl": -2088.8175246649,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 349661.706,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 141.5932285228,
+            "costs": 157.7067714772,
+            "gross_pnl": 299.3,
+            "group": "45",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 141.5932285228,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 162634.69999999998,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -1086.7822866966,
+            "costs": 512.7118600898,
+            "gross_pnl": -2747.6349999999998,
+            "group": "5",
+            "max_closed_drawdown_pct": -3.2603468600898022,
+            "net_pnl": -3260.3468600898004,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 546779.365,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1006.7779217541,
+            "costs": 161.3839217541,
+            "gross_pnl": -845.394,
+            "group": "50",
+            "max_closed_drawdown_pct": -1.0067779217540984,
+            "net_pnl": -1006.7779217541,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 168233.406,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -44.81923123981316,
+            "costs": 6405.3157871129,
+            "gross_pnl": 4702.185,
+            "group": "55",
+            "max_closed_drawdown_pct": -4.039160502654648,
+            "net_pnl": -1703.1307871129002,
+            "net_profit_factor": 0.8376388909027062,
+            "trade_count": 38,
+            "turnover": 6788401.985,
+            "win_rate_pct": 44.73684210526316
+          }
+        ],
+        "by_stock": [
+          {
+            "average_net_trade": -390.62121444394,
+            "costs": 821.3860722197,
+            "gross_pnl": -1131.72,
+            "group": "AXISBANK",
+            "max_closed_drawdown_pct": -2.7656212916169043,
+            "net_pnl": -1953.1060722197,
+            "net_profit_factor": 0.29379120773335127,
+            "trade_count": 5,
+            "turnover": 861962.6799999999,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -144.02792382926,
+            "costs": 858.1226191462999,
+            "gross_pnl": 137.98300000000012,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -1.50978768828951,
+            "net_pnl": -720.1396191463,
+            "net_profit_factor": 0.6423736031834767,
+            "trade_count": 5,
+            "turnover": 915838.983,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -525.2814562781667,
+            "costs": 532.1723688345,
+            "gross_pnl": -1043.672,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -1.7529956758429055,
+            "net_pnl": -1575.8443688345,
+            "net_profit_factor": 0.10267431600187739,
+            "trade_count": 3,
+            "turnover": 575152.328,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": 69.20456156293335,
+            "costs": 508.1863153112,
+            "gross_pnl": 715.8,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -0.40191713007525776,
+            "net_pnl": 207.61368468880005,
+            "net_profit_factor": 1.5134163779250291,
+            "trade_count": 3,
+            "turnover": 539556.2,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -259.20512243754,
+            "costs": 2533.7783365631,
+            "gross_pnl": -1354.2985,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -5.656937992998112,
+            "net_pnl": -3888.0768365631,
+            "net_profit_factor": 0.462272697207291,
+            "trade_count": 15,
+            "turnover": 2688049.2015,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -279.8305623334,
+            "costs": 175.8805623334,
+            "gross_pnl": -103.95,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -0.2798305623334052,
+            "net_pnl": -279.8305623334,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 189454.65000000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -583.6938284574,
+            "costs": 323.05315691479996,
+            "gross_pnl": -844.3344999999999,
+            "group": "KOTAKBANK",
+            "max_closed_drawdown_pct": -1.1673876569147978,
+            "net_pnl": -1167.3876569148,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 336749.7655,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -406.1815123854,
+            "costs": 858.7205619270001,
+            "gross_pnl": -1172.187,
+            "group": "LT",
+            "max_closed_drawdown_pct": -2.030907561926998,
+            "net_pnl": -2030.9075619270002,
+            "net_profit_factor": 0.38104308399467524,
+            "trade_count": 5,
+            "turnover": 916931.413,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -451.50565939861997,
+            "costs": 780.7002969931,
+            "gross_pnl": -1476.828,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.2575282969930943,
+            "net_pnl": -2257.5282969931,
+            "net_profit_factor": 0.06728592509631395,
+            "trade_count": 5,
+            "turnover": 802122.772,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -1173.3726824855,
+            "costs": 181.2076824855,
+            "gross_pnl": -992.165,
+            "group": "SBIN",
+            "max_closed_drawdown_pct": -1.1733726824854962,
+            "net_pnl": -1173.3726824855,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 197440.835,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -277.55516901832,
+            "costs": 836.7648450916,
+            "gross_pnl": -551.011,
+            "group": "SUNPHARMA",
+            "max_closed_drawdown_pct": -1.529369073614395,
+            "net_pnl": -1387.7758450915999,
+            "net_profit_factor": 0.3807513210512896,
+            "trade_count": 5,
+            "turnover": 884508.589,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -307.3154513322,
+            "costs": 492.07035399660003,
+            "gross_pnl": -429.876,
+            "group": "TCS",
+            "max_closed_drawdown_pct": -1.150933157271794,
+            "net_pnl": -921.9463539966,
+            "net_profit_factor": 0.19895751706206455,
+            "trade_count": 3,
+            "turnover": 516016.524,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -373.0371738955,
+            "costs": 336.124347791,
+            "gross_pnl": -409.95,
+            "group": "TITAN",
+            "max_closed_drawdown_pct": -0.9380649399574059,
+            "net_pnl": -746.074347791,
+            "net_profit_factor": 0.20466663232837462,
+            "trade_count": 2,
+            "turnover": 355922.25,
+            "win_rate_pct": 50.0
+          }
+        ],
+        "by_trend_regime": [
+          {
+            "average_net_trade": -313.04356247000624,
+            "costs": 2571.1904995201,
+            "gross_pnl": -2437.5065,
+            "group": "bearish",
+            "max_closed_drawdown_pct": -5.237683802795301,
+            "net_pnl": -5008.6969995201,
+            "net_profit_factor": 0.2877115165397853,
+            "trade_count": 16,
+            "turnover": 2673815.3935000002,
+            "win_rate_pct": 31.25
+          },
+          {
+            "average_net_trade": -208.73383570747694,
+            "costs": 2259.0498641972,
+            "gross_pnl": -454.49,
+            "group": "bullish",
+            "max_closed_drawdown_pct": -3.864840737504416,
+            "net_pnl": -2713.5398641972,
+            "net_profit_factor": 0.5554817371774824,
+            "trade_count": 13,
+            "turnover": 2422431.91,
+            "win_rate_pct": 38.46153846153846
+          },
+          {
+            "average_net_trade": -393.99521393146,
+            "costs": 4226.6678482865,
+            "gross_pnl": -5623.2125,
+            "group": "sideways",
+            "max_closed_drawdown_pct": -10.752383639675289,
+            "net_pnl": -9849.8803482865,
+            "net_profit_factor": 0.2629575855009407,
+            "trade_count": 25,
+            "turnover": 4486079.8875,
+            "win_rate_pct": 32.0
+          },
+          {
+            "average_net_trade": -322.259307604,
+            "costs": 181.259307604,
+            "gross_pnl": -141.0,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -0.32225930760401145,
+            "net_pnl": -322.259307604,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 197379.0,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_volatility_regime": [
+          {
+            "average_net_trade": -325.33584191598334,
+            "costs": 981.8600514959,
+            "gross_pnl": -970.155,
+            "group": "high_volatility",
+            "max_closed_drawdown_pct": -1.9520150514958923,
+            "net_pnl": -1952.0150514959,
+            "net_profit_factor": 0.3397594192939691,
+            "trade_count": 6,
+            "turnover": 1028693.445,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -325.35431567575307,
+            "costs": 8256.3074681119,
+            "gross_pnl": -7686.053999999999,
+            "group": "low_volatility",
+            "max_closed_drawdown_pct": -17.424966070622826,
+            "net_pnl": -15942.3614681119,
+            "net_profit_factor": 0.3320077840662352,
+            "trade_count": 49,
+            "turnover": 8751012.746,
+            "win_rate_pct": 30.612244897959183
+          }
+        ],
+        "cost_components": {
+          "brokerage": 2200.0,
+          "exchange": 314.9065393502,
+          "gst": 454.4435241975,
+          "ipft": 9.779706191,
+          "sebi": 0.9779706191,
+          "slippage": 4889.8530955,
+          "stamp_duty": 146.825436,
+          "stt": 1221.38124775
+        },
+        "cost_pct_of_absolute_turnover": 0.09446262841832034,
+        "costs": 9238.1675196078,
+        "gross_losing_trades": 34,
+        "gross_pnl": -8656.208999999999,
+        "gross_positive_to_net_negative_trades": 3,
+        "max_closed_drawdown_pct": -19.363363604843,
+        "net_losing_trades": 37,
+        "net_pnl": -17894.376519607802,
+        "net_profit_erased_or_added_by_costs": 9238.167519607803,
+        "net_profit_factor": 0.33286220769083913,
+        "reconstructed_risk_violations": {},
+        "top_five_negative_stock_groups": [
+          {
+            "average_net_trade": -259.20512243754,
+            "costs": 2533.7783365631,
+            "gross_pnl": -1354.2985,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -5.656937992998112,
+            "net_pnl": -3888.0768365631,
+            "net_profit_factor": 0.462272697207291,
+            "trade_count": 15,
+            "turnover": 2688049.2015,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -451.50565939861997,
+            "costs": 780.7002969931,
+            "gross_pnl": -1476.828,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.2575282969930943,
+            "net_pnl": -2257.5282969931,
+            "net_profit_factor": 0.06728592509631395,
+            "trade_count": 5,
+            "turnover": 802122.772,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -406.1815123854,
+            "costs": 858.7205619270001,
+            "gross_pnl": -1172.187,
+            "group": "LT",
+            "max_closed_drawdown_pct": -2.030907561926998,
+            "net_pnl": -2030.9075619270002,
+            "net_profit_factor": 0.38104308399467524,
+            "trade_count": 5,
+            "turnover": 916931.413,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -390.62121444394,
+            "costs": 821.3860722197,
+            "gross_pnl": -1131.72,
+            "group": "AXISBANK",
+            "max_closed_drawdown_pct": -2.7656212916169043,
+            "net_pnl": -1953.1060722197,
+            "net_profit_factor": 0.29379120773335127,
+            "trade_count": 5,
+            "turnover": 861962.6799999999,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -525.2814562781667,
+            "costs": 532.1723688345,
+            "gross_pnl": -1043.672,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -1.7529956758429055,
+            "net_pnl": -1575.8443688345,
+            "net_profit_factor": 0.10267431600187739,
+            "trade_count": 3,
+            "turnover": 575152.328,
+            "win_rate_pct": 33.333333333333336
+          }
+        ],
+        "top_five_negative_stock_share_of_negative_stock_net": 0.6466395686016364,
+        "trade_count": 55,
+        "turnover": 9779706.191,
+        "win_rate_pct": 32.72727272727273
+      },
+      "sharp_reversal_4bar_1to3_rsi35_stop1_h6_v1": {
+        "average_net_trade": -149.0788585402342,
+        "by_entry_time_label": [
+          {
+            "average_net_trade": -158.916443543968,
+            "costs": 7771.4381771984,
+            "gross_pnl": -174.38400000000001,
+            "group": "09:25",
+            "max_closed_drawdown_pct": -8.282713338850966,
+            "net_pnl": -7945.8221771984,
+            "net_profit_factor": 0.32768807439391734,
+            "trade_count": 50,
+            "turnover": 7966507.516,
+            "win_rate_pct": 36.0
+          },
+          {
+            "average_net_trade": -192.59397855023158,
+            "costs": 8717.7297773632,
+            "gross_pnl": -2260.127,
+            "group": "09:30",
+            "max_closed_drawdown_pct": -11.408768253129885,
+            "net_pnl": -10977.8567773632,
+            "net_profit_factor": 0.3263979760188344,
+            "trade_count": 57,
+            "turnover": 8873533.573,
+            "win_rate_pct": 24.56140350877193
+          },
+          {
+            "average_net_trade": -98.26425769999615,
+            "costs": 7892.7789003998,
+            "gross_pnl": 2783.0375,
+            "group": "09:35",
+            "max_closed_drawdown_pct": -6.9027856761501365,
+            "net_pnl": -5109.7414003998,
+            "net_profit_factor": 0.5276156442924426,
+            "trade_count": 52,
+            "turnover": 8005689.5375,
+            "win_rate_pct": 38.46153846153846
+          },
+          {
+            "average_net_trade": -83.16006387107272,
+            "costs": 1610.0107025818,
+            "gross_pnl": 695.25,
+            "group": "09:40",
+            "max_closed_drawdown_pct": -1.5480075451473785,
+            "net_pnl": -914.7607025817999,
+            "net_profit_factor": 0.5258768368883303,
+            "trade_count": 11,
+            "turnover": 1605730.55,
+            "win_rate_pct": 36.36363636363637
+          },
+          {
+            "average_net_trade": -121.64400898271667,
+            "costs": 929.8520538962999,
+            "gross_pnl": 199.988,
+            "group": "09:45",
+            "max_closed_drawdown_pct": -1.3131634710566997,
+            "net_pnl": -729.8640538963,
+            "net_profit_factor": 0.47896663763304115,
+            "trade_count": 6,
+            "turnover": 951940.088,
+            "win_rate_pct": 33.333333333333336
+          },
+          {
+            "average_net_trade": -39.11488064091998,
+            "costs": 709.6984032046,
+            "gross_pnl": 514.1240000000001,
+            "group": "09:50",
+            "max_closed_drawdown_pct": -0.8501093749885502,
+            "net_pnl": -195.5744032045999,
+            "net_profit_factor": 0.8747582011471925,
+            "trade_count": 5,
+            "turnover": 697274.524,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": 52.88340673959999,
+            "costs": 838.6829663020001,
+            "gross_pnl": 1103.1,
+            "group": "09:55",
+            "max_closed_drawdown_pct": -0.6777226706946915,
+            "net_pnl": 264.41703369799995,
+            "net_profit_factor": 1.317123017510396,
+            "trade_count": 5,
+            "turnover": 887064.5,
+            "win_rate_pct": 60.0
+          },
+          {
+            "average_net_trade": -359.1484313003875,
+            "costs": 1253.9234504031,
+            "gross_pnl": -1619.2640000000001,
+            "group": "10:00",
+            "max_closed_drawdown_pct": -3.566263630903621,
+            "net_pnl": -2873.1874504031,
+            "net_profit_factor": 0.2000913858488718,
+            "trade_count": 8,
+            "turnover": 1290346.736,
+            "win_rate_pct": 25.0
+          },
+          {
+            "average_net_trade": -200.3281889956,
+            "costs": 346.0563779912,
+            "gross_pnl": -54.60000000000002,
+            "group": "10:05",
+            "max_closed_drawdown_pct": -0.8040415188648065,
+            "net_pnl": -400.6563779912,
+            "net_profit_factor": 0.5037150707714608,
+            "trade_count": 2,
+            "turnover": 370486.19999999995,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -435.7138127864,
+            "costs": 300.2276255728,
+            "gross_pnl": -571.2,
+            "group": "10:10",
+            "max_closed_drawdown_pct": -0.9119554032768096,
+            "net_pnl": -871.4276255728,
+            "net_profit_factor": 0.044440525883587385,
+            "trade_count": 2,
+            "turnover": 303102.80000000005,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -37.1110510488,
+            "costs": 179.7110510488,
+            "gross_pnl": 142.6,
+            "group": "10:15",
+            "max_closed_drawdown_pct": -0.037111051048810406,
+            "net_pnl": -37.1110510488,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 195053.79999999996,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -319.481607064,
+            "costs": 145.481607064,
+            "gross_pnl": -174.0,
+            "group": "10:20",
+            "max_closed_drawdown_pct": -0.3194816070639983,
+            "net_pnl": -319.481607064,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 144714.0,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 172.63572875160003,
+            "costs": 479.1928137452,
+            "gross_pnl": 997.1,
+            "group": "10:25",
+            "max_closed_drawdown_pct": -0.029159366447639723,
+            "net_pnl": 517.9071862548001,
+            "net_profit_factor": 18.73016750128175,
+            "trade_count": 3,
+            "turnover": 496827.69999999995,
+            "win_rate_pct": 66.66666666666667
+          },
+          {
+            "average_net_trade": -448.811706608,
+            "costs": 306.82341321599995,
+            "gross_pnl": -590.8,
+            "group": "10:30",
+            "max_closed_drawdown_pct": -0.8976234132159977,
+            "net_pnl": -897.623413216,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 312816.0,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -324.3140117741,
+            "costs": 586.5560470964,
+            "gross_pnl": -710.6999999999999,
+            "group": "10:40",
+            "max_closed_drawdown_pct": -1.2972560470964067,
+            "net_pnl": -1297.2560470964,
+            "net_profit_factor": 0.0,
+            "trade_count": 4,
+            "turnover": 585673.9,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1118.0694330034,
+            "costs": 174.6269330034,
+            "gross_pnl": -943.4425,
+            "group": "10:50",
+            "max_closed_drawdown_pct": -1.1180694330033991,
+            "net_pnl": -1118.0694330034,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 187745.05750000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -216.01901838602498,
+            "costs": 1315.9836470882,
+            "gross_pnl": -412.16850000000005,
+            "group": "10:55",
+            "max_closed_drawdown_pct": -2.59626099487813,
+            "net_pnl": -1728.1521470881999,
+            "net_profit_factor": 0.4735721002926186,
+            "trade_count": 8,
+            "turnover": 1381513.5315,
+            "win_rate_pct": 37.5
+          },
+          {
+            "average_net_trade": -1108.606388395,
+            "costs": 173.500888395,
+            "gross_pnl": -935.1055,
+            "group": "11:05",
+            "max_closed_drawdown_pct": -1.1086063883949948,
+            "net_pnl": -1108.606388395,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 186085.9945,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -125.2353417926,
+            "costs": 351.9706835852,
+            "gross_pnl": 101.5,
+            "group": "11:10",
+            "max_closed_drawdown_pct": -0.2504706835852022,
+            "net_pnl": -250.4706835852,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 379167.69999999995,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -143.26656343886665,
+            "costs": 485.7496903166,
+            "gross_pnl": 55.95,
+            "group": "11:15",
+            "max_closed_drawdown_pct": -0.42979969031659015,
+            "net_pnl": -429.7996903166,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 506632.85,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -886.3372116243,
+            "costs": 147.0522116243,
+            "gross_pnl": -739.285,
+            "group": "11:20",
+            "max_closed_drawdown_pct": -0.8863372116242996,
+            "net_pnl": -886.3372116243,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 147117.71500000003,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 246.4630017404,
+            "costs": 143.6369982596,
+            "gross_pnl": 390.1,
+            "group": "11:25",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 246.4630017404,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 141907.1,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -1150.8109771141,
+            "costs": 178.5229771141,
+            "gross_pnl": -972.288,
+            "group": "11:40",
+            "max_closed_drawdown_pct": -1.1508109771141029,
+            "net_pnl": -1150.8109771141,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 193485.312,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -85.8881500426,
+            "costs": 308.0763000852,
+            "gross_pnl": 136.3,
+            "group": "11:50",
+            "max_closed_drawdown_pct": -0.39941562483519766,
+            "net_pnl": -171.7763000852,
+            "net_profit_factor": 0.5699309456006499,
+            "trade_count": 2,
+            "turnover": 314542.69999999995,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -873.1307195986,
+            "costs": 145.4807195986,
+            "gross_pnl": -727.65,
+            "group": "11:55",
+            "max_closed_drawdown_pct": -0.8731307195986027,
+            "net_pnl": -873.1307195986,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 144802.35,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 185.9526641618,
+            "costs": 308.1946716764,
+            "gross_pnl": 680.1,
+            "group": "12:05",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 371.9053283236,
+            "net_profit_factor": "Infinity",
+            "trade_count": 2,
+            "turnover": 314628.9,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -15.4288883836,
+            "costs": 123.3288883836,
+            "gross_pnl": 107.9,
+            "group": "12:15",
+            "max_closed_drawdown_pct": -0.01542888838359513,
+            "net_pnl": -15.4288883836,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 112056.1,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -19.5937311808,
+            "costs": 158.7937311808,
+            "gross_pnl": 139.2,
+            "group": "12:20",
+            "max_closed_drawdown_pct": -0.01959373118078922,
+            "net_pnl": -19.5937311808,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 164260.8,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 797.9767315656001,
+            "costs": 344.24653686880004,
+            "gross_pnl": 1940.2,
+            "group": "12:25",
+            "max_closed_drawdown_pct": -0.05682219713872838,
+            "net_pnl": 1595.9534631312001,
+            "net_profit_factor": 28.629876560837086,
+            "trade_count": 2,
+            "turnover": 367498.80000000005,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": 35.8993807322,
+            "costs": 175.1506192678,
+            "gross_pnl": 211.05,
+            "group": "12:35",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 35.8993807322,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 188329.05,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -691.16007243685,
+            "costs": 335.1891448736,
+            "gross_pnl": -1047.1309999999999,
+            "group": "12:55",
+            "max_closed_drawdown_pct": -1.3823201448736944,
+            "net_pnl": -1382.3201448737,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 354648.669,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -301.8969683742,
+            "costs": 327.29393674840003,
+            "gross_pnl": -276.5,
+            "group": "13:00",
+            "max_closed_drawdown_pct": -0.6037939367483869,
+            "net_pnl": -603.7939367484,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 342900.9,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 229.90115234910002,
+            "costs": 334.74769530180004,
+            "gross_pnl": 794.5500000000001,
+            "group": "13:20",
+            "max_closed_drawdown_pct": -0.23110829737961192,
+            "net_pnl": 459.80230469820003,
+            "net_profit_factor": 2.975870305187506,
+            "trade_count": 2,
+            "turnover": 353700.55000000005,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -807.1493374365,
+            "costs": 137.6293374365,
+            "gross_pnl": -669.52,
+            "group": "13:25",
+            "max_closed_drawdown_pct": -0.8071493374364969,
+            "net_pnl": -807.1493374365,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 133234.47999999998,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -1165.3091741614,
+            "costs": 180.2481741614,
+            "gross_pnl": -985.061,
+            "group": "13:40",
+            "max_closed_drawdown_pct": -1.1653091741613997,
+            "net_pnl": -1165.3091741614,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 196027.139,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": 495.82228085,
+            "costs": 169.17771915,
+            "gross_pnl": 665.0,
+            "group": "13:45",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 495.82228085,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 179462.5,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 206.2557034568,
+            "costs": 168.1442965432,
+            "gross_pnl": 374.4,
+            "group": "13:50",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 206.2557034568,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 177988.19999999998,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 57.0867707318,
+            "costs": 180.0632292682,
+            "gross_pnl": 237.15,
+            "group": "13:55",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 57.0867707318,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 195556.95,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 314.0065664504,
+            "costs": 180.9934335496,
+            "gross_pnl": 495.0,
+            "group": "14:00",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 314.0065664504,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 196884.6,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 250.20412356966668,
+            "costs": 468.837629291,
+            "gross_pnl": 1219.45,
+            "group": "14:15",
+            "max_closed_drawdown_pct": -0.20204628199864683,
+            "net_pnl": 750.6123707090001,
+            "net_profit_factor": 4.6931528938996845,
+            "trade_count": 3,
+            "turnover": 481547.25,
+            "win_rate_pct": 66.66666666666667
+          },
+          {
+            "average_net_trade": 124.152661708,
+            "costs": 132.047338292,
+            "gross_pnl": 256.2,
+            "group": "14:30",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 124.152661708,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 124867.0,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -344.7054716488,
+            "costs": 179.4054716488,
+            "gross_pnl": -165.3,
+            "group": "14:35",
+            "max_closed_drawdown_pct": -0.3447054716488096,
+            "net_pnl": -344.7054716488,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 194653.80000000002,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -107.89180977429999,
+            "costs": 332.0336195486,
+            "gross_pnl": 116.25,
+            "group": "14:40",
+            "max_closed_drawdown_pct": -0.2623511836569947,
+            "net_pnl": -215.78361954859997,
+            "net_profit_factor": 0.17750087291118458,
+            "trade_count": 2,
+            "turnover": 349814.85,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": 629.1161760854,
+            "costs": 322.7676478292,
+            "gross_pnl": 1581.0,
+            "group": "14:45",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 1258.2323521708,
+            "net_profit_factor": "Infinity",
+            "trade_count": 2,
+            "turnover": 335936.7,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -135.82244140720002,
+            "costs": 344.0448828144,
+            "gross_pnl": 72.39999999999998,
+            "group": "14:50",
+            "max_closed_drawdown_pct": -0.5529465638560049,
+            "net_pnl": -271.64488281440003,
+            "net_profit_factor": 0.5087321260845332,
+            "trade_count": 2,
+            "turnover": 367504.4,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -308.7021903106,
+            "costs": 177.7521903106,
+            "gross_pnl": -130.95,
+            "group": "14:55",
+            "max_closed_drawdown_pct": -0.30870219031060575,
+            "net_pnl": -308.7021903106,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 192214.34999999998,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -88.8724822897,
+            "costs": 306.59496457939997,
+            "gross_pnl": 128.85,
+            "group": "15:00",
+            "max_closed_drawdown_pct": -0.24509156244492125,
+            "net_pnl": -177.7449645794,
+            "net_profit_factor": 0.2752706601884966,
+            "trade_count": 2,
+            "turnover": 312363.15,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": 363.7095758672,
+            "costs": 136.6904241328,
+            "gross_pnl": 500.4,
+            "group": "15:05",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 363.7095758672,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 131662.80000000002,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": 517.6606270156,
+            "costs": 140.2393729844,
+            "gross_pnl": 657.9,
+            "group": "15:10",
+            "max_closed_drawdown_pct": 0.0,
+            "net_pnl": 517.6606270156,
+            "net_profit_factor": "Infinity",
+            "trade_count": 1,
+            "turnover": 136861.9,
+            "win_rate_pct": 100.0
+          },
+          {
+            "average_net_trade": -394.3654650498,
+            "costs": 303.02593009960003,
+            "gross_pnl": -485.70500000000004,
+            "group": "15:15",
+            "max_closed_drawdown_pct": -0.7887309300996015,
+            "net_pnl": -788.7309300996,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 307208.495,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -353.689542706,
+            "costs": 164.689542706,
+            "gross_pnl": -189.0,
+            "group": "15:20",
+            "max_closed_drawdown_pct": -0.35368954270599273,
+            "net_pnl": -353.689542706,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 172993.5,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -939.9861025222,
+            "costs": 153.4361025222,
+            "gross_pnl": -786.55,
+            "group": "15:25",
+            "max_closed_drawdown_pct": -0.9399861025222056,
+            "net_pnl": -939.9861025222,
+            "net_profit_factor": 0.0,
+            "trade_count": 1,
+            "turnover": 156523.45,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_exit_reason": [
+          {
+            "average_net_trade": -82.8846951650428,
+            "costs": 37815.4309251054,
+            "gross_pnl": 17674.45,
+            "group": "horizon_exit",
+            "max_closed_drawdown_pct": -22.2770535009029,
+            "net_pnl": -20140.9809251054,
+            "net_profit_factor": 0.5930351475918579,
+            "trade_count": 243,
+            "turnover": 38782301.65,
+            "win_rate_pct": 37.44855967078189
+          },
+          {
+            "average_net_trade": 119.94854789079999,
+            "costs": 614.9058084368,
+            "gross_pnl": 1094.7,
+            "group": "session_exit",
+            "max_closed_drawdown_pct": -0.4015760113195821,
+            "net_pnl": 479.79419156319994,
+            "net_profit_factor": 2.194778019699361,
+            "trade_count": 4,
+            "turnover": 627116.8,
+            "win_rate_pct": 50.0
+          },
+          {
+            "average_net_trade": -929.1375551718545,
+            "costs": 3347.1942137807,
+            "gross_pnl": -17093.832,
+            "group": "stop_exit",
+            "max_closed_drawdown_pct": -20.441026213780788,
+            "net_pnl": -20441.0262137808,
+            "net_profit_factor": 0.0,
+            "trade_count": 22,
+            "turnover": 3401672.568,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_holding_label_minutes": [
+          {
+            "average_net_trade": -1024.2962454586,
+            "costs": 326.9369909172,
+            "gross_pnl": -1721.6554999999998,
+            "group": "0",
+            "max_closed_drawdown_pct": -2.0485924909172004,
+            "net_pnl": -2048.5924909172,
+            "net_profit_factor": 0.0,
+            "trade_count": 2,
+            "turnover": 342609.4445,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -691.60105270488,
+            "costs": 745.4037635244,
+            "gross_pnl": -2712.6014999999998,
+            "group": "10",
+            "max_closed_drawdown_pct": -3.4580052635243885,
+            "net_pnl": -3458.0052635244,
+            "net_profit_factor": 0.0,
+            "trade_count": 5,
+            "turnover": 750360.8985,
+            "win_rate_pct": 0.0
+          },
+          {
+            "average_net_trade": -649.3830129953001,
+            "costs": 992.2470909671,
+            "gross_pnl": -3553.434,
+            "group": "15",
+            "max_closed_drawdown_pct": -4.545681090967091,
+            "net_pnl": -4545.6810909671,
+            "net_profit_factor": 0.10223695255982891,
+            "trade_count": 7,
+            "turnover": 974917.3659999999,
+            "win_rate_pct": 14.285714285714286
+          },
+          {
+            "average_net_trade": -858.381908249975,
+            "costs": 1288.1917659997,
+            "gross_pnl": -5578.8634999999995,
+            "group": "20",
+            "max_closed_drawdown_pct": -6.867055265999811,
+            "net_pnl": -6867.0552659998,
+            "net_profit_factor": 0.050300291023333756,
+            "trade_count": 8,
+            "turnover": 1341436.2365,
+            "win_rate_pct": 12.5
+          },
+          {
+            "average_net_trade": -85.83131498088524,
+            "costs": 37952.430855336,
+            "gross_pnl": 17009.59,
+            "group": "25",
+            "max_closed_drawdown_pct": -23.06174977554949,
+            "net_pnl": -20942.840855336,
+            "net_profit_factor": 0.5835798525173365,
+            "trade_count": 244,
+            "turnover": 38914608.79,
+            "win_rate_pct": 37.295081967213115
+          },
+          {
+            "average_net_trade": -746.6793268595001,
+            "costs": 472.3204805785,
+            "gross_pnl": -1767.7175,
+            "group": "5",
+            "max_closed_drawdown_pct": -2.240037980578491,
+            "net_pnl": -2240.0379805785,
+            "net_profit_factor": 0.0,
+            "trade_count": 3,
+            "turnover": 487158.28250000003,
+            "win_rate_pct": 0.0
+          }
+        ],
+        "by_stock": [
+          {
+            "average_net_trade": -88.59503032775416,
+            "costs": 3875.8742278661,
+            "gross_pnl": 1749.5935,
+            "group": "AXISBANK",
+            "max_closed_drawdown_pct": -2.747852666243189,
+            "net_pnl": -2126.2807278661,
+            "net_profit_factor": 0.6033495469323894,
+            "trade_count": 24,
+            "turnover": 4037948.8935,
+            "win_rate_pct": 45.833333333333336
+          },
+          {
+            "average_net_trade": -99.07978593427728,
+            "costs": 3393.284790554,
+            "gross_pnl": 1213.5295,
+            "group": "BHARTIARTL",
+            "max_closed_drawdown_pct": -2.9230775712100976,
+            "net_pnl": -2179.7552905541,
+            "net_profit_factor": 0.6316047061654982,
+            "trade_count": 22,
+            "turnover": 3466560.4295,
+            "win_rate_pct": 36.36363636363637
+          },
+          {
+            "average_net_trade": -352.69147269775,
+            "costs": 1839.032672373,
+            "gross_pnl": -2393.265,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -4.232297672372997,
+            "net_pnl": -4232.297672373,
+            "net_profit_factor": 0.05163176488541349,
+            "trade_count": 12,
+            "turnover": 1873900.935,
+            "win_rate_pct": 16.666666666666668
+          },
+          {
+            "average_net_trade": -273.81195929050716,
+            "costs": 2253.3294300671,
+            "gross_pnl": -1580.038,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -3.9567920617893715,
+            "net_pnl": -3833.3674300671,
+            "net_profit_factor": 0.2523224424246964,
+            "trade_count": 14,
+            "turnover": 2344707.062,
+            "win_rate_pct": 21.428571428571427
+          },
+          {
+            "average_net_trade": -165.3087834754353,
+            "costs": 5189.1346381648,
+            "gross_pnl": -431.36400000000003,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -5.620498638164772,
+            "net_pnl": -5620.4986381648,
+            "net_profit_factor": 0.30905518747722655,
+            "trade_count": 34,
+            "turnover": 5276768.336,
+            "win_rate_pct": 29.41176470588235
+          },
+          {
+            "average_net_trade": -196.81523396606843,
+            "costs": 3045.8544453553,
+            "gross_pnl": -693.635,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -4.657199695770942,
+            "net_pnl": -3739.4894453553,
+            "net_profit_factor": 0.3892882165448501,
+            "trade_count": 19,
+            "turnover": 3163854.965,
+            "win_rate_pct": 26.31578947368421
+          },
+          {
+            "average_net_trade": -136.83170587522667,
+            "costs": 2279.9755881284,
+            "gross_pnl": 227.50000000000003,
+            "group": "KOTAKBANK",
+            "max_closed_drawdown_pct": -2.495942194301337,
+            "net_pnl": -2052.4755881284,
+            "net_profit_factor": 0.4679139089572608,
+            "trade_count": 15,
+            "turnover": 2314155.9,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -39.87436315391428,
+            "costs": 3320.9116262322,
+            "gross_pnl": 2483.5499999999997,
+            "group": "LT",
+            "max_closed_drawdown_pct": -2.2620681221440564,
+            "net_pnl": -837.3616262321999,
+            "net_profit_factor": 0.8230830796109453,
+            "trade_count": 21,
+            "turnover": 3429295.95,
+            "win_rate_pct": 42.857142857142854
+          },
+          {
+            "average_net_trade": -67.06745372872498,
+            "costs": 3034.9105745745,
+            "gross_pnl": 1693.5615,
+            "group": "MARUTI",
+            "max_closed_drawdown_pct": -2.851764085716846,
+            "net_pnl": -1341.3490745744998,
+            "net_profit_factor": 0.7043787340850537,
+            "trade_count": 20,
+            "turnover": 3077871.5615,
+            "win_rate_pct": 40.0
+          },
+          {
+            "average_net_trade": -250.36433200804,
+            "costs": 2417.3114801206,
+            "gross_pnl": -1338.1535,
+            "group": "RELIANCE",
+            "max_closed_drawdown_pct": -3.7554649801206152,
+            "net_pnl": -3755.4649801206,
+            "net_profit_factor": 0.14400855009711874,
+            "trade_count": 15,
+            "turnover": 2516589.2465,
+            "win_rate_pct": 26.666666666666668
+          },
+          {
+            "average_net_trade": -128.52961330797143,
+            "costs": 1137.7572931558,
+            "gross_pnl": 238.05,
+            "group": "SBIN",
+            "max_closed_drawdown_pct": -1.3049600042070897,
+            "net_pnl": -899.7072931558,
+            "net_profit_factor": 0.3550269401234323,
+            "trade_count": 7,
+            "turnover": 1188517.05,
+            "win_rate_pct": 42.857142857142854
+          },
+          {
+            "average_net_trade": -150.0523910400647,
+            "costs": 2572.9266476811,
+            "gross_pnl": 22.036000000000048,
+            "group": "SUNPHARMA",
+            "max_closed_drawdown_pct": -2.6283899561131308,
+            "net_pnl": -2550.8906476811,
+            "net_profit_factor": 0.3862515452838528,
+            "trade_count": 17,
+            "turnover": 2606487.236,
+            "win_rate_pct": 41.1764705882353
+          },
+          {
+            "average_net_trade": -159.4399542840739,
+            "costs": 3432.6939485336998,
+            "gross_pnl": -234.42499999999995,
+            "group": "TCS",
+            "max_closed_drawdown_pct": -3.7077213133056786,
+            "net_pnl": -3667.1189485337,
+            "net_profit_factor": 0.29125356583012296,
+            "trade_count": 23,
+            "turnover": 3455325.575,
+            "win_rate_pct": 39.130434782608695
+          },
+          {
+            "average_net_trade": -125.62136863524232,
+            "costs": 3984.5335845163,
+            "gross_pnl": 718.3779999999999,
+            "group": "TITAN",
+            "max_closed_drawdown_pct": -3.5946713120150853,
+            "net_pnl": -3266.1555845163,
+            "net_profit_factor": 0.5312611175646853,
+            "trade_count": 26,
+            "turnover": 4059107.878,
+            "win_rate_pct": 30.76923076923077
+          }
+        ],
+        "by_trend_regime": [
+          {
+            "average_net_trade": -240.7246419549087,
+            "costs": 6319.1130299258,
+            "gross_pnl": -4754.2205,
+            "group": "bearish",
+            "max_closed_drawdown_pct": -11.073333529925788,
+            "net_pnl": -11073.3335299258,
+            "net_profit_factor": 0.2237140977965288,
+            "trade_count": 46,
+            "turnover": 6107143.4795,
+            "win_rate_pct": 23.91304347826087
+          },
+          {
+            "average_net_trade": -170.38990234367998,
+            "costs": 11254.3696640576,
+            "gross_pnl": -672.9235,
+            "group": "bullish",
+            "max_closed_drawdown_pct": -12.39856986179011,
+            "net_pnl": -11927.293164057599,
+            "net_profit_factor": 0.3792711633427757,
+            "trade_count": 70,
+            "turnover": 11704290.5765,
+            "win_rate_pct": 35.714285714285715
+          },
+          {
+            "average_net_trade": -123.41820123895636,
+            "costs": 19387.5883561084,
+            "gross_pnl": 3836.895,
+            "group": "sideways",
+            "max_closed_drawdown_pct": -16.110351468484662,
+            "net_pnl": -15550.6933561085,
+            "net_profit_factor": 0.47926607289287265,
+            "trade_count": 126,
+            "turnover": 19785722.295,
+            "win_rate_pct": 35.714285714285715
+          },
+          {
+            "average_net_trade": -57.44047767522593,
+            "costs": 4816.4598972311,
+            "gross_pnl": 3265.567,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -3.2312726819531123,
+            "net_pnl": -1550.8928972311,
+            "net_profit_factor": 0.778152270230502,
+            "trade_count": 27,
+            "turnover": 5213934.666999999,
+            "win_rate_pct": 44.44444444444444
+          }
+        ],
+        "by_volatility_regime": [
+          {
+            "average_net_trade": -246.50603496305334,
+            "costs": 2100.2085244458,
+            "gross_pnl": -1597.382,
+            "group": "high_volatility",
+            "max_closed_drawdown_pct": -3.697590524445815,
+            "net_pnl": -3697.5905244458,
+            "net_profit_factor": 0.23297150932664779,
+            "trade_count": 15,
+            "turnover": 2049806.318,
+            "win_rate_pct": 20.0
+          },
+          {
+            "average_net_trade": -139.05010221364958,
+            "costs": 38244.3701445577,
+            "gross_pnl": 4038.045,
+            "group": "low_volatility",
+            "max_closed_drawdown_pct": -35.16281791419667,
+            "net_pnl": -34206.3251445578,
+            "net_profit_factor": 0.4509677699392893,
+            "trade_count": 246,
+            "turnover": 39207517.945,
+            "win_rate_pct": 35.36585365853659
+          },
+          {
+            "average_net_trade": -274.787159789925,
+            "costs": 1432.9522783194,
+            "gross_pnl": -765.3449999999999,
+            "group": "warmup",
+            "max_closed_drawdown_pct": -2.6167458778912134,
+            "net_pnl": -2198.2972783194,
+            "net_profit_factor": 0.31510841505311993,
+            "trade_count": 8,
+            "turnover": 1553766.755,
+            "win_rate_pct": 37.5
+          }
+        ],
+        "cost_components": {
+          "brokerage": 10760.0,
+          "exchange": 1378.5171307796,
+          "gst": 2192.6390799234,
+          "ipft": 42.811091018,
+          "sebi": 4.2811091016,
+          "slippage": 21405.545509,
+          "stamp_duty": 642.1412355,
+          "stt": 5351.595792
+        },
+        "cost_pct_of_absolute_turnover": 0.09758576563666052,
+        "costs": 41777.5309473229,
+        "gross_losing_trades": 128,
+        "gross_pnl": 1675.3180000000002,
+        "gross_positive_to_net_negative_trades": 44,
+        "max_closed_drawdown_pct": -40.456467613347805,
+        "net_losing_trades": 176,
+        "net_pnl": -40102.212947323,
+        "net_profit_erased_or_added_by_costs": 41777.530947323,
+        "net_profit_factor": 0.4298262136531827,
+        "reconstructed_risk_violations": {},
+        "top_five_negative_stock_groups": [
+          {
+            "average_net_trade": -165.3087834754353,
+            "costs": 5189.1346381648,
+            "gross_pnl": -431.36400000000003,
+            "group": "INFY",
+            "max_closed_drawdown_pct": -5.620498638164772,
+            "net_pnl": -5620.4986381648,
+            "net_profit_factor": 0.30905518747722655,
+            "trade_count": 34,
+            "turnover": 5276768.336,
+            "win_rate_pct": 29.41176470588235
+          },
+          {
+            "average_net_trade": -352.69147269775,
+            "costs": 1839.032672373,
+            "gross_pnl": -2393.265,
+            "group": "HDFCBANK",
+            "max_closed_drawdown_pct": -4.232297672372997,
+            "net_pnl": -4232.297672373,
+            "net_profit_factor": 0.05163176488541349,
+            "trade_count": 12,
+            "turnover": 1873900.935,
+            "win_rate_pct": 16.666666666666668
+          },
+          {
+            "average_net_trade": -273.81195929050716,
+            "costs": 2253.3294300671,
+            "gross_pnl": -1580.038,
+            "group": "ICICIBANK",
+            "max_closed_drawdown_pct": -3.9567920617893715,
+            "net_pnl": -3833.3674300671,
+            "net_profit_factor": 0.2523224424246964,
+            "trade_count": 14,
+            "turnover": 2344707.062,
+            "win_rate_pct": 21.428571428571427
+          },
+          {
+            "average_net_trade": -250.36433200804,
+            "costs": 2417.3114801206,
+            "gross_pnl": -1338.1535,
+            "group": "RELIANCE",
+            "max_closed_drawdown_pct": -3.7554649801206152,
+            "net_pnl": -3755.4649801206,
+            "net_profit_factor": 0.14400855009711874,
+            "trade_count": 15,
+            "turnover": 2516589.2465,
+            "win_rate_pct": 26.666666666666668
+          },
+          {
+            "average_net_trade": -196.81523396606843,
+            "costs": 3045.8544453553,
+            "gross_pnl": -693.635,
+            "group": "ITC",
+            "max_closed_drawdown_pct": -4.657199695770942,
+            "net_pnl": -3739.4894453553,
+            "net_profit_factor": 0.3892882165448501,
+            "trade_count": 19,
+            "turnover": 3163854.965,
+            "win_rate_pct": 26.31578947368421
+          }
+        ],
+        "top_five_negative_stock_share_of_negative_stock_net": 0.5281782876646645,
+        "trade_count": 269,
+        "turnover": 42811091.018,
+        "win_rate_pct": 34.572490706319705
+      }
+    },
+    "trade_rows": 574
+  },
+  "available_dimensions": [
+    "symbol",
+    "trend_regime",
+    "volatility_regime",
+    "entry_time_label",
+    "holding_label_minutes",
+    "exit_reason",
+    "itemized_cost:brokerage",
+    "itemized_cost:stt",
+    "itemized_cost:exchange",
+    "itemized_cost:ipft",
+    "itemized_cost:sebi",
+    "itemized_cost:stamp_duty",
+    "itemized_cost:gst",
+    "itemized_cost:slippage"
+  ],
+  "diagnostic_code_hashes_sha256": {
+    "app/research/sharp_reversal_diagnostics.py": "7e55246e2346767a998b2d619ab6f44a58be503984b77397b8dc43ff326f5483",
+    "scripts/run_sharp_reversal_diagnostics.py": "0610a1a4b7fe8c11c9840f760d3864f62955f3464b420e359607a550bc4525ad"
+  },
+  "diagnostic_version": 1,
+  "experiment_source_commit": "9bbce21c9c460a74bf8b0e86183dc6a15f00a7a4",
+  "source_artifact_hashes_sha256": {
+    "REPORT.md": "8585a2349c6d3a827f4e5562dc81d5b8b17d0888a09560d955779f9a2f6e8544",
+    "experiment_spec.json": "1db09e8193d98b93a70582695f7374f260edd10c16a191248d6551338b4eee9d",
+    "metrics_by_partition.csv": "64d88db30457d09de1bba8249f412a38211b7129d5330266c40e107b3309ee7a",
+    "metrics_by_regime.csv": "8b2bb4a6c7509a8f802a8115ceeacc78a49654bf837ba66f0780aeaa29bb9396",
+    "metrics_by_symbol.csv": "41ed3ba9d43f6a0440712d90d17901b111536e85e349c158538fcbfa1a6a2656",
+    "run_manifest.json": "e4e39843b5aa3b7b434ca1706c01884ddf10a4fb399529f2e9a2e4648b369900",
+    "trades.csv": "1ad90590d44fbdaf55ab7ef4be45831a0bd6a3f450dee5ab480b25724f031ede"
+  },
+  "source_commit": "a1730dcd2b5684821be8dce7e0b1d7d550e8bc51",
+  "unavailable_dimensions": [
+    "execution timestamps within bars",
+    "rejected-signal event ledger",
+    "independent session/calendar evidence",
+    "source-verified candle timestamp convention",
+    "measured market spread/fill slippage"
+  ]
+}

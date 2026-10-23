@@ -1,0 +1,1006 @@
+{
+  "code_hashes_sha256": {
+    "app/candle_integrity.py": "f0e3374d5fa783fcaa01ce6f7aa437293853d3721af35d0039481e3f5cd42650",
+    "app/cost_model.py": "5f7d359b4a27e41d724c2b32ec29f0db5ed1c57cc15f5df2d3d91c5284638783",
+    "app/market_analysis.py": "2d74abd9609f28954ff65f7a794527833f2b1ed7e51e3b39c967fc5dfdfca91c",
+    "app/research/sharp_reversal_experiment.py": "bd6a699aa5a4bc9a30c135f21d5f7b8d8a139b403ac3013ffd0c52b2bcfc6001",
+    "app/reversal_detector.py": "b364361fbbf1fa6f36e7232b2cebb2412076bf51aa1e8a482046f411d9ebd0ee",
+    "app/risk_engine.py": "7980c4ede7417d03e34ee33356ebd0be3258f8ced0ce57129f372bef0f3fba1f",
+    "app/v2/registry.py": "fbfe0264dcc228980989dc6c7f5fce59d82910d735984b31824373f2a14fc0a9",
+    "scripts/run_sharp_reversal_experiment.py": "5fabb07994fd651c65ec41786f3f7ce2c66e9290ea65a4782a887a1b5adc7df9",
+    "strategy_backtest.py": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d"
+  },
+  "data_audit": {
+    "complete_symbol_sessions_retained": 9150,
+    "end": "2026-07-31T15:25:00+05:30",
+    "excluded_examples_first_100": [
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2625,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2626,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2627,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2628,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2629,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2630,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2631,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2632,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2633,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 09:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2634,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2635,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2636,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2637,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2638,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2639,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2640,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2641,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2642,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2643,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2644,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2645,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 10:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2646,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2647,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2648,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2649,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2650,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2651,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2652,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2653,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2654,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2655,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2656,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2657,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 11:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2658,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2659,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2660,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2661,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2662,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2663,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2664,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2665,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2666,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2667,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2668,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2669,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 12:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2670,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2671,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2672,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2673,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2674,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2675,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2676,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2677,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2678,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2679,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2680,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2681,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 13:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2682,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2683,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2684,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2685,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2686,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2687,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2688,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2689,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2690,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2691,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2692,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2693,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 14:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2694,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2695,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2696,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2697,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2698,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 2699,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-01-20 15:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4800,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4801,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4802,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4803,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4804,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4805,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4806,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4807,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4808,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 09:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4809,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:30:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4810,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:35:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4811,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:40:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4812,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:45:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4813,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:50:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4814,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 11:55:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4815,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:00:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4816,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:05:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4817,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:10:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4818,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4819,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded"
+        ],
+        "row": 4820,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-03-02 12:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded",
+          "policy_exclusion:special-session schedule excluded under V2 data policy"
+        ],
+        "row": 8496,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-05-18 09:15:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded",
+          "policy_exclusion:special-session schedule excluded under V2 data policy"
+        ],
+        "row": 8497,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-05-18 09:20:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded",
+          "policy_exclusion:special-session schedule excluded under V2 data policy"
+        ],
+        "row": 8498,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-05-18 09:25:00+05:30"
+      },
+      {
+        "reasons": [
+          "non_regular_session_excluded",
+          "policy_exclusion:special-session schedule excluded under V2 data policy"
+        ],
+        "row": 8499,
+        "symbol": "AXISBANK",
+        "timestamp": "2024-05-18 09:30:00+05:30"
+      }
+    ],
+    "excluded_rows": 49670,
+    "exclusion_reason_counts": {
+      "incomplete_regular_session_coverage": 44168,
+      "invalid_candle_structure": 3,
+      "non_regular_session_excluded": 4074,
+      "outside_regular_session_label": 168,
+      "policy_exclusion:Muhurat session excluded under V2 data policy": 168,
+      "policy_exclusion:special Saturday session excluded under V2 data policy": 1050,
+      "policy_exclusion:special Sunday session excluded under V2 data policy": 1050,
+      "policy_exclusion:special-session schedule excluded under V2 data policy": 294,
+      "policy_exclusion:unresolved flat zero-volume bars and missing interval": 71,
+      "policy_exclusion:unresolved suspicious price discontinuity": 75,
+      "policy_exclusion:unresolved suspicious volume spike": 75,
+      "zero_volume_candle_unresolved": 1208
+    },
+    "incomplete_symbol_sessions_excluded": 605,
+    "input_hashes": {
+      "data\\research\\extended_historical_robustness_candles.csv": "30924b7f53e295de813b859bc81998e196d9ee33cde64ee83d94585911100065",
+      "data\\research\\extended_historical_robustness_oos_candles.csv": "7a37d5bb6816a2bf2666017df8d54b95d8c75cda6944fea87d86e3405788c2d5"
+    },
+    "integrity_error_reason_counts": {
+      "invalid_ohlc_relationship": 3
+    },
+    "integrity_warning_counts": {
+      "intrasession_gap_review_calendar": 28,
+      "outside_regular_session_candidate_check_calendar": 168,
+      "zero_volume_retained": 1208
+    },
+    "raw_rows": 735920,
+    "retained_date_coverage_by_partition": {
+      "development_reused": {
+        "expected_regular_dates": 265,
+        "missing_expected_regular_dates": [],
+        "requested_end": "2024-12-31",
+        "requested_start": "2023-12-01",
+        "retained_end": "2024-12-31",
+        "retained_regular_dates": 265,
+        "retained_rows": 277950,
+        "retained_start": "2023-12-01"
+      },
+      "previous_oos_reused": {
+        "expected_regular_dates": 206,
+        "missing_expected_regular_dates": [
+          "2026-08-03",
+          "2026-08-04",
+          "2026-08-05",
+          "2026-08-06",
+          "2026-08-07",
+          "2026-08-10",
+          "2026-08-11",
+          "2026-08-12",
+          "2026-08-13",
+          "2026-08-14",
+          "2026-08-17",
+          "2026-08-18",
+          "2026-08-19",
+          "2026-08-20",
+          "2026-08-21",
+          "2026-08-24",
+          "2026-08-25",
+          "2026-08-26",
+          "2026-08-27",
+          "2026-08-28",
+          "2026-08-31",
+          "2026-09-01",
+          "2026-09-02",
+          "2026-09-03",
+          "2026-09-04",
+          "2026-09-07",
+          "2026-09-08",
+          "2026-09-09",
+          "2026-09-10",
+          "2026-09-11",
+          "2026-09-15",
+          "2026-09-16",
+          "2026-09-17",
+          "2026-09-18",
+          "2026-09-21",
+          "2026-09-22",
+          "2026-09-23",
+          "2026-09-24",
+          "2026-09-25",
+          "2026-09-28",
+          "2026-09-29",
+          "2026-09-30",
+          "2026-10-01"
+        ],
+        "requested_end": "2026-10-01",
+        "requested_start": "2025-12-02",
+        "retained_end": "2026-07-31",
+        "retained_regular_dates": 163,
+        "retained_rows": 171150,
+        "retained_start": "2025-12-02"
+      },
+      "walk_forward_reused": {
+        "expected_regular_dates": 226,
+        "missing_expected_regular_dates": [],
+        "requested_end": "2025-12-01",
+        "requested_start": "2025-01-01",
+        "retained_end": "2025-12-01",
+        "retained_regular_dates": 226,
+        "retained_rows": 237150,
+        "retained_start": "2025-01-01"
+      }
+    },
+    "retained_rows": 686250,
+    "same_day_gaps_after_row_exclusions": 0,
+    "start": "2023-12-01T09:15:00+05:30",
+    "symbols": [
+      "AXISBANK",
+      "BHARTIARTL",
+      "HDFCBANK",
+      "ICICIBANK",
+      "INFY",
+      "ITC",
+      "KOTAKBANK",
+      "LT",
+      "MARUTI",
+      "RELIANCE",
+      "SBIN",
+      "SUNPHARMA",
+      "TCS",
+      "TITAN"
+    ],
+    "timestamp_semantics": "provisional START-label assumption; dataset-specific semantics unresolved",
+    "zero_volume_rows_retained": 0
+  },
+  "experiment_id": "sharp-reversal-exploratory-v1.1",
+  "important_limits": [
+    "all observed periods were previously examined",
+    "no untouched holdout",
+    "historical provenance, adjustment, and survivorship unresolved",
+    "market regime is a lagged equal-weight basket proxy, not an official index",
+    "timestamp labels provisionally treated as candle starts"
+  ],
+  "input_hashes_sha256": {
+    "data\\audits\\nse_cm_session_manifest_v2.json": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "data\\research\\extended_historical_robustness_candles.csv": "30924b7f53e295de813b859bc81998e196d9ee33cde64ee83d94585911100065",
+    "data\\research\\extended_historical_robustness_oos_candles.csv": "7a37d5bb6816a2bf2666017df8d54b95d8c75cda6944fea87d86e3405788c2d5",
+    "experiments\\sharp_reversal_exploratory_v1.json": "6372ec0f54632f6cc00f67064611705d5249cf5189ce1d965ff11a4c3e1943ca"
+  },
+  "runtime": {
+    "numpy": "2.5.4",
+    "pandas": "3.0.6",
+    "python": "3.13.2",
+    "ta": "version_not_exposed"
+  },
+  "source_commit_before_experiment": "9bbce21c9c460a74bf8b0e86183dc6a15f00a7a4",
+  "strategy_registry": [
+    {
+      "accepted_trades": 73,
+      "data_rejections": {},
+      "enabled_for_paper": false,
+      "signals": 93,
+      "status": "FROZEN_BASELINE",
+      "strategy_id": "frozen_reversal_v1"
+    },
+    {
+      "accepted_trades": 177,
+      "data_rejections": {},
+      "enabled_for_paper": false,
+      "signals": 276,
+      "status": "RESEARCH_ONLY",
+      "strategy_id": "sharp_reversal_3bar_1to3_rsi30_stop075_h6_v1"
+    },
+    {
+      "accepted_trades": 269,
+      "data_rejections": {
+        "entry_crosses_session_or_gap": 1
+      },
+      "enabled_for_paper": false,
+      "signals": 401,
+      "status": "RESEARCH_ONLY",
+      "strategy_id": "sharp_reversal_4bar_1to3_rsi35_stop1_h6_v1"
+    },
+    {
+      "accepted_trades": 55,
+      "data_rejections": {},
+      "enabled_for_paper": false,
+      "signals": 77,
+      "status": "RESEARCH_ONLY",
+      "strategy_id": "sharp_reversal_3bar_2to4_rsi30_stop1_h12_v1"
+    }
+  ]
+}

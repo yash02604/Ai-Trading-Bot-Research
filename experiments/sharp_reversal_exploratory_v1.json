@@ -1,0 +1,55 @@
+{
+  "experiment_id": "sharp-reversal-exploratory-v1.1",
+  "revision_note": "Before the final run, the local audit identified 1,204 zero-volume candles across 602 OOS symbol-sessions. This version excludes any zero-volume candle and the entire affected or otherwise incomplete regular symbol-session; strategy parameters are unchanged. This leaves no retained full symbol-sessions after 2026-07-31 in the requested OOS window, so August–October 2026 is absent from the results. An earlier diagnostic run is superseded.",
+  "status": "EXPLORATORY_ONLY_DATA_PROVENANCE_UNRESOLVED",
+  "data_files": ["data/research/extended_historical_robustness_candles.csv", "data/research/extended_historical_robustness_oos_candles.csv"],
+  "session_manifest": "data/audits/nse_cm_session_manifest_v2.json",
+  "partitions": [
+    {"partition_id": "development_reused", "start": "2023-12-01", "end": "2024-12-31", "status": "previously examined; exploratory only"},
+    {"partition_id": "walk_forward_reused", "start": "2025-01-01", "end": "2025-12-01", "status": "previously examined; exploratory only"},
+    {"partition_id": "previous_oos_reused", "start": "2025-12-02", "end": "2026-10-01", "status": "Stage 9/10 evaluated; not an untouched holdout"}
+  ],
+  "starting_capital_inr": 100000,
+  "risk": {"risk_per_trade_fraction": 0.01, "daily_loss_limit_fraction_of_day_start_equity": 0.02, "max_open_positions": 1, "max_trades_per_day": 3, "whole_shares": true, "max_capital_allocation_fraction": 1.0},
+  "execution": {
+    "direction": "long_only",
+    "signal_timing": "Completed signal candle; enter at the next same-session five-minute candle open.",
+    "stop_handling": "Check each holding candle low; gap through stop fills at candle open; otherwise stop price.",
+    "target": "none",
+    "holding_horizon_bars_includes_entry_bar": true,
+    "session_exit": "Close at final valid same-session candle; never carry overnight.",
+    "gap_policy": "Reject events whose required feature, entry, or holding window contains a same-session gap or incomplete session tail.",
+    "intrabar_ambiguity": "Stop is the only intrabar exit; stop takes precedence when touched.",
+    "slippage_bps_per_side": 5.0
+  },
+  "cost_assumptions": {"model": "app.cost_model.CostAssumptions", "brokerage": "min(INR 20, 0.1% of each leg turnover)", "stt_sell_rate": 0.00025, "stamp_buy_rate": 0.00003, "sebi_turnover_rate": 0.0000001, "gst_rate": 0.18, "nse_turnover_rate": 0.0000322, "ipft_per_lakh_inr": 0.10, "slippage": "5 bps adverse per side, modeled; not measured"},
+  "data_policy": {
+    "timestamp_assumption": "Treat source labels provisionally as candle starts; original dataset-specific label semantics remain unresolved.",
+    "session_policy": "Use only dates marked VERIFIED and REGULAR in manifest v2; exclude special, holiday, unresolved, absent, out-of-session, and out-of-alignment rows.",
+    "known_date_exclusions": [
+      {"symbol": "ALL", "date": "2024-01-20", "reason": "special-session schedule excluded under V2 data policy"},
+      {"symbol": "ALL", "date": "2024-03-02", "reason": "special-session schedule excluded under V2 data policy"},
+      {"symbol": "ALL", "date": "2024-05-18", "reason": "special-session schedule excluded under V2 data policy"},
+      {"symbol": "ALL", "date": "2024-11-01", "reason": "Muhurat session excluded under V2 data policy"},
+      {"symbol": "ALL", "date": "2025-02-01", "reason": "special Saturday session excluded under V2 data policy"},
+      {"symbol": "ALL", "date": "2026-02-01", "reason": "special Sunday session excluded under V2 data policy"},
+      {"symbol": "SBIN", "date": "2024-06-04", "reason": "unresolved suspicious price discontinuity"},
+      {"symbol": "ITC", "date": "2025-01-06", "reason": "unresolved flat zero-volume bars and missing interval"},
+      {"symbol": "ITC", "date": "2025-05-28", "reason": "unresolved suspicious volume spike"}
+    ],
+    "malformed_ohlc": "Exclude structurally invalid rows via app.candle_integrity; signal and holding windows with resulting same-session gaps are rejected.",
+    "session_coverage": "Require all 75 aligned regular-session START labels from 09:15 through 15:25 for each symbol-date; exclude incomplete symbol-sessions rather than bridging missing bars.",
+    "zero_volume": "Any zero-volume equity candle makes its symbol-session incomplete; exclude the entire symbol-session. Volume-field meaning remains unresolved.",
+    "missing_bars": "Never fill; reject affected event windows. Require a complete session tail when horizon runs to end of day.",
+    "corporate_actions_and_survivorship": "Unresolved; limits conclusions to this fixed available basket and observed records."
+  },
+  "candidates": [
+    {"strategy_id": "frozen_reversal_v1", "version": "v1-frozen", "kind": "reference", "description": "Frozen V1: 1% inclusive to 2% exclusive net decline over three observations, RSI 20 inclusive to 25 exclusive, close turns above previous close; 1% stop; six-bar maximum.", "decline_bars": 3, "min_decline_pct": 1.0, "max_decline_pct_exclusive": 2.0, "rsi_min_inclusive": 20.0, "rsi_max_exclusive": 25.0, "require_monotonic_decline": false, "stop_pct": 1.0, "horizon_bars": 6, "registry_status": "FROZEN_BASELINE", "enabled_for_paper": false},
+    {"strategy_id": "sharp_reversal_3bar_1to3_rsi30_stop075_h6_v1", "version": "research-v1", "kind": "research_candidate", "description": "Three preceding closes trend down; 1%-3% total decline; RSI below 30; 0.75% stop and six-bar horizon.", "decline_bars": 3, "min_decline_pct": 1.0, "max_decline_pct_exclusive": 3.0, "rsi_min_inclusive": 0.0, "rsi_max_exclusive": 30.0, "require_monotonic_decline": true, "stop_pct": 0.75, "horizon_bars": 6, "registry_status": "RESEARCH_ONLY", "enabled_for_paper": false},
+    {"strategy_id": "sharp_reversal_4bar_1to3_rsi35_stop1_h6_v1", "version": "research-v1", "kind": "research_candidate", "description": "Four preceding closes trend down; 1%-3% total decline; RSI below 35; 1% stop and six-bar horizon.", "decline_bars": 4, "min_decline_pct": 1.0, "max_decline_pct_exclusive": 3.0, "rsi_min_inclusive": 0.0, "rsi_max_exclusive": 35.0, "require_monotonic_decline": true, "stop_pct": 1.0, "horizon_bars": 6, "registry_status": "RESEARCH_ONLY", "enabled_for_paper": false},
+    {"strategy_id": "sharp_reversal_3bar_2to4_rsi30_stop1_h12_v1", "version": "research-v1", "kind": "research_candidate", "description": "Three preceding closes trend down; 2%-4% total decline; RSI below 30; 1% stop and twelve-bar horizon.", "decline_bars": 3, "min_decline_pct": 2.0, "max_decline_pct_exclusive": 4.0, "rsi_min_inclusive": 0.0, "rsi_max_exclusive": 30.0, "require_monotonic_decline": true, "stop_pct": 1.0, "horizon_bars": 12, "registry_status": "RESEARCH_ONLY", "enabled_for_paper": false}
+  ],
+  "acceptance_criteria": "Descriptive only; no statistical or profitability acceptance threshold. Further investigation may be suggested only if net P&L after modeled costs is positive with at least 30 trades overall and positive net P&L in at least two chronological partitions; this is not validation or paper approval.",
+  "stop_and_inconclusive_criteria": ["Input hash differs between reruns or prior artifacts change.", "No usable trades or fewer than 30 trades for a candidate: insufficient sample; inconclusive.", "Session, data-integrity, timestamp, or instrument mapping cannot be classified conservatively.", "Historical source provenance, corporate-action adjustment, or universe membership remains unresolved: exploratory-only verdict regardless of metrics."],
+  "prohibited": ["live orders", "paper execution enablement", "provider calls", "AI replay fabrication", "backtest parameter tuning after results"]
+}

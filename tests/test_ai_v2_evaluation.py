@@ -32,25 +32,33 @@ class Provider:
     model_id = "fixture-model-v1"
 
     def __init__(self, *, fail=False, stop_loss=995, malformed=False, returned_model=None,
-                 entry_condition="NEXT_ELIGIBLE_BAR_OPEN"):
+                 entry_condition="NEXT_ELIGIBLE_BAR_OPEN", action="BUY", holding_bars=1,
+                 target_price=1010):
         self.fail = fail
         self.stop_loss = stop_loss
         self.malformed = malformed
         self.returned_model = returned_model or self.model_id
         self.entry_condition = entry_condition
+        self.action = action
+        self.holding_bars = holding_bars
+        self.target_price = target_price
 
     def complete(self, _payload):
         if self.fail:
             raise TimeoutError("fixture timeout")
         response = {
-            "schema_version": DECISION_CONTRACT_VERSION, "action": "BUY",
+            "schema_version": DECISION_CONTRACT_VERSION, "action": self.action,
             "market_regime": "SIDEWAYS",
             "ranked_symbols": [{"symbol": "ABC", "rank": 1, "evidence": ["fixture close=1000"]}],
-            "symbol": "ABC", "strategy_id": STRATEGY,
-            "entry_price": 1000, "stop_loss": self.stop_loss, "target_price": 1010,
-            "holding_bars": 1, "entry_condition": self.entry_condition,
-            "invalidation_conditions": ["close below stop"],
-            "estimated_round_trip_cost_pct": 0.2,
+            "symbol": "ABC" if self.action in {"BUY", "EXIT"} else None,
+            "strategy_id": STRATEGY if self.action in {"BUY", "EXIT"} else None,
+            "entry_price": 1000 if self.action in {"BUY", "EXIT"} else None,
+            "stop_loss": self.stop_loss if self.action == "BUY" else None,
+            "target_price": self.target_price if self.action == "BUY" else None,
+            "holding_bars": self.holding_bars if self.action == "BUY" else None,
+            "entry_condition": self.entry_condition if self.action == "BUY" else None,
+            "invalidation_conditions": ["close below stop"] if self.action == "BUY" else [],
+            "estimated_round_trip_cost_pct": 0.2 if self.action == "BUY" else None,
             "rationale": "offline fixture only", "uncertainty": "synthetic data",
             "key_evidence": ["completed candle fixture"], "confidence": 0.5,
         }
@@ -63,11 +71,11 @@ class Switch:
         self.enabled = enabled
 
 
-def _request(cutoff=SIGNAL, signal=SIGNAL, source_hash="0" * 64):
+def _request(cutoff=SIGNAL, signal=SIGNAL, source_hash="0" * 64, open_symbols=()):
     market = DecisionRequest(
         request_id="fixture-request-" + cutoff[-14:-6].replace(":", ""),
         signal_timestamp=signal, data_cutoff=cutoff, eligible_symbols=("ABC",),
-        strategy_ids=(STRATEGY,), features={"ABC": {"close": 1000.0}},
+        strategy_ids=(STRATEGY,), open_symbols=tuple(open_symbols), features={"ABC": {"close": 1000.0}},
         feature_timestamps={"ABC": cutoff},
     )
     return AIResearchRequest(market, {"bars.csv": source_hash}, "VERIFIED", ())
@@ -127,6 +135,42 @@ def _ledger(tmp_path, *, count=1, provider=None, second_cutoff=None, second_reco
     return tmp_path / "decisions.sqlite3", source, evidence
 
 
+def _sequence_ledger(tmp_path, actions, *, bars=None):
+    source = tmp_path / "bars.csv"
+    if bars is None:
+        _bars(source)
+    else:
+        pd.DataFrame(bars).to_csv(source, index=False)
+    import hashlib
+    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+
+    class SequenceProvider:
+        provider_id = "offline-sequence-provider"
+        model_id = "fixture-sequence-v1"
+        def __init__(self, providers):
+            self.providers = iter(providers)
+        def complete(self, payload):
+            return next(self.providers).complete(payload)
+
+    providers = [Provider(action=action, holding_bars=horizon) for action, _cutoff, _recorded, _opens, horizon in actions]
+    service = AIResearchDecisionService(provider=SequenceProvider(providers), registry=StrategyRegistry([
+        StrategyCandidate(STRATEGY, "candidate-v1", "test only")]))
+    ledger = V2AuditLedger(tmp_path / "decisions.sqlite3")
+    for index, (action, cutoff, recorded, open_symbols, _horizon) in enumerate(actions):
+        cutoff_hour, cutoff_minute = (9, cutoff) if cutoff < 60 else divmod(cutoff, 60)
+        recorded_hour, recorded_minute = (9, recorded) if recorded < 60 else divmod(recorded, 60)
+        cutoff_text = f"{DAY}T{cutoff_hour:02d}:{cutoff_minute:02d}:00{IST}"
+        recorded_text = f"{DAY}T{recorded_hour:02d}:{recorded_minute:02d}:00{IST}"
+        request = _request(cutoff=cutoff_text, signal=cutoff_text, source_hash=digest,
+                           open_symbols=open_symbols)
+        envelope = service.decide(request, now=datetime.fromisoformat(recorded_text))
+        assert ledger.append_ai_research_decision(f"sequence-{index}", recorded_text, envelope,
+            GateResult(False, "research-only paper-disabled"), "HOLD")
+    ledger.close()
+    evidence = _write_evidence(tmp_path / "timestamp-evidence.json", source)
+    return tmp_path / "decisions.sqlite3", source, evidence
+
+
 def _evaluate(tmp_path, *, ledger=None, source=None, evidence=None, kill_switch=None, **kwargs):
     if ledger is None:
         ledger, source, evidence = _ledger(tmp_path)
@@ -164,6 +208,88 @@ def test_end_to_end_replay_is_causal_costed_and_repeatable(tmp_path):
     assert repeat_report["events_sha256"] == report["events_sha256"]
     with pytest.raises(EvaluationBlocked, match="already exists"):
         _evaluate(tmp_path, ledger=ledger, source=source, evidence=evidence)
+
+
+def test_buy_hold_exit_is_a_persistent_causal_lifecycle_with_reconciled_costs(tmp_path):
+    actions = [("BUY", 20, 25, (), 5), ("HOLD", 25, 30, (), 5),
+               ("EXIT", 35, 40, ("ABC",), 5)]
+    ledger, source, evidence = _sequence_ledger(tmp_path, actions)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "lifecycle", kill_switch=Switch())
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    report = json.loads(Path(result.report_path).read_text())
+    fills = [event for event in events if event["event_type"] == "SIMULATED_FILL"]
+    exits = [event for event in events if event["event_type"] == "SIMULATED_EXIT"]
+    assert len(fills) == len(exits) == 1
+    assert fills[0]["position_id"] == exits[0]["position_id"]
+    assert any(event["event_type"] == "POSITION_HELD" for event in events)
+    assert any(event["event_type"] == "EXIT_ACCEPTED" for event in events)
+    trade = report["trades"][0]
+    assert trade["exit_reason"] == "AI_EXIT"
+    assert trade["exit_signal_id"] == "sequence-2"
+    assert trade["entry_costs"]["total_cost"] + trade["exit_costs"]["total_cost"] == pytest.approx(trade["costs"]["total_cost"])
+    assert trade["net_pnl"] == pytest.approx(trade["gross_pnl"] - trade["costs"]["total_cost"])
+    assert not any(event["event_type"] == "EXIT_FILL" for event in events if event["position_id"] != fills[0]["position_id"])
+
+
+def test_exit_without_open_position_is_rejected_and_never_filled(tmp_path):
+    ledger, source, evidence = _sequence_ledger(tmp_path, [("EXIT", 20, 25, ("ABC",), 5)])
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "no-position-exit", kill_switch=Switch())
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    assert any(event["event_type"] == "EXIT_REJECTED" for event in events)
+    assert not any(event["event_type"] in {"EXIT_FILL", "SIMULATED_EXIT"} for event in events)
+
+
+def test_duplicate_buy_and_second_exit_cannot_create_duplicate_fills_or_outcomes(tmp_path):
+    actions = [("BUY", 20, 25, (), 8), ("BUY", 25, 30, (), 8),
+               ("EXIT", 35, 40, ("ABC",), 8), ("EXIT", 40, 45, ("ABC",), 8)]
+    ledger, source, evidence = _sequence_ledger(tmp_path, actions)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "duplicates", kill_switch=Switch())
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    assert sum(event["event_type"] == "SIMULATED_FILL" for event in events) == 1
+    assert sum(event["event_type"] == "TRADE_OUTCOME" for event in events) == 1
+    assert any(event["event_type"] == "ENTRY_REJECTED" for event in events)
+    assert any(event["event_type"] == "EXIT_REJECTED" and event.get("reason") == "an exit is already pending"
+               for event in events)
+
+
+def test_stop_wins_when_stop_and_target_are_both_touched_in_one_bar(tmp_path):
+    bars = []
+    for minute, opening, high, low, close in [
+        (15, 999, 1000, 998, 999), (20, 1000, 1001, 999, 1000),
+        (25, 1000, 1001, 999, 1000), (30, 1000, 1012, 994, 1001),
+        (35, 1001, 1003, 1000, 1002), (40, 1002, 1003, 1001, 1002),
+        (45, 1002, 1004, 1001, 1003), (50, 1003, 1004, 1002, 1003)]:
+        bars.append({"symbol": "ABC", "timestamp": f"{DAY}T09:{minute:02d}:00{IST}",
+                     "open": opening, "high": high, "low": low, "close": close, "volume": 100})
+    ledger, source, evidence = _sequence_ledger(tmp_path, [("BUY", 20, 25, (), 8)], bars=bars)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "same-bar", kill_switch=Switch())
+    report = json.loads(Path(result.report_path).read_text())
+    assert report["trades"][0]["exit_reason"] == "STOP_LOSS"
+    assert any(event["event_type"] == "STOP_LOSS_EXIT" for event in
+               map(json.loads, Path(result.ledger_path).read_text().splitlines()))
+
+
+def test_position_is_forced_closed_at_verified_session_end(tmp_path):
+    bars = [{"symbol": "ABC", "timestamp": f"{DAY}T15:{minute:02d}:00{IST}",
+             "open": 1000, "high": 1001, "low": 999, "close": 1000, "volume": 100}
+            for minute in (0, 5, 10, 15, 20, 25)]
+    ledger, source, evidence = _sequence_ledger(tmp_path, [("BUY", 900, 905, (), 12)], bars=bars)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "session-close", kill_switch=Switch())
+    report = json.loads(Path(result.report_path).read_text())
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    assert report["trades"][0]["exit_reason"] == "SESSION_CLOSE"
+    assert any(event["event_type"] == "FORCED_SESSION_CLOSE" for event in events)
+    assert report["trades"][0]["exit_timestamp"] == f"{DAY}T15:25:00+05:30"
 
 
 def test_missing_intervening_candle_rejects_without_synthesizing_a_fill(tmp_path):
@@ -288,7 +414,7 @@ def test_concurrent_duplicate_decision_is_rejected_after_first_trade(tmp_path):
     events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
     rejected = [event for event in events if event["event_type"] == "TRADE_REJECTED"]
     assert result.fill_count == 1
-    assert any("overlaps" in event["reason"] for event in rejected)
+    assert any("duplicates an existing pending or open instrument" in event["reason"] for event in rejected)
 
 
 def test_duplicate_decision_key_is_not_filled_twice(tmp_path):

@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from app.cost_model import CostAssumptions, estimate_round_trip_costs
+from app.cost_model import CostAssumptions, estimate_round_trip_costs, nse_transaction_rate
 from app.research.execution_integrity import ExecutionIntegrityError, TimestampSemanticsEvidence
 from app.research.sharp_reversal_experiment import load_session_dates
 from .ai_led_research import AIResearchDecision, AIResearchRequest, ResearchAction, safe_no_trade
@@ -28,7 +28,7 @@ from .safety import RiskLimits, RiskState, SafetyGate
 
 IST = ZoneInfo("Asia/Kolkata")
 BAR = timedelta(minutes=5)
-EVALUATION_VERSION = "ai-led-paper-evaluation-v1.0"
+EVALUATION_VERSION = "ai-led-paper-evaluation-v1.1"
 SUPPORTED_ENTRY_CONDITION = "NEXT_ELIGIBLE_BAR_OPEN"
 MAX_ENTRY_DEVIATION_PCT = 0.25
 
@@ -260,6 +260,33 @@ def _group_metrics(trades: list[dict], key: str) -> dict:
             for name, rows in sorted(groups.items())}
 
 
+def _split_round_trip_costs(entry_price: float, exit_price: float, quantity: int,
+                            trade_date: date, assumptions: CostAssumptions) -> tuple[dict, dict]:
+    """Allocate the existing round-trip formula to its actual buy and sell legs."""
+    legs = []
+    for side, price in (("entry", entry_price), ("exit", exit_price)):
+        turnover = price * quantity
+        brokerage = min(assumptions.brokerage_cap, turnover * assumptions.brokerage_rate)
+        exchange = turnover * nse_transaction_rate(trade_date)
+        ipft = turnover / 100_000.0 * assumptions.ipft_per_lakh
+        sebi = turnover * assumptions.sebi_rate
+        stt = turnover * assumptions.stt_sell_rate if side == "exit" else 0.0
+        stamp = turnover * assumptions.stamp_buy_rate if side == "entry" else 0.0
+        gst = assumptions.gst_rate * (brokerage + exchange + ipft)
+        slippage = turnover * assumptions.slippage_bps_per_side / 10_000.0
+        values = {"brokerage": brokerage, "stt": stt, "exchange": exchange,
+                  "ipft": ipft, "sebi": sebi, "stamp_duty": stamp, "gst": gst,
+                  "slippage": slippage}
+        values["total_cost"] = sum(values.values())
+        legs.append(values)
+    combined = {key: legs[0][key] + legs[1][key] for key in legs[0] if key != "total_cost"}
+    combined["total_cost"] = sum(combined.values())
+    expected = estimate_round_trip_costs(entry_price, exit_price, quantity, trade_date, assumptions)
+    if any(not math.isclose(combined[key], expected[key], rel_tol=1e-12, abs_tol=1e-9) for key in combined):
+        raise EvaluationBlocked("buy/sell cost allocation does not reconcile with the existing round-trip model")
+    return legs[0], legs[1]
+
+
 def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[str, Path],
                                 timestamp_evidence_path: Path, session_manifest_path: Path,
                                 output_dir: Path, starting_capital: float = 100_000.0,
@@ -316,7 +343,11 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
               "cost_assumptions": asdict(costs), "allow_model_substitution": allow_model_substitution,
               "execution_assumptions": {"entry_condition": SUPPORTED_ENTRY_CONDITION,
                                         "max_entry_deviation_pct": MAX_ENTRY_DEVIATION_PCT,
-                                        "same_session_only": True, "stop_first_if_stop_and_target_touch": True},
+                                        "same_session_only": True,
+                                        "same_bar_precedence": ["opening_gap_stop", "opening_gap_target", "ai_exit_at_open",
+                                                                "intrabar_stop_loss", "intrabar_target",
+                                                                "maximum_holding_close", "session_close"],
+                                        "stop_first_if_stop_and_target_touch": True},
               "session_manifest_sha256": session_hash, "source_hashes": source_hashes}
     run_id = "ai-v2-paper-" + _json_hash({"config": config, "decision_ids": [r[0] for r in records]})[:20]
     if output_dir.exists():
@@ -331,18 +362,213 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
     gate = SafetyGate(registry=registry, limits=limits, session_validator=session_validator,
                       kill_switch=kill_switch, state=state)
     seen_market_decisions: set[tuple] = set()
-    last_date = None
-    portfolio_available_at: datetime | None = None
+    active_day: date | None = None
     event_context = {"paper_only": True, "execution_enabled": False}
+    frames = {symbol: group.reset_index(drop=True)
+              for symbol, group in candles.groupby("symbol", sort=True)}
+    positions: dict[str, dict] = {}
 
-    def emit(signal_id, stamp, event_type, payload, *, event_time=None):
+    def emit(signal_id, stamp, event_type, payload, *, event_time=None, position_id=None):
         events.append({"event_id": f"{run_id}:{len(events)+1}", "run_id": run_id, **event_context,
-                      "signal_id": signal_id, "recorded_at": (event_time or stamp).isoformat(),
+                      "signal_id": signal_id, "decision_id": signal_id,
+                      "recorded_at": (event_time or stamp).isoformat(),
+                      "position_id": position_id, "source_hashes": source_hashes,
                       "event_type": event_type, **payload})
+
+    def reject(signal_id, stamp, event_type, payload, *, position_id=None):
+        emit(signal_id, stamp, event_type, payload, position_id=position_id)
+        emit(signal_id, stamp, "TRADE_REJECTED", payload, position_id=position_id)
+
+    def close_position(position, reference, stamp, reason, *, signal_id, event_stamp=None):
+        symbol = position["symbol"]
+        quantity = position["quantity"]
+        entry_costs, exit_costs = _split_round_trip_costs(position["reference_entry"], reference,
+                                                          quantity, stamp.date(), costs)
+        breakdown = estimate_round_trip_costs(position["reference_entry"], reference,
+                                              quantity, stamp.date(), costs)
+        gross = (reference - position["reference_entry"]) * quantity
+        net = gross - breakdown["total_cost"]
+        trade = {"position_id": position["position_id"], "entry_signal_id": position["entry_signal_id"],
+                 "entry_decision_id": position["entry_signal_id"], "exit_signal_id": signal_id,
+                 "exit_decision_id": signal_id, "symbol": symbol, "strategy_id": position["strategy_id"],
+                 "strategy_version": position["strategy_version"], "market_regime": position["regime"],
+                 "side": "LONG", "status": "CLOSED", "stop_loss": position["stop"],
+                 "target_price": position["target"], "maximum_holding_bars": position["horizon"],
+                 "quantity": quantity, "entry_timestamp": position["entry_timestamp"].isoformat(),
+                 "exit_timestamp": stamp.isoformat(), "entry_reference": position["reference_entry"],
+                 "exit_reference": reference, "entry_fill": position["entry_fill"],
+                 "exit_fill": reference * (1 - costs.slippage_bps_per_side / 10_000),
+                 "entry_costs": entry_costs, "exit_costs": exit_costs,
+                 "holding_bars": position["holding_bars"], "exit_reason": reason,
+                 "gross_pnl": gross, "costs": breakdown, "net_pnl": net,
+                 "source_hashes": source_hashes}
+        trades.append(trade)
+        state.capital += net
+        state.daily_loss += max(0.0, -net)
+        del state.open_positions[symbol]
+        del positions[symbol]
+        event_at = event_stamp or stamp + BAR
+        if reason in {"STOP_LOSS", "TARGET"}:
+            emit(signal_id, stamp, f"{reason}_EXIT", {"reference_price": reference},
+                 event_time=event_at, position_id=position["position_id"])
+        elif reason == "SESSION_CLOSE":
+            emit(signal_id, stamp, "FORCED_SESSION_CLOSE", {"reference_price": reference},
+                 event_time=event_at, position_id=position["position_id"])
+        elif reason == "AI_EXIT":
+            emit(signal_id, stamp, "EXIT_FILL", {"reference_price": reference},
+                 event_time=event_at, position_id=position["position_id"])
+        emit(signal_id, stamp, "SIMULATED_EXIT", trade, event_time=event_at,
+             position_id=position["position_id"])
+        emit(signal_id, stamp, "COSTS_RECORDED", {"costs": breakdown, "entry_costs": entry_costs,
+             "exit_costs": exit_costs},
+             event_time=event_at, position_id=position["position_id"])
+        emit(signal_id, stamp, "TRADE_OUTCOME", {"gross_pnl": gross, "net_pnl": net,
+             "costs": breakdown, "exit_reason": reason, "source_hashes": source_hashes},
+             event_time=event_at, position_id=position["position_id"])
+
+    def advance_positions(until: datetime) -> None:
+        """Process only bars whose START-labeled interval has completed by `until`."""
+        for symbol in list(positions):
+            position = positions.get(symbol)
+            if position is None:
+                continue
+            frame = frames[symbol]
+            # A pending order fills at the eligible bar open; no OHLC is inspected until
+            # that bar has completed and its label + five minutes is visible.
+            if position["status"] == "PENDING_ENTRY":
+                if position["entry_timestamp"] > until:
+                    continue
+                if kill_switch.enabled or not _verified_session(position["entry_timestamp"], session_dates):
+                    reject(position["entry_signal_id"], until, "ENTRY_REJECTED",
+                         {"reason": "kill switch or session invalid at simulated fill"},
+                         position_id=position["position_id"])
+                    del state.open_positions[symbol]
+                    del positions[symbol]
+                    continue
+                position["status"] = "OPEN"
+                state.open_positions[symbol] = {"quantity": position["quantity"],
+                    "entry_price": position["entry_fill"], "allocation": position["quantity"] * position["entry_fill"]}
+                state.trades_today += 1
+                emit(position["entry_signal_id"], position["entry_timestamp"], "SIMULATED_FILL",
+                     {"symbol": symbol, "strategy_id": position["strategy_id"],
+                      "quantity": position["quantity"], "bar_timestamp": position["entry_timestamp"].isoformat(),
+                      "reference_price": position["reference_entry"], "fill_price": position["entry_fill"],
+                      "entry_costs": position["entry_costs"], "source_hashes": source_hashes},
+                     event_time=position["entry_timestamp"], position_id=position["position_id"])
+            if position.get("pending_exit") is not None:
+                exit_request = position["pending_exit"]
+            else:
+                exit_request = None
+            start_index = position["entry_index"]
+            next_index = position.get("next_index", start_index)
+            while next_index < len(frame):
+                bar = frame.iloc[next_index]
+                stamp = bar.timestamp
+                if stamp + BAR > until:
+                    break
+                if stamp.date() != position["entry_timestamp"].date() or not _verified_session(stamp, session_dates):
+                    break
+                if next_index > start_index:
+                    prior = frame.iloc[next_index - 1].timestamp
+                    if stamp - prior != BAR:
+                        raise EvaluationBlocked(f"missing candle while position is open: {symbol} {prior + BAR}")
+                opn, low, high, close = map(float, (bar.open, bar.low, bar.high, bar.close))
+                held = next_index - start_index + 1
+                reason = None
+                exit_ref = None
+                # Opening gaps are handled first. A stop gap receives the worse open;
+                # target gaps are capped at target. Otherwise an AI exit executes at open.
+                if opn <= position["stop"]:
+                    reason, exit_ref = "STOP_LOSS", opn
+                elif opn >= position["target"]:
+                    reason, exit_ref = "TARGET", position["target"]
+                elif exit_request is not None and stamp > exit_request["recorded_at"]:
+                    reason, exit_ref = "AI_EXIT", opn
+                elif low <= position["stop"]:
+                    reason, exit_ref = "STOP_LOSS", position["stop"]
+                elif high >= position["target"]:
+                    reason, exit_ref = "TARGET", position["target"]
+                elif held >= position["horizon"]:
+                    reason, exit_ref = "HORIZON", close
+                session = session_dates[stamp.date()]
+                intervals = session.get("normal_market_intervals", [])
+                interval = next((row for row in intervals
+                    if time.fromisoformat(row["start"]) <= stamp.timetz().replace(tzinfo=None)
+                    < time.fromisoformat(row["end"])), None)
+                session_close = datetime.combine(stamp.date(), time.fromisoformat(interval["end"]), IST) if interval else None
+                if reason is None and session_close == stamp + BAR:
+                    reason, exit_ref = "SESSION_CLOSE", close
+                position["holding_bars"] = held
+                next_index += 1
+                position["next_index"] = next_index
+                if reason:
+                    closing_signal = exit_request["signal_id"] if reason == "AI_EXIT" else position["entry_signal_id"]
+                    close_position(position, exit_ref, stamp, reason, signal_id=closing_signal)
+                    break
+
+    def schedule_entry(signal_id, recorded, decision, candidates, request, risk):
+        symbol = decision.symbol
+        frame = frames.get(symbol)
+        if frame is None:
+            return "decision symbol has no candle source"
+        cutoff = _iso(request.market.data_cutoff, "data_cutoff")
+        if len(frame.index[frame.timestamp.eq(cutoff)]) != 1:
+            return "decision cutoff candle missing or ambiguous"
+        later = frame.index[frame.timestamp.gt(recorded)].tolist()
+        if not later:
+            return "no strictly future entry candle"
+        index = later[0]
+        bar = frame.iloc[index]
+        entry_time, entry_ref = bar.timestamp, float(bar.open)
+        if entry_time.date() != cutoff.date() or not _verified_session(entry_time, session_dates):
+            return "entry is not a future same-session candle"
+        intervening = frame[(frame.timestamp >= cutoff) & (frame.timestamp <= entry_time)]
+        if list(intervening.timestamp) != list(pd.date_range(cutoff, entry_time, freq="5min", tz=IST)):
+            return "missing candle before entry"
+        deviation = abs(entry_ref - float(decision.entry_price)) / float(decision.entry_price) * 100
+        if deviation > MAX_ENTRY_DEVIATION_PCT:
+            return "next-open price exceeds the bounded AI entry deviation"
+        fill = entry_ref * (1 + costs.slippage_bps_per_side / 10_000)
+        stop, target, horizon = float(decision.stop_loss), float(decision.target_price), decision.holding_bars
+        stop_pct = (fill - stop) / fill * 100
+        target_pct = (target - fill) / fill * 100
+        if not limits.min_stop_distance_pct <= stop_pct <= limits.max_stop_distance_pct or not 0 < target_pct <= limits.max_target_distance_pct:
+            return "actual entry fill violates stop/target distance limits"
+        risk_qty = int((state.capital * limits.max_risk_per_trade) // (fill - stop))
+        used_allocation = sum(float(row.get("allocation", 0.0)) for row in state.open_positions.values())
+        allocation_cap = min(state.capital * limits.max_allocation, max(0.0, state.capital - used_allocation))
+        quantity = min(risk.quantity, risk_qty, int(allocation_cap // fill))
+        if quantity <= 0:
+            return "actual fill cannot satisfy risk or capital bounds"
+        position_id = f"{run_id}:position:{_json_hash([signal_id, symbol])[:16]}"
+        version = next(x.version for x in candidates if x.strategy_id == decision.strategy_id)
+        entry_costs, _unused_exit_costs = _split_round_trip_costs(entry_ref, entry_ref, quantity,
+                                                                  entry_time.date(), costs)
+        positions[symbol] = {"position_id": position_id, "entry_signal_id": signal_id,
+            "symbol": symbol, "strategy_id": decision.strategy_id, "strategy_version": version,
+            "regime": decision.market_regime.value, "entry_index": index, "next_index": index,
+            "entry_timestamp": entry_time, "reference_entry": entry_ref, "entry_fill": fill,
+            "entry_costs": entry_costs, "quantity": quantity, "stop": stop, "target": target,
+            "horizon": horizon, "holding_bars": 0, "status": "PENDING_ENTRY", "pending_exit": None}
+        state.open_positions[symbol] = {"quantity": quantity, "entry_price": fill,
+            "allocation": quantity * fill}
+        emit(signal_id, recorded, "ENTRY_ACCEPTED", {"symbol": symbol, "quantity": quantity,
+            "position_id": position_id, "entry_timestamp": entry_time.isoformat(),
+            "stop_loss": stop, "target": target, "maximum_holding_bars": horizon,
+            "source_hashes": source_hashes}, position_id=position_id)
+        return None
 
     try:
         for signal_id, recorded_text, body, request, decision, candidates in parsed_records:
             recorded = _iso(recorded_text, "ledger recorded_at")
+            advance_positions(recorded)
+            if active_day != recorded.date():
+                if positions and any(p["entry_timestamp"].date() != recorded.date() for p in positions.values()):
+                    raise EvaluationBlocked("position crossed a verified session boundary")
+                if not positions:
+                    state.daily_loss, state.trades_today = 0.0, 0
+                    state.day_start_capital = state.capital
+                active_day = recorded.date()
             envelope = body["envelope"]
             event_context = {
                 "paper_only": True, "execution_enabled": False,
@@ -374,25 +600,67 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
                 emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "duplicate decision key"})
                 continue
             seen_market_decisions.add(market_key)
-            if last_date != recorded.date():
-                if state.open_positions:
-                    emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "open position crossed session boundary"})
-                    raise EvaluationBlocked("position state unexpectedly crossed a session boundary")
-                state.daily_loss, state.trades_today = 0.0, 0
-                state.day_start_capital = state.capital
-                last_date = recorded.date()
-            if decision.action in {ResearchAction.BUY, ResearchAction.EXIT} and state.open_positions:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "position already open at decision time"})
-                continue
-            if (decision.action in {ResearchAction.BUY, ResearchAction.EXIT}
-                    and portfolio_available_at is not None and recorded < portfolio_available_at):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "signal overlaps an earlier simulated holding window"})
-                continue
+            if state.open_positions and recorded.date() != next(iter(positions.values()))["entry_timestamp"].date():
+                raise EvaluationBlocked("position crossed a verified session boundary without a close")
             action = decision.action
-            if action in {ResearchAction.HOLD, ResearchAction.NO_TRADE}:
+            if action is ResearchAction.NO_TRADE:
                 emit(signal_id, recorded, "NO_TRADE", {"decision_action": action.value,
                     "recorded_final_decision": body.get("final_decision"),
                     "reason": decision.rationale, "source_hashes": source_hashes})
+                continue
+            if action is ResearchAction.HOLD:
+                open_positions = [p for p in positions.values() if p["status"] == "OPEN"]
+                if open_positions:
+                    for position in open_positions:
+                        emit(signal_id, recorded, "POSITION_HELD", {"symbol": position["symbol"],
+                            "reason": decision.rationale, "source_hashes": source_hashes},
+                            position_id=position["position_id"])
+                else:
+                    emit(signal_id, recorded, "NO_TRADE", {"decision_action": action.value,
+                        "reason": "no filled position to hold", "source_hashes": source_hashes})
+                continue
+            if action is ResearchAction.BUY and decision.symbol in positions:
+                duplicate_position_id = f"{run_id}:position:{_json_hash([signal_id, decision.symbol])[:16]}"
+                emit(signal_id, recorded, "TRADE_PROPOSED", {"symbol": decision.symbol,
+                    "strategy_id": decision.strategy_id, "decision_action": action.value,
+                    "data_cutoff": _iso(request.market.data_cutoff, "data_cutoff").isoformat()},
+                    position_id=duplicate_position_id)
+                emit(signal_id, recorded, "ENTRY_PROPOSED", {"symbol": decision.symbol,
+                    "strategy_id": decision.strategy_id}, position_id=duplicate_position_id)
+                reject(signal_id, recorded, "ENTRY_REJECTED", {"reason": "signal duplicates an existing pending or open instrument"},
+                       position_id=duplicate_position_id)
+                continue
+            if action is ResearchAction.EXIT:
+                position = positions.get(decision.symbol or "")
+                emit(signal_id, recorded, "EXIT_PROPOSED", {"symbol": decision.symbol,
+                    "source_hashes": source_hashes}, position_id=position["position_id"] if position else None)
+                if position is None or position["status"] != "OPEN":
+                    reject(signal_id, recorded, "EXIT_REJECTED", {"reason": "EXIT has no matching filled open position"})
+                    continue
+                if position.get("pending_exit") is not None:
+                    reject(signal_id, recorded, "EXIT_REJECTED", {"reason": "an exit is already pending"},
+                         position_id=position["position_id"])
+                    continue
+                if decision.strategy_id != position["strategy_id"]:
+                    reject(signal_id, recorded, "EXIT_REJECTED", {"reason": "EXIT strategy does not match the open position"},
+                         position_id=position["position_id"])
+                    continue
+                if decision.symbol not in request.market.open_symbols:
+                    reject(signal_id, recorded, "EXIT_REJECTED", {"reason": "EXIT instrument is absent from recorded open_symbols"},
+                         position_id=position["position_id"])
+                    continue
+                recommendation = V2Recommendation(Action.EXIT, decision.market_regime,
+                    tuple(RankedSymbol(x.symbol, x.rank, x.evidence) for x in decision.ranked_symbols),
+                    decision.symbol, decision.strategy_id, decision.entry_price, decision.stop_loss,
+                    decision.target_price, decision.holding_bars, decision.rationale, decision.key_evidence,
+                    decision.confidence)
+                risk = gate.approve_research(request.market, recommendation, now=recorded, signal_id=signal_id)
+                if not risk.approved:
+                    reject(signal_id, recorded, "EXIT_REJECTED", {"reason": risk.reason}, position_id=position["position_id"])
+                    continue
+                position["pending_exit"] = {"signal_id": signal_id, "recorded_at": recorded}
+                emit(signal_id, recorded, "EXIT_ACCEPTED", {"symbol": decision.symbol,
+                    "execution": "NEXT_ELIGIBLE_BAR_OPEN"}, position_id=position["position_id"])
                 continue
             emit(signal_id, recorded, "TRADE_PROPOSED", {"symbol": decision.symbol,
                 "strategy_id": decision.strategy_id, "strategy_version": next(
@@ -400,12 +668,18 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
                 "decision_action": action.value, "recorded_final_decision": body.get("final_decision"),
                 "entry_condition": decision.entry_condition,
                 "ai_estimated_round_trip_cost_pct": decision.estimated_round_trip_cost_pct,
-                "data_cutoff": cutoff.isoformat(), "source_hashes": source_hashes})
+                "data_cutoff": cutoff.isoformat(), "source_hashes": source_hashes},
+                position_id=f"{run_id}:position:{_json_hash([signal_id, decision.symbol])[:16]}")
+            proposed_position_id = f"{run_id}:position:{_json_hash([signal_id, decision.symbol])[:16]}"
+            emit(signal_id, recorded, "ENTRY_PROPOSED", {"symbol": decision.symbol,
+                "strategy_id": decision.strategy_id, "data_cutoff": cutoff.isoformat()},
+                position_id=proposed_position_id)
             if action is ResearchAction.BUY and decision.entry_condition != SUPPORTED_ENTRY_CONDITION:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "entry condition is outside the implemented execution contract"})
+                reject(signal_id, recorded, "ENTRY_REJECTED", {"reason": "entry condition is outside the implemented execution contract"},
+                       position_id=proposed_position_id)
                 continue
             recommendation = V2Recommendation(
-                Action.BUY if action is ResearchAction.BUY else Action.EXIT, decision.market_regime,
+                Action.BUY, decision.market_regime,
                 tuple(RankedSymbol(x.symbol, x.rank, x.evidence) for x in decision.ranked_symbols),
                 decision.symbol, decision.strategy_id, decision.entry_price, decision.stop_loss,
                 decision.target_price, decision.holding_bars, decision.rationale, decision.key_evidence,
@@ -420,131 +694,20 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
             }
             event_context["recorded_risk_result"] = body.get("risk_result")
             if not risk.approved:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": risk.reason,
-                    "risk_quantity": risk.quantity, "source_hashes": source_hashes})
+                reject(signal_id, recorded, "ENTRY_REJECTED", {"reason": risk.reason,
+                    "risk_quantity": risk.quantity, "source_hashes": source_hashes},
+                    position_id=proposed_position_id)
                 continue
-            symbol = decision.symbol
-            frame = candles[candles.symbol.eq(symbol)].reset_index(drop=True)
-            cutoff_rows = frame.index[frame.timestamp.eq(cutoff)].tolist()
-            if len(cutoff_rows) != 1:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "decision cutoff candle missing or ambiguous"})
-                continue
-            if not _verified_session(cutoff, session_dates):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "cutoff session invalid or unresolved"})
-                continue
-            candidates_after = frame.index[frame.timestamp.gt(recorded)].tolist()
-            if not candidates_after:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "no strictly future entry candle"})
-                continue
-            entry_index = candidates_after[0]
-            entry_bar = frame.iloc[entry_index]
-            entry_time = entry_bar.timestamp
-            if (entry_time.date() != cutoff.date() or entry_time - cutoff < BAR
-                    or not _verified_session(entry_time, session_dates)):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "entry is not a future same-session candle"})
-                continue
-            # No silent gap bridging from cutoff completion to a modeled fill.
-            before_entry = frame[(frame.timestamp >= cutoff) & (frame.timestamp <= entry_time)]
-            expected = pd.date_range(cutoff, entry_time, freq="5min", tz=IST)
-            if list(before_entry.timestamp) != list(expected):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "missing candle before entry"})
-                continue
-            entry_ref = float(entry_bar.open)
-            entry_deviation_pct = abs(entry_ref - float(decision.entry_price)) / float(decision.entry_price) * 100
-            if entry_deviation_pct > MAX_ENTRY_DEVIATION_PCT:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "next-open price exceeds the bounded AI entry deviation",
-                    "entry_deviation_pct": entry_deviation_pct,
-                    "max_entry_deviation_pct": MAX_ENTRY_DEVIATION_PCT})
-                continue
-            fill = entry_ref * (1 + costs.slippage_bps_per_side / 10_000)
-            stop, target, horizon = float(decision.stop_loss), float(decision.target_price), decision.holding_bars
-            actual_stop_pct = (fill - stop) / fill * 100
-            actual_target_pct = (target - fill) / fill * 100
-            if (not limits.min_stop_distance_pct <= actual_stop_pct <= limits.max_stop_distance_pct
-                    or actual_target_pct <= 0 or actual_target_pct > limits.max_target_distance_pct):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "actual entry fill violates stop/target distance limits"})
-                continue
-            if kill_switch.enabled or not _verified_session(entry_time, session_dates):
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "kill switch or session invalid at simulated fill"})
-                continue
-            # Re-size at the actual next-bar open using unchanged independent limits.
-            risk_qty = int((state.capital * limits.max_risk_per_trade) // (fill - stop)) if fill > stop else 0
-            used = sum(float(x["allocation"]) for x in state.open_positions.values())
-            allocation_cap = min(state.capital * limits.max_allocation, max(0.0, state.capital - used))
-            alloc_qty = int(allocation_cap // fill) if fill > 0 else 0
-            quantity = min(risk.quantity, risk_qty, alloc_qty)
-            if quantity <= 0:
-                emit(signal_id, recorded, "TRADE_REJECTED", {"reason": "actual fill cannot satisfy risk or capital bounds"})
-                continue
-            position = {"symbol": symbol, "entry_index": entry_index, "entry_timestamp": entry_time,
-                        "reference_entry": entry_ref, "entry_fill": fill, "quantity": quantity,
-                        "stop": stop, "target": target, "horizon": horizon,
-                        "regime": decision.market_regime.value, "strategy_id": decision.strategy_id}
-            state.open_positions[symbol] = {"quantity": quantity, "entry_price": fill,
-                                             "allocation": quantity * fill}
-            state.trades_today += 1
-            emit(signal_id, recorded, "SIMULATED_FILL", {"symbol": symbol, "strategy_id": decision.strategy_id,
-                "quantity": quantity, "bar_timestamp": entry_time.isoformat(), "reference_price": entry_ref,
-                "fill_price": fill, "slippage_bps_per_side": costs.slippage_bps_per_side,
-                "source_hashes": source_hashes}, event_time=entry_time)
-            exit_info = None
-            session_entry = session_dates[entry_time.date()]
-            interval = next(item for item in session_entry["normal_market_intervals"]
-                            if time.fromisoformat(item["start"]) <= entry_time.timetz().replace(tzinfo=None)
-                            < time.fromisoformat(item["end"]))
-            session_close = datetime.combine(entry_time.date(), time.fromisoformat(interval["end"]), IST)
-            for offset in range(horizon):
-                idx = entry_index + offset
-                if idx >= len(frame):
-                    break
-                bar = frame.iloc[idx]
-                stamp = bar.timestamp
-                if stamp.date() != entry_time.date() or not _verified_session(stamp, session_dates):
-                    break
-                if idx > entry_index and stamp - frame.iloc[idx - 1].timestamp != BAR:
-                    break
-                low, high, opn = float(bar.low), float(bar.high), float(bar.open)
-                if low <= stop:  # Conservative when stop and target touch in one candle.
-                    exit_info = (min(opn, stop) if opn < stop else stop, stamp, "STOP_LOSS", offset + 1)
-                    break
-                if high >= target:
-                    exit_info = (target, stamp, "TARGET", offset + 1)
-                    break
-                if offset == horizon - 1:
-                    exit_info = (float(bar.close), stamp, "HORIZON", offset + 1)
-                    break
-                if stamp + BAR == session_close:
-                    exit_info = (float(bar.close), stamp, "SESSION_CLOSE", offset + 1)
-                    break
-            if exit_info is None:
-                # No fabricated exit or overnight carry. The proposal is rejected from
-                # completed-trade metrics because this candle series cannot close it.
-                raise EvaluationBlocked("simulated fill has no complete same-session exit window; run is incomplete")
-            exit_ref, exit_time, exit_reason, held_bars = exit_info
-            gross = (exit_ref - entry_ref) * quantity
-            breakdown = estimate_round_trip_costs(entry_ref, exit_ref, quantity, exit_time.date(), costs)
-            net = gross - breakdown["total_cost"]
-            trade = {"signal_id": signal_id, "symbol": symbol, "strategy_id": decision.strategy_id,
-                     "strategy_version": next(x.version for x in candidates if x.strategy_id == decision.strategy_id),
-                     "market_regime": position["regime"],
-                     "quantity": quantity, "entry_timestamp": entry_time.isoformat(),
-                     "exit_timestamp": exit_time.isoformat(), "entry_reference": entry_ref,
-                     "exit_reference": exit_ref, "entry_fill": fill,
-                     "exit_fill": exit_ref * (1 - costs.slippage_bps_per_side / 10_000),
-                     "holding_bars": held_bars, "exit_reason": exit_reason, "gross_pnl": gross,
-                     "costs": breakdown, "net_pnl": net, "source_hashes": source_hashes}
-            trades.append(trade)
-            state.capital += net
-            state.daily_loss += max(0.0, -net)
-            del state.open_positions[symbol]
-            emit(signal_id, exit_time, "SIMULATED_EXIT", trade, event_time=exit_time + BAR)
-            emit(signal_id, exit_time, "TRADE_OUTCOME", {"gross_pnl": gross, "net_pnl": net,
-                "costs": breakdown, "exit_reason": exit_reason, "source_hashes": source_hashes},
-                event_time=exit_time + BAR)
-            # Reserve the slot through the decision's maximum horizon (or the
-            # manifest's session close). This cutoff is known at entry time and does
-            # not depend on the future stop/target path found by the simulator.
-            portfolio_available_at = min(entry_time + horizon * BAR, session_close)
+            reason = schedule_entry(signal_id, recorded, decision, candidates, request, risk)
+            if reason:
+                reject(signal_id, recorded, "ENTRY_REJECTED", {"reason": reason, "source_hashes": source_hashes},
+                       position_id=proposed_position_id)
+
+        if parsed_records:
+            latest = max(frame.timestamp.max() + BAR for frame in frames.values())
+            advance_positions(latest)
+        if positions:
+            raise EvaluationBlocked("paper run ended with an unresolved open or pending position")
     except Exception:
         # The unique output folder preserves diagnostic append-only events if replay
         # aborts midway; caller can inspect it but must not treat it as complete.

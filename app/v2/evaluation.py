@@ -382,6 +382,7 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
     def close_position(position, reference, stamp, reason, *, signal_id, event_stamp=None):
         symbol = position["symbol"]
         quantity = position["quantity"]
+        event_at = event_stamp or stamp + BAR
         entry_costs, exit_costs = _split_round_trip_costs(position["reference_entry"], reference,
                                                           quantity, stamp.date(), costs)
         breakdown = estimate_round_trip_costs(position["reference_entry"], reference,
@@ -395,7 +396,10 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
                  "side": "LONG", "status": "CLOSED", "stop_loss": position["stop"],
                  "target_price": position["target"], "maximum_holding_bars": position["horizon"],
                  "quantity": quantity, "entry_timestamp": position["entry_timestamp"].isoformat(),
-                 "exit_timestamp": stamp.isoformat(), "entry_reference": position["reference_entry"],
+                 # The START-labeled bar's OHLC exit decision is not knowable until
+                 # its interval completes; keep the report timestamp aligned with
+                 # the append-only exit events below.
+                 "exit_timestamp": event_at.isoformat(), "entry_reference": position["reference_entry"],
                  "exit_reference": reference, "entry_fill": position["entry_fill"],
                  "exit_fill": reference * (1 - costs.slippage_bps_per_side / 10_000),
                  "entry_costs": entry_costs, "exit_costs": exit_costs,
@@ -407,7 +411,6 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
         state.daily_loss += max(0.0, -net)
         del state.open_positions[symbol]
         del positions[symbol]
-        event_at = event_stamp or stamp + BAR
         if reason in {"STOP_LOSS", "TARGET"}:
             emit(signal_id, stamp, f"{reason}_EXIT", {"reference_price": reference},
                  event_time=event_at, position_id=position["position_id"])

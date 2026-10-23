@@ -277,6 +277,93 @@ def test_stop_wins_when_stop_and_target_are_both_touched_in_one_bar(tmp_path):
                map(json.loads, Path(result.ledger_path).read_text().splitlines()))
 
 
+def test_automatic_target_exit_has_one_reconciled_realized_outcome(tmp_path):
+    bars = []
+    for minute, opening, high, low, close in [
+        (15, 999, 1000, 998, 999), (20, 1000, 1001, 999, 1000),
+        (25, 1000, 1001, 999, 1000), (30, 1000, 1001, 999, 1000),
+        (35, 1001, 1012, 1000, 1008), (40, 1008, 1009, 1007, 1008),
+        (45, 1008, 1009, 1007, 1008), (50, 1008, 1009, 1007, 1008)]:
+        bars.append({"symbol": "ABC", "timestamp": f"{DAY}T09:{minute:02d}:00{IST}",
+                     "open": opening, "high": high, "low": low, "close": close, "volume": 100})
+    ledger, source, evidence = _sequence_ledger(
+        tmp_path, [("BUY", 20, 25, (), 8)], bars=bars)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "target-exit", kill_switch=Switch())
+    report = json.loads(Path(result.report_path).read_text())
+    outcomes = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()
+                if json.loads(line)["event_type"] == "TRADE_OUTCOME"]
+    trade = report["trades"][0]
+    assert trade["exit_reason"] == "TARGET"
+    assert trade["exit_reference"] == 1010
+    assert trade["gross_pnl"] == pytest.approx((1010 - trade["entry_reference"]) * trade["quantity"])
+    assert trade["net_pnl"] == pytest.approx(trade["gross_pnl"] - trade["costs"]["total_cost"])
+    assert trade["entry_costs"]["total_cost"] + trade["exit_costs"]["total_cost"] == pytest.approx(
+        trade["costs"]["total_cost"])
+    assert report["trade_count"] == len(outcomes) == 1
+    assert outcomes[0]["net_pnl"] == pytest.approx(trade["net_pnl"])
+
+
+def test_maximum_holding_period_closes_on_completed_bar_close(tmp_path):
+    ledger, source, evidence = _sequence_ledger(
+        tmp_path, [("BUY", 20, 25, (), 2)])
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "horizon-exit", kill_switch=Switch())
+    report = json.loads(Path(result.report_path).read_text())
+    trade = report["trades"][0]
+    assert trade["exit_reason"] == "HORIZON"
+    assert trade["holding_bars"] == 2
+    assert trade["exit_reference"] == 1002
+    assert trade["exit_timestamp"] == f"{DAY}T09:40:00+05:30"
+
+
+def test_malformed_ohlc_is_rejected_before_decisions_are_simulated(tmp_path):
+    source = _bars(tmp_path / "malformed-bars.csv")
+    frame = pd.read_csv(source)
+    frame.loc[frame["timestamp"] == f"{DAY}T09:30:00{IST}", "high"] = 998
+    frame.to_csv(source, index=False)
+    digest = __import__("hashlib").sha256(source.read_bytes()).hexdigest()
+    service = AIResearchDecisionService(provider=Provider(), registry=StrategyRegistry([
+        StrategyCandidate(STRATEGY, "candidate-v1", "test only")]))
+    envelope = service.decide(_request(source_hash=digest), now=datetime.fromisoformat(RECORDED))
+    ledger = V2AuditLedger(tmp_path / "malformed.sqlite3")
+    ledger.append_ai_research_decision("malformed-signal", RECORDED, envelope,
+                                       GateResult(False, "prior paper hold"), "HOLD")
+    ledger.close()
+    evidence = _write_evidence(tmp_path / "malformed-evidence.json", source)
+    with pytest.raises(EvaluationBlocked, match="invalid OHLC relationship"):
+        evaluate_recorded_decisions(decision_ledger=tmp_path / "malformed.sqlite3",
+            source_files={"bars.csv": source}, timestamp_evidence_path=evidence,
+            session_manifest_path=SESSION_MANIFEST, output_dir=tmp_path / "malformed-evaluation",
+            kill_switch=Switch())
+
+
+def test_realized_loss_activates_daily_loss_gate_for_later_entry(tmp_path):
+    bars = []
+    for minute, opening, high, low, close in [
+        (15, 999, 1000, 998, 999), (20, 1000, 1001, 999, 1000),
+        (25, 1000, 1001, 999, 1000), (30, 1000, 1001, 990, 994),
+        (35, 994, 995, 993, 994), (40, 994, 995, 993, 994),
+        (45, 994, 995, 993, 994), (50, 994, 995, 993, 994)]:
+        bars.append({"symbol": "ABC", "timestamp": f"{DAY}T09:{minute:02d}:00{IST}",
+                     "open": opening, "high": high, "low": low, "close": close, "volume": 100})
+    ledger, source, evidence = _sequence_ledger(tmp_path, [
+        ("BUY", 20, 25, (), 8), ("BUY", 35, 40, (), 8)], bars=bars)
+    result = evaluate_recorded_decisions(decision_ledger=ledger, source_files={"bars.csv": source},
+        timestamp_evidence_path=evidence, session_manifest_path=SESSION_MANIFEST,
+        output_dir=tmp_path / "daily-loss", kill_switch=Switch(),
+        starting_capital=5_000, limits=RiskLimits(max_daily_loss=0.001))
+    report = json.loads(Path(result.report_path).read_text())
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    assert report["trade_count"] == 1
+    assert report["net_pnl"] < 0
+    assert sum(event["event_type"] == "TRADE_OUTCOME" for event in events) == 1
+    assert any(event["event_type"] == "ENTRY_REJECTED"
+               and "daily loss limit reached" in event["reason"] for event in events)
+
+
 def test_position_is_forced_closed_at_verified_session_end(tmp_path):
     bars = [{"symbol": "ABC", "timestamp": f"{DAY}T15:{minute:02d}:00{IST}",
              "open": 1000, "high": 1001, "low": 999, "close": 1000, "volume": 100}
@@ -289,7 +376,9 @@ def test_position_is_forced_closed_at_verified_session_end(tmp_path):
     events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
     assert report["trades"][0]["exit_reason"] == "SESSION_CLOSE"
     assert any(event["event_type"] == "FORCED_SESSION_CLOSE" for event in events)
-    assert report["trades"][0]["exit_timestamp"] == f"{DAY}T15:25:00+05:30"
+    assert report["trades"][0]["exit_timestamp"] == f"{DAY}T15:30:00+05:30"
+    forced_close = next(event for event in events if event["event_type"] == "FORCED_SESSION_CLOSE")
+    assert forced_close["recorded_at"] == report["trades"][0]["exit_timestamp"]
 
 
 def test_missing_intervening_candle_rejects_without_synthesizing_a_fill(tmp_path):

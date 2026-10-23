@@ -39,6 +39,9 @@ class V2AuditLedger:
             event_type TEXT NOT NULL, recorded_at TEXT NOT NULL, payload TEXT NOT NULL);
           CREATE UNIQUE INDEX IF NOT EXISTS events_paper_idempotency
             ON events(signal_id,event_type) WHERE event_type IN ('PAPER_FILL','PAPER_OUTCOME');
+          CREATE UNIQUE INDEX IF NOT EXISTS events_ai_research_idempotency
+            ON events(signal_id,event_type)
+            WHERE event_type IN ('AI_HYPOTHESIS_DISCOVERY','AI_STRATEGY_HYPOTHESIS');
           CREATE TRIGGER IF NOT EXISTS decisions_no_update BEFORE UPDATE ON decisions
             BEGIN SELECT RAISE(ABORT, 'V2 decisions are append-only'); END;
           CREATE TRIGGER IF NOT EXISTS decisions_no_delete BEFORE DELETE ON decisions
@@ -67,6 +70,22 @@ class V2AuditLedger:
             self.db.rollback()
             return False
 
+    def append_ai_research_decision(self, signal_id: str, recorded_at: str, envelope,
+                                   gate_result, final_decision: str) -> bool:
+        """Append a versioned AI-led research decision without enabling paper execution."""
+        risk_record = {key: getattr(gate_result, key) for key in
+                       ("approved", "reason", "quantity", "allocation", "planned_risk")}
+        payload = _safe_payload({"envelope": envelope, "risk_result": risk_record,
+                                 "final_decision": final_decision, "paper_only": True,
+                                 "execution_enabled": False})
+        try:
+            self.db.execute("INSERT INTO decisions VALUES(?,?,?)", (signal_id, recorded_at, payload))
+            self.db.commit()
+            return True
+        except sqlite3.IntegrityError:
+            self.db.rollback()
+            return False
+
     def append_event(self, signal_id: str, event_type: str, recorded_at: str, payload) -> bool:
         body = _safe_payload(payload)
         try:
@@ -77,6 +96,13 @@ class V2AuditLedger:
         except sqlite3.IntegrityError:
             self.db.rollback()
             return False
+
+    def events_by_type(self, event_type: str) -> tuple[tuple[str, str, str], ...]:
+        rows = self.db.execute(
+            "SELECT signal_id,recorded_at,payload FROM events WHERE event_type=? ORDER BY event_id",
+            (event_type,),
+        ).fetchall()
+        return tuple(rows)
 
     def unclosed_paper_fills(self) -> dict[str, dict]:
         """Validate ledger fill/outcome pairs; do not silently recover partial/corrupt state."""

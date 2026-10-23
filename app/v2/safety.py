@@ -112,6 +112,21 @@ class SafetyGate:
 
     def approve(self, request: DecisionRequest, decision: V2Recommendation,
                 *, now: datetime, signal_id: str) -> GateResult:
+        return self._approve(request, decision, now=now, signal_id=signal_id,
+                             research_only=False, issue_permit=True)
+
+    def approve_research(self, request: DecisionRequest, decision: V2Recommendation,
+                         *, now: datetime, signal_id: str) -> GateResult:
+        """Apply the identical risk/session/switch checks without issuing a fill capability.
+
+        This path admits immutable RESEARCH_ONLY and FROZEN_BASELINE registry entries
+        for offline evaluation. Its result cannot be consumed by PaperOnlyExecutor.
+        """
+        return self._approve(request, decision, now=now, signal_id=signal_id,
+                             research_only=True, issue_permit=False)
+
+    def _approve(self, request: DecisionRequest, decision: V2Recommendation, *, now: datetime,
+                 signal_id: str, research_only: bool, issue_permit: bool) -> GateResult:
         try:
             request.validate(now=now, max_data_age_seconds=self.limits.max_data_age_seconds)
             current = parse_timestamp(now, "now")
@@ -149,7 +164,8 @@ class SafetyGate:
             candidate = self.registry.require(decision.strategy_id or "")
             if decision.strategy_id not in request.strategy_ids:
                 return GateResult(False, "strategy was not in the request")
-            if not candidate.enabled_for_paper:
+            if (not candidate.enabled_for_paper and not (
+                    research_only and candidate.status in {"RESEARCH_ONLY", "FROZEN_BASELINE"})):
                 return GateResult(False, "strategy is registered but not approved for paper execution")
             if decision.action is Action.EXIT:
                 if decision.symbol not in self.state.open_positions or decision.symbol not in request.open_symbols:
@@ -158,14 +174,17 @@ class SafetyGate:
                     return GateResult(False, "EXIT requires a finite positive current reference price")
                 self.state.seen_signal_ids.add(signal_id)
                 self.state.seen_request_keys.add(request_key)
-                token = secrets.token_urlsafe(32)
-                self._permits[token] = self._fingerprint(request, decision, signal_id, 0)
+                token = None
+                if issue_permit:
+                    token = secrets.token_urlsafe(32)
+                    self._permits[token] = self._fingerprint(request, decision, signal_id, 0)
                 return GateResult(True, "EXIT approved for the matching paper position", _permit=token)
-            return self._approve_buy(request, decision, signal_id)
+            return self._approve_buy(request, decision, signal_id, issue_permit=issue_permit)
         except Exception as error:
             return GateResult(False, f"safety validation failed: {str(error)[:180]}")
 
-    def _approve_buy(self, request: DecisionRequest, decision: V2Recommendation, signal_id: str) -> GateResult:
+    def _approve_buy(self, request: DecisionRequest, decision: V2Recommendation, signal_id: str,
+                     *, issue_permit: bool = True) -> GateResult:
         entry, stop, target = decision.entry_price, decision.stop_loss, decision.target_price
         if None in (entry, stop, target) or not all(math.isfinite(v) for v in (entry, stop, target)):
             return GateResult(False, "BUY requires finite entry, stop, and target")
@@ -203,8 +222,10 @@ class SafetyGate:
         planned_risk = quantity * (estimated_entry - stop)
         self.state.seen_signal_ids.add(signal_id)
         self.state.seen_request_keys.add((request.request_id, request.signal_timestamp))
-        token = secrets.token_urlsafe(32)
-        self._permits[token] = self._fingerprint(request, decision, signal_id, quantity)
+        token = None
+        if issue_permit:
+            token = secrets.token_urlsafe(32)
+            self._permits[token] = self._fingerprint(request, decision, signal_id, quantity)
         return GateResult(True, "BUY approved by independent Python risk gate", quantity, allocation, planned_risk, token)
 
 

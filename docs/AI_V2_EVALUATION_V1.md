@@ -1,0 +1,33 @@
+# AI V2 recorded-decision evaluation and paper simulation v1
+
+Status: offline framework only. No historical evaluation was run for this implementation.
+
+## Data and decision contract
+
+`app/v2/evaluation.py` reads the append-only V2 `decisions` table through a SQLite read-only URI. It does not call an AI provider or rewrite an existing recommendation. The evaluator verifies the recorded contract and prompt versions, immutable strategy catalog, provider/model metadata, request cutoff and feature timestamps, exact SHA-256 mapping for every supplied input, and the `TimestampSemanticsEvidence` file bound to those same bytes. Source files and the session manifest are never modified. New event and report files go into an exclusive, previously unused output directory.
+
+Only timezone-explicit CSV rows with `symbol,timestamp,open,high,low,close` drive fills. Other explicitly named request inputs may be hash-bound, but are not reinterpreted as equity candles. Candle offsets are normalized to Asia/Kolkata only after parsing an explicit offset. Duplicate symbol/timestamp keys, invalid OHLC, unaligned bars, unresolved or non-regular dates, incomplete entry windows, stale/future inputs, or missing evidence fail closed. The exact V2 request input hashes must match the bytes supplied to the evaluator.
+
+Historical cache timestamps remain unresolved in this repository. There is no accepted timestamp evidence file or acquisition lineage for those caches. The evaluator therefore cannot run them. A provider documentation link or compatible-looking clock labels alone cannot satisfy its evidence requirement. The evaluator also rejects any supplied equity candle file containing zero or negative volume; this is a structural exclusion, not a claim that positive-volume rows are authentic or free of anomalies. Known suspicious price/volume observations and corporate-action/universe questions still require source-bound audit evidence and explicit exclusions before use.
+
+## Timing and simulator rules
+
+Decisions must be recorded no earlier than the end of their START-labeled cutoff candle. Entry uses the open of the first candle whose label is strictly later than the ledger `recorded_at`; it must be in the same verified regular session, with every five-minute label from cutoff through entry present. The recorded entry condition must be the implemented token `NEXT_ELIGIBLE_BAR_OPEN`, and the next-open price must be within 0.25% of the AI's proposed reference; other free-form AI entry conditions are rejected instead of interpreted. This avoids using a cutoff candle before it completes, same-bar entries, future features, overnight carry, and synthetic gap repair.
+
+The simulator uses the registered BUY levels, then exits at the stop, target, registered holding horizon, or verified session close. If one candle touches both stop and target, stop wins. Stop gaps use the worse of the stop and candle open. Target fills are capped at the target. Horizon and session-close exits use that completed candle's close. Exit event time is the candle end because START-labeled OHLC is not available earlier. An incomplete contiguous exit window leaves a partial run marked incomplete; it is not converted into a completed trade.
+
+The run is single-position and serial. It reserves the slot until the decision's maximum holding horizon or the manifest's session close, whichever comes first. That end time is known at the proposed entry and does not depend on a future stop/target result; any intervening decisions are rejected as overlapping. Python `SafetyGate.approve_research` reuses the existing session, kill-switch, duplicate, sizing, allocation, stop/target, daily loss, daily trade and open-position checks with the same `RiskLimits`. The only exception is strategy status: immutable `RESEARCH_ONLY` and `FROZEN_BASELINE` candidates may be evaluated. This method never returns a paper execution permit, and the simulator checks the kill switch again at the fill boundary. The existing `PaperOnlyExecutor` is not called. The simulator has no broker path.
+
+Cost components use the existing `app.cost_model` unchanged, including its estimated 5 bps per side slippage assumption and estimated statutory/transaction charges. Gross P&L uses reference entry/exit prices; slippage and other charges are deducted in the itemized total to obtain net P&L. These are estimates, not contract-note costs or observed fills.
+
+## Audit events and metrics
+
+Each newly generated JSONL event has a run/event/signal identifier, `paper_only=true`, `execution_enabled=false`, recorded prompt/config/decision/provider/model fields, rationale/evidence, source hashes, and risk outcome. Events distinguish proposals, no-trade decisions, rejections, simulated fills, exits, and outcomes. A successful report contains the output event-file SHA-256, configuration and code/input hashes, gross and net P&L, component costs, gross-to-net deterioration, absolute INR drawdown, trade count, win rate, profit factor, average net trade, exposure in bar-minutes, and stock/regime groupings. Outputs are exclusive-run artifacts; never edit them after generation.
+
+Recorded `EXIT` actions are passed to the risk gate and require a matching simulated open position, which this independent per-decision replay does not currently maintain across decisions. They therefore fail closed; exits are presently driven by the immutable BUY stop, target, and horizon only. An event-driven portfolio replay that consumes subsequent recorded EXIT decisions is not implemented. This limitation means the current framework is not a complete replay of an adaptive AI policy's position-management stream.
+
+The report marks V1 comparison `BLOCKED` unless a frozen-V1 action ledger is generated on the same exact eligible inputs, time cutoffs, and execution/cost protocol. This implementation does not fabricate such a ledger and does not execute the existing V1 strategy. No independent holdout or profitability claim is provided. The current cache's provenance, corporate-action treatment, universe coverage/survivorship, and some feed anomalies remain unresolved.
+
+## Running after data gates pass
+
+Call `evaluate_recorded_decisions` with the immutable V2 audit DB, an explicit mapping of recorded input identities to their files, a reviewed timestamp-evidence JSON, the applicable NSE CM manifest, a new output directory, and an explicit kill-switch object. Any missing or mismatched lineage blocks before a valid evaluation can be reported. Do not create timestamp evidence from the existing cache without independent acquisition evidence. No strategy backtest, provider call, market-data download, continuous runner, or broker order is part of this module.

@@ -19,6 +19,10 @@ from app.market_analysis import calculate_indicators
 from app.reversal_detector import detect_reversal_candidates
 from app.risk_engine import RiskConfig, RiskState, calculate_position_size, check_trade_allowed
 from app.v2.registry import StrategyCandidate, StrategyRegistry, default_registry
+from app.research.execution_integrity import (
+    ExecutionIntegrityError, TimestampSemanticsEvidence,
+    validate_simulation_event,
+)
 
 BAR = pd.Timedelta(minutes=5)
 IST_LAST_START = time(15, 25)
@@ -370,27 +374,57 @@ def build_events(frames: dict[str, pd.DataFrame], candidate: ExperimentCandidate
 
 
 def simulate(events: list[dict], candidate: ExperimentCandidate, initial_capital: float,
-             costs: CostAssumptions | None = None) -> tuple[list[dict], dict]:
+             costs: CostAssumptions | None = None,
+             timestamp_evidence: TimestampSemanticsEvidence | None = None,
+             verified_regular_dates: set[date] | None = None) -> tuple[list[dict], dict]:
+    if timestamp_evidence is None:
+        raise ExecutionIntegrityError("verified timestamp evidence is required before simulated execution")
+    timestamp_evidence.require_verified_start_labels()
+    if not verified_regular_dates:
+        raise ExecutionIntegrityError("verified regular-session dates are required before simulated execution")
+    if (type(candidate.horizon_bars) is not int or not 1 <= candidate.horizon_bars <= 12
+            or type(candidate.stop_pct) not in (int, float) or not np.isfinite(candidate.stop_pct)
+            or not 0 < candidate.stop_pct < 5):
+        raise ExecutionIntegrityError("candidate exit parameters are outside registered research bounds")
     costs = costs or CostAssumptions()
     trades, rejected = [], Counter()
-    capital = float(initial_capital)
+    try:
+        capital = float(initial_capital)
+    except (TypeError, ValueError) as exc:
+        raise ExecutionIntegrityError("starting capital must be a positive finite number") from exc
+    if not np.isfinite(capital) or capital <= 0:
+        raise ExecutionIntegrityError("starting capital must be a positive finite number")
     day_start_capital: dict[date, float] = {}
     day_loss, day_trades = Counter(), Counter()
-    last_exit = None
+    open_exit_labels = []
+    previous_entry_time = None
     for event in events:
+        try:
+            validate_simulation_event(event, timestamp_evidence)
+            if event["last_index"] - event["entry_index"] >= candidate.horizon_bars:
+                raise ExecutionIntegrityError("event exceeds the registered holding horizon")
+        except ExecutionIntegrityError:
+            rejected["execution_integrity_rejected"] += 1
+            continue
         entry_time = event["entry_timestamp"]
+        if entry_time.date() not in verified_regular_dates:
+            rejected["execution_integrity_rejected"] += 1
+            continue
+        if previous_entry_time is not None and entry_time < previous_entry_time:
+            rejected["execution_integrity_rejected"] += 1
+            continue
+        previous_entry_time = entry_time
         day = entry_time.date()
         day_start_capital.setdefault(day, capital)
-        if last_exit is not None and entry_time <= last_exit:
-            rejected["maximum_open_positions"] += 1
-            continue
+        open_exit_labels = [exit_label for exit_label in open_exit_labels if exit_label >= entry_time]
         if capital <= 0:
             rejected["insufficient_capital"] += 1
             continue
         daily_config = RiskConfig(capital=day_start_capital[day], max_risk_per_trade=0.01,
                                   max_daily_loss=0.02, max_positions=1, max_trades_per_day=3)
         allowed, reason = check_trade_allowed(daily_config, RiskState(
-            daily_loss=day_loss[day], trades_today=day_trades[day]))
+            daily_loss=day_loss[day], open_positions=len(open_exit_labels),
+            trades_today=day_trades[day]))
         if not allowed:
             rejected[reason] += 1
             continue
@@ -436,7 +470,7 @@ def simulate(events: list[dict], candidate: ExperimentCandidate, initial_capital
         if net < 0:
             day_loss[day] += abs(net)
         day_trades[day] += 1
-        last_exit = frame.timestamp.iloc[exit_index]
+        open_exit_labels.append(frame.timestamp.iloc[exit_index])
     return trades, {"risk_rejections": dict(sorted(rejected.items())), "ending_capital": capital}
 
 
@@ -463,13 +497,21 @@ def metrics(trades: list[dict], initial_capital: float) -> dict:
     }
 
 
-def write_experiment(root: Path, spec_path: Path, output: Path) -> dict:
+def write_experiment(root: Path, spec_path: Path, output: Path,
+                     timestamp_evidence: TimestampSemanticsEvidence | None = None) -> dict:
     """Run every preregistered candidate and save deterministic, new artifacts."""
     if output.exists():
         raise FileExistsError(f"refusing to overwrite experiment output: {output}")
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     input_paths = [root / item for item in spec["data_files"]] + [root / spec["session_manifest"], spec_path]
     input_hashes = {str(path.relative_to(root)): sha256_file(path) for path in input_paths}
+    if timestamp_evidence is None:
+        raise ExecutionIntegrityError("no verified timestamp/acquisition evidence; historical execution is blocked")
+    if not timestamp_evidence.evidence_file_sha256:
+        raise ExecutionIntegrityError("timestamp evidence must be loaded from a hashed evidence file")
+    timestamp_evidence.require_verified_start_labels({
+        relative: digest for relative, digest in input_hashes.items() if relative in spec["data_files"]
+    })
     data, audit = prepare_data(root, spec)
     session_manifest = load_session_dates(root / spec["session_manifest"])
     regular_dates = {day for day, item in session_manifest.items()
@@ -488,7 +530,9 @@ def write_experiment(root: Path, spec_path: Path, output: Path) -> dict:
         for window in windows:
             start, end = date.fromisoformat(window["start"]), date.fromisoformat(window["end"])
             selected = [event for event in events if start <= event["signal_timestamp"].date() <= end]
-            trades, sim_meta = simulate(selected, candidate, spec["starting_capital_inr"])
+            trades, sim_meta = simulate(selected, candidate, spec["starting_capital_inr"],
+                                        timestamp_evidence=timestamp_evidence,
+                                        verified_regular_dates=regular_dates)
             coverage = audit["retained_date_coverage_by_partition"].get(window["partition_id"], {})
             coverage_note = window["status"]
             if coverage.get("missing_expected_regular_dates"):
@@ -522,7 +566,8 @@ def write_experiment(root: Path, spec_path: Path, output: Path) -> dict:
                 all_regimes.append({"strategy_id": candidate.strategy_id, "regime_dimension": dimension,
                                     "regime": regime, **metrics(part, spec["starting_capital_inr"])})
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-    code_paths = ["app/research/sharp_reversal_experiment.py", "scripts/run_sharp_reversal_experiment.py",
+    code_paths = ["app/research/sharp_reversal_experiment.py", "app/research/execution_integrity.py",
+                  "scripts/run_sharp_reversal_experiment.py",
                   "app/candle_integrity.py", "app/cost_model.py", "app/market_analysis.py",
                   "app/reversal_detector.py", "app/risk_engine.py", "app/v2/registry.py", "strategy_backtest.py"]
     import platform
@@ -530,6 +575,10 @@ def write_experiment(root: Path, spec_path: Path, output: Path) -> dict:
     code_hashes = {relative: sha256_file(root / relative) for relative in code_paths}
     manifest = {"experiment_id": spec["experiment_id"], "source_commit_before_experiment": commit,
                 "input_hashes_sha256": input_hashes, "code_hashes_sha256": code_hashes,
+                "timestamp_evidence_sha256": timestamp_evidence.evidence_file_sha256,
+                "timestamp_semantics": timestamp_evidence.label_semantics,
+                "timestamp_semantics_verification": timestamp_evidence.verification_status,
+                "acquisition_request_ids": list(timestamp_evidence.acquisition_request_ids),
                 "runtime": {"python": platform.python_version(), "pandas": pd.__version__,
                             "numpy": np.__version__, "ta": getattr(ta, "__version__", "version_not_exposed")},
                 "data_audit": audit,

@@ -4,6 +4,7 @@ import pandas as pd
 import pytest
 
 from app.cost_model import CostAssumptions, estimate_round_trip_costs
+from app.research.execution_integrity import TimestampSemanticsEvidence
 from app.research.sharp_reversal_experiment import (
     ExperimentCandidate,
     build_events,
@@ -21,6 +22,21 @@ def candidate(*, stop=1.0, horizon=3):
         rsi_min_inclusive=0.0, rsi_max_exclusive=35.0,
         require_monotonic_decline=True, stop_pct=stop, horizon_bars=horizon,
     )
+
+
+def fixture_evidence():
+    # Synthetic authorization for deterministic unit fixtures only; it does not
+    # establish timestamp semantics or provenance for the repository datasets.
+    return TimestampSemanticsEvidence(
+        label_semantics="START", verification_status="VERIFIED",
+        provider_documentation_url="https://provider.invalid/documentation",
+        acquisition_manifest_sha256="a" * 64,
+        acquisition_request_ids=("synthetic-fixture",), dataset_sha256={},
+    )
+
+
+def fixture_sessions():
+    return {date(2025, 2, 3)}
 
 
 def frame(start="2025-02-03T09:15:00+05:30", count=40):
@@ -93,7 +109,7 @@ def make_event(data, entry_index, *, last_index=None):
 def test_risk_limits_enforce_daily_trade_count_and_gap_stop():
     data = frame(count=32)
     events = [make_event(data, index) for index in (3, 7, 11, 15)]
-    trades, result = simulate(events, candidate(horizon=1), 100_000)
+    trades, result = simulate(events, candidate(horizon=1), 100_000, timestamp_evidence=fixture_evidence(), verified_regular_dates=fixture_sessions())
     assert len(trades) == 3
     assert all(type(trade["quantity"]) is int and trade["quantity"] > 0 for trade in trades)
     assert all(trade["planned_risk"] <= 1_000 for trade in trades)
@@ -103,7 +119,7 @@ def test_risk_limits_enforce_daily_trade_count_and_gap_stop():
     loss_frame = frame(count=32)
     loss_frame.loc[22, ["open", "high", "low", "close"]] = [80.0, 81.0, 79.0, 80.0]
     losing = [make_event(loss_frame, 21, last_index=22), make_event(loss_frame, 24)]
-    losing_trades, loss_result = simulate(losing, candidate(horizon=2), 100_000)
+    losing_trades, loss_result = simulate(losing, candidate(horizon=2), 100_000, timestamp_evidence=fixture_evidence(), verified_regular_dates=fixture_sessions())
     assert len(losing_trades) == 1
     assert losing_trades[0]["exit_reason"] == "gap_exit"
     assert loss_result["risk_rejections"].get("Daily loss limit reached") == 1
@@ -114,16 +130,16 @@ def test_same_time_events_cannot_open_duplicate_positions():
     first = make_event(data, 10)
     duplicate = make_event(data, 10)
     duplicate["symbol"] = "OTHER"
-    trades, result = simulate([first, duplicate], candidate(horizon=1), 100_000)
+    trades, result = simulate([first, duplicate], candidate(horizon=1), 100_000, timestamp_evidence=fixture_evidence(), verified_regular_dates=fixture_sessions())
     assert len(trades) == 1
-    assert result["risk_rejections"].get("maximum_open_positions") == 1
+    assert result["risk_rejections"].get("Maximum open positions reached") == 1
 
 
 def test_repeat_run_is_deterministic_and_metrics_match_cost_ledger():
     data = frame(count=32)
     events = [make_event(data, index) for index in (3, 7, 11)]
-    first, _ = simulate(events, candidate(horizon=1), 100_000)
-    second, _ = simulate(events, candidate(horizon=1), 100_000)
+    first, _ = simulate(events, candidate(horizon=1), 100_000, timestamp_evidence=fixture_evidence(), verified_regular_dates=fixture_sessions())
+    second, _ = simulate(events, candidate(horizon=1), 100_000, timestamp_evidence=fixture_evidence(), verified_regular_dates=fixture_sessions())
     assert first == second
     summary = metrics(first, 100_000)
     assert summary["trade_count"] == len(first)

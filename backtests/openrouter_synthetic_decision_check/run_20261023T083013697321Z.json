@@ -1,0 +1,21 @@
+{
+  "api_key_configured": false,
+  "automatic_retries": 0,
+  "blockers": [
+    "OPENROUTER_API_KEY is unavailable through the existing settings loader"
+  ],
+  "checked_at_utc": "2026-10-23T08:30:13.697321+00:00",
+  "configured_model_id": "openrouter/free",
+  "configured_timeout_seconds": 10.0,
+  "credentials_logged": false,
+  "effective_timeout_seconds": 10.0,
+  "max_completion_tokens": 512,
+  "max_model_requests": 4,
+  "max_response_bytes": 16384,
+  "model_substitution_allowed": false,
+  "performance_evidence": false,
+  "requests_made": 0,
+  "schema_version": "openrouter-synthetic-decision-check-v1",
+  "status": "BLOCKED",
+  "synthetic_inputs_only": true
+}

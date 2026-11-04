@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "pilot_id": "upstox-v3-reliance-2025-02-03-5m-v1",
+  "approval_status": "APPROVED",
+  "provider_authorization": {
+    "verified": false,
+    "evidence_reference": "owner-reviewed-document-ref",
+    "reviewed_at_utc": "2026-10-22T10:00:00Z",
+    "endpoint": "https://api.upstox.com/v3/historical-candle/{instrument_key}/minutes/{interval}/{to_date}/{from_date}",
+    "read_only": true
+  },
+  "research_use": {
+    "verified": true,
+    "evidence_reference": "owner-reviewed-document-ref",
+    "reviewed_at_utc": "2026-10-22T10:00:00Z",
+    "research_only_permitted": true
+  },
+  "raw_retention": {
+    "verified": true,
+    "evidence_reference": "owner-reviewed-document-ref",
+    "reviewed_at_utc": "2026-10-22T10:00:00Z",
+    "raw_bytes_permitted": true,
+    "retention_duration": "30 days"
+  },
+  "request_limits": {
+    "verified": true,
+    "evidence_reference": "owner-reviewed-document-ref",
+    "reviewed_at_utc": "2026-10-22T10:00:00Z",
+    "requests_per_minute": 10,
+    "max_concurrent_requests": 1,
+    "zero_retries_permitted": true
+  },
+  "instrument_master": {
+    "verified": true,
+    "evidence_reference": "owner-reviewed-document-ref",
+    "reviewed_at_utc": "2026-10-22T10:00:00Z",
+    "snapshot_path": "data/acquisition_pilots/instrument_master_snapshot.json",
+    "snapshot_sha256": "9efb4aab79235307b08556575c91b2278250ad8e5bbcec8a762c2091eb689e5f",
+    "snapshot_date": "2026-10-20",
+    "official_source_url": "https://assets.upstox.com/instrument-master/complete.json.gz",
+    "symbol": "RELIANCE",
+    "instrument_key": "NSE_EQ|INE002A01018",
+    "exchange": "NSE",
+    "segment": "NSE_EQ"
+  },
+  "execution_authorization": {
+    "approved": true,
+    "evidence_reference": "single-request-approval-ref",
+    "pilot_id": "upstox-v3-reliance-2025-02-03-5m-v1",
+    "instrument_key": "NSE_EQ|INE002A01018",
+    "date": "2025-02-03",
+    "interval_minutes": 5,
+    "max_http_requests": 1
+  }
+}

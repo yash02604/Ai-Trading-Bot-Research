@@ -1,0 +1,91 @@
+{
+  "main_equity_rows": 518570,
+  "oos_equity_rows": 217350,
+  "context_files": {
+    "india_vix_5min": 52573,
+    "nifty50_5min": 52576,
+    "nifty_bank_5min": 52572,
+    "nifty_it_5min": 52572,
+    "sensex_5min": 52573
+  },
+  "main_symbols": [
+    "AXISBANK",
+    "BHARTIARTL",
+    "HDFCBANK",
+    "ICICIBANK",
+    "INFY",
+    "ITC",
+    "KOTAKBANK",
+    "LT",
+    "MARUTI",
+    "RELIANCE",
+    "SBIN",
+    "SUNPHARMA",
+    "TCS",
+    "TITAN"
+  ],
+  "oos_symbols": [
+    "AXISBANK",
+    "BHARTIARTL",
+    "HDFCBANK",
+    "ICICIBANK",
+    "INFY",
+    "ITC",
+    "KOTAKBANK",
+    "LT",
+    "MARUTI",
+    "RELIANCE",
+    "SBIN",
+    "SUNPHARMA",
+    "TCS",
+    "TITAN"
+  ],
+  "main_aware_offsets": {
+    "+05:30": 518570
+  },
+  "oos_aware_offsets": {
+    "+05:30": 217350
+  },
+  "context_aware_offsets": {
+    "india_vix_5min": {
+      "+00:00": 52498,
+      "+05:30": 75
+    },
+    "nifty50_5min": {
+      "+00:00": 52501,
+      "+05:30": 75
+    },
+    "nifty_bank_5min": {
+      "+00:00": 52497,
+      "+05:30": 75
+    },
+    "nifty_it_5min": {
+      "+00:00": 52497,
+      "+05:30": 75
+    },
+    "sensex_5min": {
+      "+00:00": 52498,
+      "+05:30": 75
+    }
+  },
+  "main_timestamp_range": [
+    "2023-12-01T09:15:00+05:30",
+    "2025-12-01T15:25:00+05:30"
+  ],
+  "oos_timestamp_range": [
+    "2025-12-02 09:15:00+05:30",
+    "2026-10-01 15:25:00+05:30"
+  ],
+  "evaluation_dataset": {
+    "path": "data/research/extended_historical_robustness_candles.csv",
+    "bytes": 47032720,
+    "sha256": "30924b7f53e295de813b859bc81998e196d9ee33cde64ee83d94585911100065",
+    "observed_sha256": "30924b7f53e295de813b859bc81998e196d9ee33cde64ee83d94585911100065",
+    "binding_status": "VERIFIED",
+    "duplicate_instrument_timestamp_rows": 0,
+    "invalid_ohlc_rows": 3,
+    "zero_volume_rows": 4,
+    "negative_volume_rows": 0,
+    "symbol_instrument_mapping_consistent": true
+  }
+}

@@ -1,0 +1,9 @@
+{
+ "adbd54eab102eb8993955b2b5f91cabb8ca57e3c918c6cab87e21a8142199c60": {
+  "confidence": 1.0,
+  "decision": "BUY",
+  "model": "deterministic-offline-fixture-v1",
+  "provider_failure": false,
+  "reason": "Deterministic offline fixture; not a historical model response."
+ }
+}

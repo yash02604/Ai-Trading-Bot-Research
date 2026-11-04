@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research.local/schemas/acquisition-manifest-v1.schema.json",
+  "title": "Offline historical market data acquisition manifest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "acquisition_request_id", "provider_id", "api_version", "endpoint", "request_parameters", "retrieved_at_utc", "instrument", "requested_date_range", "interval", "response", "retry_metadata", "parser_version", "normalizer_version", "session_manifest_version", "raw_response_sha256", "normalized_output_sha256", "redacted_parameter_names", "raw_response_retention"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "acquisition_request_id": {"type": "string", "minLength": 1},
+    "provider_id": {"type": "string", "minLength": 1},
+    "api_version": {"type": "string", "minLength": 1},
+    "endpoint": {"type": "string", "pattern": "^https://[^?]+$"},
+    "request_parameters": {"type": "object"},
+    "retrieved_at_utc": {"type": "string", "format": "date-time", "pattern": "(Z|\\+00:00)$"},
+    "instrument": {"$ref": "#/$defs/instrument"},
+    "requested_date_range": {
+      "type": "object", "additionalProperties": false, "required": ["from_date", "to_date"],
+      "properties": {"from_date": {"type": "string", "format": "date"}, "to_date": {"type": "string", "format": "date"}}
+    },
+    "interval": {
+      "type": "object", "additionalProperties": false, "required": ["value", "unit"],
+      "properties": {"value": {"type": "integer", "minimum": 1}, "unit": {"type": "string", "minLength": 1}}
+    },
+    "response": {
+      "type": "object", "additionalProperties": false, "required": ["status", "http_status"],
+      "properties": {"status": {"enum": ["SUCCESS", "FAILED"]}, "http_status": {"type": ["integer", "null"]}, "request_id": {"type": ["string", "null"]}}
+    },
+    "retry_metadata": {"type": "object"},
+    "parser_version": {"type": "string", "minLength": 1},
+    "normalizer_version": {"type": "string", "minLength": 1},
+    "session_manifest_version": {"type": "string", "minLength": 1},
+    "raw_response_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "normalized_output_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "redacted_parameter_names": {"type": "array", "items": {"type": "string"}},
+    "raw_response_retention": {"type": "object", "additionalProperties": false, "required": ["enabled", "provider_terms_reviewed", "policy_version"], "properties": {"enabled": {"type": "boolean"}, "provider_terms_reviewed": {"type": "boolean"}, "policy_version": {"type": "string", "minLength": 1}}}
+  },
+  "$defs": {
+    "instrument": {
+      "type": "object", "additionalProperties": true, "required": ["instrument_key"],
+      "properties": {
+        "instrument_key": {"type": "string", "minLength": 1},
+        "symbol": {"type": ["string", "null"]},
+        "isin": {"type": ["string", "null"]},
+        "exchange": {"type": ["string", "null"]},
+        "segment": {"type": ["string", "null"]},
+        "instrument_master_snapshot_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

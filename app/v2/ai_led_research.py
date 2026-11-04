@@ -305,6 +305,13 @@ class ProviderEnvelope:
     prompt_tokens: int | None
     completion_tokens: int | None
     failure_type: str | None = None
+    failure_stage: str | None = None
+    failure_code: str | None = None
+    response_finish_reason: str | None = None
+    response_bytes: int | None = None
+    provider_http_status: int | None = None
+    provider_error_code: str | None = None
+    provider_error_type: str | None = None
 
 
 @dataclass(frozen=True)
@@ -365,6 +372,13 @@ class AIResearchDecisionService:
         prompt_tokens = completion_tokens = None
         strategy_catalog: tuple[StrategyCandidate, ...] = ()
         input_hash = None
+        failure_stage = "request_validation"
+        failure_code = None
+        response_finish_reason = None
+        response_bytes = None
+        provider_http_status = None
+        provider_error_code = None
+        provider_error_type = None
         try:
             request.validate(now=now, max_data_age_seconds=self.max_data_age_seconds)
             if request.data_quality_issues:
@@ -384,23 +398,33 @@ class AIResearchDecisionService:
             serialized_payload = json.dumps(payload, sort_keys=True, separators=(",", ":"))
             input_hash = hashlib.sha256(serialized_payload.encode()).hexdigest()
             started = time.perf_counter()
+            failure_stage = "provider_request"
             result = self.provider.complete({"system_prompt": DECISION_PROMPT,
                                              "user_payload": serialized_payload})
             provider_id = result.provider_id
             requested_model = result.requested_model_id
             returned_model = result.model_id
             prompt_tokens, completion_tokens = result.prompt_tokens, result.completion_tokens
+            response_finish_reason = getattr(result, "finish_reason", None)
+            response_bytes = getattr(result, "response_bytes", None)
             latency = result.latency_ms if result.latency_ms is not None else (time.perf_counter() - started) * 1000
             substituted = result.model_id != result.requested_model_id
+            failure_stage = "model_identity_validation"
             if substituted and not self.allow_model_substitution:
+                failure_code = "model_identity_mismatch"
                 raise ModelSubstitutionError("provider returned a substituted model")
+            failure_stage = "response_parsing"
             raw = json.loads(result.content)
+            failure_stage = "decision_validation"
             recommendation = AIResearchDecision.from_mapping(raw, request)
+            failure_stage = None
             return ProviderEnvelope(DECISION_CONTRACT_VERSION, DECISION_PROMPT_VERSION,
                                     request.config_version, request, strategy_catalog, recommendation,
                                     input_hash, hashlib.sha256(DECISION_PROMPT.encode()).hexdigest(),
-                                    result.provider_id, result.requested_model_id, result.model_id,
-                                    substituted, latency, result.prompt_tokens, result.completion_tokens)
+                                   result.provider_id, result.requested_model_id, result.model_id,
+                                    substituted, latency, result.prompt_tokens, result.completion_tokens,
+                                    response_finish_reason=response_finish_reason,
+                                    response_bytes=response_bytes)
         except Exception as exc:
             reason = f"decision rejected safely: {type(exc).__name__}"
             return ProviderEnvelope(DECISION_CONTRACT_VERSION, DECISION_PROMPT_VERSION,
@@ -409,7 +433,15 @@ class AIResearchDecisionService:
                                    hashlib.sha256(DECISION_PROMPT.encode()).hexdigest(), provider_id,
                                    requested_model, returned_model, substituted, latency,
                                    prompt_tokens, completion_tokens,
-                                   type(exc).__name__)
+                                   type(exc).__name__, getattr(exc, "provider_stage", None) or failure_stage,
+                                   getattr(exc, "provider_diagnostic_code", None) or failure_code or
+                                   ("invalid_json" if failure_stage == "response_parsing" else
+                                    "invalid_decision" if failure_stage == "decision_validation" else
+                                    "provider_failure"),
+                                   response_finish_reason, response_bytes,
+                                   getattr(exc, "provider_http_status", None),
+                                   getattr(exc, "provider_error_code", None),
+                                   getattr(exc, "provider_error_type", None))
 
 
 class ModelSubstitutionError(ValueError):

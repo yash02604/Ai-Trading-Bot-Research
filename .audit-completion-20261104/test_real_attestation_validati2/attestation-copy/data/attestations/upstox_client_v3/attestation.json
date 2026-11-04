@@ -1,0 +1,31 @@
+{
+  "current_source": {
+    "bytes": 9574,
+    "crlf_count": 233,
+    "path": "app/upstox_client.py",
+    "sha256": "4a4ecf561e785aeb43a5a8fb6fb4c7a3bb30ea146865abf7e1574b7925148e3b",
+    "snapshot": "current_client.crlf.py.snapshot"
+  },
+  "parent_attestation": {
+    "path": "data/attestations/upstox_client_v2/attestation.json",
+    "sha256": "9402ac71a85ed9ab7df6120260b21851a27bcf0b8381d692a94bb7da5c676709"
+  },
+  "parent_source_sha256": "20bf9738577c5e4bf19b04587a609c352514f944bceb0cb0d6df3c5a1ea73580",
+  "review": {
+    "changes": [
+      "Optional verified acquisition window restricts physical attempts to one.",
+      "Durable before_send callback immediately precedes the single GET worker.",
+      "Default three-attempt behavior for other callers and GET endpoint/auth/redirect contracts remain unchanged."
+    ],
+    "independent_review_approval": false,
+    "operational_trading_approval": false,
+    "reviewer": "Codex remediation implementation, 2026-11-03"
+  },
+  "reviewed_diff": {
+    "path": "reviewed_diff.patch",
+    "sha256": "c93c8d7f13e297f00eb7d8897e175e0e6c8d56874f6e16cd617a3537c27aa6ea"
+  },
+  "schema_version": "upstox-client-source-attestation-v3"
+}
+
+# modified

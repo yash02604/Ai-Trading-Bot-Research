@@ -1,0 +1,19 @@
+{
+  "14a2ab4613eeaf6dd0739ee2f5803f6bca41c9790c54844871a5e1f0e589e870": {
+    "decision": {
+      "confidence": 0.9,
+      "decision": "HOLD",
+      "reason": "veto"
+    },
+    "provider_metadata": {
+      "completion_tokens": 5,
+      "latency_ms": 1.5,
+      "prompt_tokens": 20,
+      "provider_id": "mock-deepseek",
+      "requested_model_id": "deepseek-flash",
+      "response_bytes": null,
+      "returned_model_id": "deepseek-flash"
+    },
+    "raw_response": "{\"decision\":\"HOLD\",\"confidence\":0.9,\"reason\":\"veto\"}"
+  }
+}

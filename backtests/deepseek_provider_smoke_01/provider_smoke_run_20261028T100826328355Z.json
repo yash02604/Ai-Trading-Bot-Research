@@ -1,0 +1,47 @@
+{
+  "candle_count": 75,
+  "classification": "PROVIDER_CONNECTIVITY_TEST",
+  "decision_time": "2026-10-28T15:38:26.421560+05:30",
+  "evidence_note": "Provider connectivity/JSON acknowledgement only; not a trading decision, strategy observation, backtest, or performance evidence.",
+  "historical_backtest": false,
+  "instrument_key": "NSE_EQ|INE002A01018",
+  "mode": "PROVIDER_SMOKE_TEST",
+  "paper_trade_simulated": false,
+  "prospective_observation": false,
+  "provider_configuration": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "provider_id": null,
+    "retries": 0,
+    "timeout_seconds": 10.0
+  },
+  "provider_error_type": null,
+  "provider_metadata": {
+    "completion_tokens": 33,
+    "latency_ms": 6294.264400028624,
+    "prompt_tokens": 322,
+    "requested_model_id": "deepseek-flash",
+    "response_bytes": 15,
+    "returned_model_id": "deepseek-flash"
+  },
+  "provider_request": {
+    "system_prompt": "This is a provider connectivity and JSON-format test only. Do not analyze the market, recommend a trade, or return BUY/SELL/HOLD. Return exactly the JSON object {\"status\":\"ok\"} and nothing else.",
+    "user_payload": "{\"instrument_key\":\"NSE_EQ|INE002A01018\",\"observed_at\":\"2026-10-28T15:38:22.596864+05:30\",\"recent_completed_candles\":[{\"close\":1160.3,\"high\":1160.3,\"low\":1160.3,\"open\":1160.3,\"timestamp\":\"2026-10-28T15:15:00+05:30\",\"volume\":0},{\"close\":1160.3,\"high\":1160.3,\"low\":1160.3,\"open\":1160.3,\"timestamp\":\"2026-10-28T15:20:00+05:30\",\"volume\":0},{\"close\":1158.0,\"high\":1160.3,\"low\":1158.0,\"open\":1160.3,\"timestamp\":\"2026-10-28T15:25:00+05:30\",\"volume\":488715}],\"symbol\":\"RELIANCE\",\"test_type\":\"NON_TRADING_PROVIDER_CONNECTIVITY_TEST\"}"
+  },
+  "provider_request_attempted": true,
+  "provider_response_redacted": "{\"status\":\"ok\"}",
+  "provider_skip_reason": null,
+  "request_budget_used": 1,
+  "request_id": "86c598d413f2c9610872c01d7af385da9378a9df60f230fe968ad107196a29b1",
+  "response_parse_status": "VALID_ACK",
+  "schema_version": "deepseek-provider-smoke-v1",
+  "snapshot_observed_at": "2026-10-28T15:38:22.596864+05:30",
+  "snapshot_sha256": "a6dfc3cf2eef40cf8b64d1c98ef6ad93ef3f541d17743c3ba65be80f56f52a4e",
+  "snapshot_source": "upstox-v3-intraday-readonly",
+  "status": "COMPLETED",
+  "strategy_performance_evidence": false,
+  "symbol": "RELIANCE",
+  "synthetic": false,
+  "trade_placement_enabled": false,
+  "trading_decision_created": false
+}

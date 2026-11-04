@@ -1,0 +1,125 @@
+{
+  "ai_vetoed_candidates": 0,
+  "blockers": [],
+  "cache_hits": 1,
+  "config": {
+    "candles_sha256": "c1e4d34fa51fa59386e518aac9a2ca8c7504752cfcbfa954194c5e497cdcee2d",
+    "holdout_start": null,
+    "horizon_bars": 6,
+    "initial_capital": 100000.0,
+    "mode": "OFFLINE_SYNTHETIC",
+    "model": "deterministic-offline-fixture-v1",
+    "provider_failures": 0,
+    "stop_pct": 1.0
+  },
+  "partitions": {
+    "holdout": {
+      "ai_assisted": {
+        "estimated_costs": 0,
+        "gross_pnl": 0,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "net_pnl": 0,
+        "per_symbol": {
+          "SYNTH": {
+            "estimated_costs": 0,
+            "gross_pnl": 0,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "net_pnl": 0,
+            "profit_factor": null,
+            "return_pct": 0.0,
+            "trade_count": 0,
+            "win_rate": null
+          }
+        },
+        "profit_factor": null,
+        "return_pct": 0.0,
+        "trade_count": 0,
+        "win_rate": null
+      },
+      "quantitative_only": {
+        "estimated_costs": 0,
+        "gross_pnl": 0,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "net_pnl": 0,
+        "per_symbol": {
+          "SYNTH": {
+            "estimated_costs": 0,
+            "gross_pnl": 0,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "net_pnl": 0,
+            "profit_factor": null,
+            "return_pct": 0.0,
+            "trade_count": 0,
+            "win_rate": null
+          }
+        },
+        "profit_factor": null,
+        "return_pct": 0.0,
+        "trade_count": 0,
+        "win_rate": null
+      }
+    },
+    "train": {
+      "ai_assisted": {
+        "estimated_costs": 187.38,
+        "gross_pnl": 5570.25,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "net_pnl": 5382.87,
+        "per_symbol": {
+          "SYNTH": {
+            "estimated_costs": 187.38,
+            "gross_pnl": 5570.25,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "net_pnl": 5382.87,
+            "profit_factor": "Infinity",
+            "return_pct": 5.3829,
+            "trade_count": 1,
+            "win_rate": 1.0
+          }
+        },
+        "profit_factor": "Infinity",
+        "return_pct": 5.3829,
+        "trade_count": 1,
+        "win_rate": 1.0
+      },
+      "quantitative_only": {
+        "estimated_costs": 187.38,
+        "gross_pnl": 5570.25,
+        "max_drawdown": 0.0,
+        "max_drawdown_pct": 0.0,
+        "net_pnl": 5382.87,
+        "per_symbol": {
+          "SYNTH": {
+            "estimated_costs": 187.38,
+            "gross_pnl": 5570.25,
+            "max_drawdown": 0.0,
+            "max_drawdown_pct": 0.0,
+            "net_pnl": 5382.87,
+            "profit_factor": "Infinity",
+            "return_pct": 5.3829,
+            "trade_count": 1,
+            "win_rate": 1.0
+          }
+        },
+        "profit_factor": "Infinity",
+        "return_pct": 5.3829,
+        "trade_count": 1,
+        "win_rate": 1.0
+      }
+    }
+  },
+  "performance_evidence": false,
+  "prompt_version": "deepseek-research-eval-v1",
+  "request_count": 0,
+  "results_classification": "SYNTHETIC",
+  "results_note": "Synthetic fixture output only; not historical trading performance.",
+  "schema_version": "deepseek-research-eval-v1",
+  "status": "COMPLETED",
+  "synthetic_inputs_only": true
+}

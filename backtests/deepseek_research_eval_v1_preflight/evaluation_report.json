@@ -1,0 +1,20 @@
+{
+  "ai_vetoed_candidates": 0,
+  "blockers": [
+    "overall_dataset_status is 'UNRESOLVED', not 'VERIFIED'",
+    "provenance summary does not bind the exact candle file SHA-256"
+  ],
+  "cache_hits": 0,
+  "config": {
+    "max_requests": 1,
+    "mode": "HISTORICAL_LIVE",
+    "provenance_summary": "C:\\Users\\Priyanka\\Desktop\\ai-trading-bot-research\\backtests\\provenance_integrity_v1\\summary.json"
+  },
+  "partitions": {},
+  "performance_evidence": false,
+  "prompt_version": "deepseek-research-eval-v1",
+  "request_count": 0,
+  "results_classification": "BLOCKED",
+  "schema_version": "deepseek-research-eval-v1",
+  "status": "BLOCKED_MISSING_PREREQUISITES"
+}

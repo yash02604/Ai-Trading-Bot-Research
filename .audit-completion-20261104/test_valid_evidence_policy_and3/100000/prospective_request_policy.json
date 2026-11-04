@@ -1,0 +1,22 @@
+{
+  "calendar_sha256": "4f0524db0b16c2dfedf354704cac7954b14af3936cbbff76f53d1848b4938d03",
+  "calendar_version": "nse-cm-2023-12-01_2026-12-31-v3-asof-20261030",
+  "client_attestation_sha256": "89d15e3d74d16a020f13ff18aca7a6768db006d7d9565fbd5a09017d3bb30083",
+  "initial_capital": 100000,
+  "instrument_keys": {
+    "RELIANCE": "NSE_EQ|INE002A01018"
+  },
+  "instrument_priority": [
+    "RELIANCE"
+  ],
+  "mode": "FROZEN_BASELINE_PROSPECTIVE_PAPER",
+  "model_id": "deepseek-flash",
+  "priority_policy": "single_configured_instrument",
+  "request_caps": {
+    "market_data": 2,
+    "provider": 2,
+    "smoke": 1
+  },
+  "schema_version": "prospective-request-policy-v1",
+  "trade_placement_enabled": false
+}

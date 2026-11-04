@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "pilot_id": "upstox-v3-reliance-2025-02-03-5m-v1",
+  "status": "APPROVED_FOR_SINGLE_REQUEST",
+  "provider_id": "upstox",
+  "api_version": "v3",
+  "endpoint_template": "https://api.upstox.com/v3/historical-candle/{instrument_key}/minutes/{interval}/{to_date}/{from_date}",
+  "request": {
+    "instrument_allowlist": [
+      {
+        "symbol": "RELIANCE",
+        "instrument_key": "NSE_EQ|INE002A01018",
+        "key_evidence": "Existing local strategy_backtest.py mapping; re-confirm against a dated official instrument-master snapshot before request.",
+        "exchange": "NSE",
+        "segment": "CM"
+      }
+    ],
+    "from_date": "2025-02-03",
+    "to_date": "2025-02-03",
+    "interval": {
+      "value": 5,
+      "unit": "minutes"
+    },
+    "timestamp_label": "START",
+    "timezone": "Asia/Kolkata",
+    "max_http_requests": 1,
+    "max_retries": 0,
+    "max_response_bytes": 2097152,
+    "max_candle_rows": 76
+  },
+  "session_validation": {
+    "manifest_path": "data/audits/nse_cm_session_manifest_v2.json",
+    "manifest_version": "nse-cm-2023-12-01_2026-10-01-v2",
+    "required_session_date_status": "VERIFIED",
+    "expected_regular_session_ist": [
+      "09:15",
+      "15:30"
+    ],
+    "expected_interval_count": 75,
+    "calendar_authority_note": "Manifest entry is used for deterministic validation; broader circular-index review remains outstanding."
+  },
+  "retention": {
+    "raw_response_policy": "RETAIN_EXACT_RESPONSE_BYTES_IF_PROVIDER_TERMS_PERMIT; otherwise STOP before request",
+    "provider_terms_review_required": true,
+    "retention_permission_confirmed": true,
+    "raw_content_addressed": true,
+    "hash_algorithm": "SHA-256",
+    "hash_authenticity_claim": false
+  },
+  "outputs": {
+    "root": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/",
+    "raw_response": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/raw/response-{sha256}.json",
+    "request_manifest": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/requests/{request_id}.json",
+    "normalized_records": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/normalized/candles.jsonl",
+    "quarantine_invalid": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/quarantine/verified_invalid.jsonl",
+    "quarantine_unresolved": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/quarantine/unresolved.jsonl",
+    "validation_report": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/validation.json"
+  },
+  "validation_checks": [
+    "request and candle schemas",
+    "request and output SHA-256 repeatability",
+    "explicit-offset timestamp parsing and UTC/Asia-Kolkata conversion",
+    "five-minute START-label alignment",
+    "OHLC finiteness, positivity, and ordering",
+    "duplicate instrument/timestamp keys",
+    "75 expected labels and missing-interval report without filling",
+    "session membership against the pinned manifest v2",
+    "separate VERIFIED_INVALID and UNRESOLVED quarantine",
+    "instrument key against dated official instrument-master snapshot"
+  ],
+  "stop_conditions": [
+    "No valid provider authorization for read-only historical candles or account/data-use permission is unclear.",
+    "Provider terms do not permit retaining exact raw response bytes, or the terms are unavailable.",
+    "The instrument key cannot be confirmed from a dated official instrument-master snapshot.",
+    "Pinned session date is absent, untrusted, or inconsistent with the provider response.",
+    "Response exceeds byte or row limit, is non-2xx, malformed, or contains an unexpected date, interval, or instrument.",
+    "Output run directory already exists; never overwrite a prior run.",
+    "Any credential would need to be written to an artifact, log, or command history."
+  ],
+  "not_authorized_for": [
+    "network request",
+    "larger download",
+    "strategy evaluation",
+    "broker order",
+    "live runner"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "complete": false,
+  "config": {
+    "allow_model_substitution": false,
+    "cost_assumptions": {
+      "brokerage_cap": 20.0,
+      "brokerage_rate": 0.001,
+      "gst_on_sebi": false,
+      "gst_rate": 0.18,
+      "ipft_per_lakh": null,
+      "sebi_rate": 1e-06,
+      "slippage_bps_per_side": 5.0,
+      "stamp_buy_rate": 3e-05,
+      "stt_sell_rate": 0.00025
+    },
+    "execution_assumptions": {
+      "entry_condition": "NEXT_ELIGIBLE_BAR_OPEN",
+      "max_entry_deviation_pct": 0.25,
+      "same_bar_precedence": [
+        "opening_gap_stop",
+        "opening_gap_target",
+        "ai_exit_at_open",
+        "intrabar_stop_loss",
+        "intrabar_target",
+        "maximum_holding_close",
+        "session_close"
+      ],
+      "same_session_only": true,
+      "stop_first_if_stop_and_target_touch": true
+    },
+    "risk_limits": {
+      "entry_slippage_bps": 5.0,
+      "max_allocation": 0.25,
+      "max_daily_loss": 0.02,
+      "max_data_age_seconds": 600,
+      "max_holding_bars": 12,
+      "max_open_positions": 1,
+      "max_risk_per_trade": 0.01,
+      "max_stop_distance_pct": 1.0,
+      "max_target_distance_pct": 5.0,
+      "max_trades_per_day": 3,
+      "min_holding_bars": 1,
+      "min_stop_distance_pct": 0.05
+    },
+    "session_manifest_sha256": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "source_hashes": {
+      "cost_model_code": "27b1d43e997a7fb533dabb8675abbd4fa9bb1cc7ee07fcfa25942cff7b4cbb9f",
+      "data:bars.csv": "e98db39abdcac99aa131cdeb14a98f76fd699c3f76986d5905969face08793a7",
+      "decision_ledger": "01f397bfd1d2020583fa78b2abb60efcde061905c40852e2f061a03ebd0ac11f",
+      "evaluator_code": "1deb62de5f97cbb76bef40370269dd25e22367f06de868cc4beeab5f40ff54c4",
+      "execution_integrity_code": "289abb475a77c507da88e2e65507b09e0f9e29e99dfb028d5361a69cf4b4f27d",
+      "frozen_v1_backtester_code": "5b810bb94887f32cb99a99fc0e7a99991f5bccfd4e2d82aff42adc328ac3230d",
+      "frozen_v1_strategy_code": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d",
+      "risk_gate_code": "5be6f9b2adebdeb07f251640e40884e0b178696b1306472f5916d8927239186b",
+      "session_manifest": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+      "timestamp_evidence": "f6d6085f8e973dc271a13d62e39c2974b09e47b83cf2028ada5c051839e9e798"
+    },
+    "version": "ai-led-paper-evaluation-v1.1"
+  },
+  "evaluation_version": "ai-led-paper-evaluation-v1.1",
+  "events_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "events_written": 0,
+  "run_id": "ai-v2-paper-3578be505f88d894373e",
+  "source_hashes": {
+    "cost_model_code": "27b1d43e997a7fb533dabb8675abbd4fa9bb1cc7ee07fcfa25942cff7b4cbb9f",
+    "data:bars.csv": "e98db39abdcac99aa131cdeb14a98f76fd699c3f76986d5905969face08793a7",
+    "decision_ledger": "01f397bfd1d2020583fa78b2abb60efcde061905c40852e2f061a03ebd0ac11f",
+    "evaluator_code": "1deb62de5f97cbb76bef40370269dd25e22367f06de868cc4beeab5f40ff54c4",
+    "execution_integrity_code": "289abb475a77c507da88e2e65507b09e0f9e29e99dfb028d5361a69cf4b4f27d",
+    "frozen_v1_backtester_code": "5b810bb94887f32cb99a99fc0e7a99991f5bccfd4e2d82aff42adc328ac3230d",
+    "frozen_v1_strategy_code": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d",
+    "risk_gate_code": "5be6f9b2adebdeb07f251640e40884e0b178696b1306472f5916d8927239186b",
+    "session_manifest": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "timestamp_evidence": "f6d6085f8e973dc271a13d62e39c2974b09e47b83cf2028ada5c051839e9e798"
+  },
+  "status": "INCOMPLETE",
+  "trades": [],
+  "trades_written": 0
+}

@@ -1,0 +1,4 @@
+{"attempt":1,"purpose":"INITIAL_SNAPSHOT","request_id":"bb611cf99b9b1a7f660d3909606104231dcfb039fae4e9dad694ddc61ad18766","slot_id":"459884e6b465e4d118ca5af72d9dfb3147f02ce417a1d4858e553c8b790d6f5f","symbol":"RELIANCE"}
+{"attempt":1,"purpose":"INITIAL_QUOTE","request_id":"3bf87de96fb97787d18aaf367322f3faecee049cd3dfba9271521c6b641c4d8e","slot_id":"e9d116d65a7dd2c09ad6862ab9ae5c893bb22abda1a49caeb75ebb13b015eef7","symbol":"RELIANCE"}
+{"attempt":1,"purpose":"INITIAL_SNAPSHOT","request_id":"3fc39e44787f98afefdb0453ca06324131b97717169fe6415af158ef853d57dc","slot_id":"05d1c7f1564601602b985fe212c47bedac88adf4211372acb76240d08a540678","symbol":"HDFCBANK"}
+{"attempt":1,"purpose":"INITIAL_QUOTE","request_id":"e345491b6319c06bf96b5f876d44a4eba3cf847c549d50f144c3e523d3188bbe","slot_id":"89a14ff5d2f6b20aff56ada360f746c9fff75077257a44aecc6dbd50d3ae1bc3","symbol":"HDFCBANK"}

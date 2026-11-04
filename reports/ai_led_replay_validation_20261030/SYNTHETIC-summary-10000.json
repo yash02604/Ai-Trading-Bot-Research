@@ -1,0 +1,45 @@
+{
+  "actual_entry_rejection_reasons": {},
+  "average_net_expectancy": 37.59525444,
+  "calendar": {
+    "evidence_kind": "OFFLINE_NSE_REFERENCES",
+    "manifest_version": "nse-cm-2023-12-01_2026-10-01-v2",
+    "sha256": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "verification": "local references; no independent online re-verification"
+  },
+  "completed_trades": 3,
+  "data_quality": "SYNTHETIC_FIXTURE",
+  "decision_count": 4,
+  "ending_account_balance": 10112.78576332,
+  "ending_account_equity": 10112.78576332,
+  "ending_available_cash": 10000,
+  "ending_usable_funding": 10000,
+  "evidence_kind": "SYNTHETIC_MOCK",
+  "gross_pnl": 180.0,
+  "initial_capital": 10000,
+  "maximum_drawdown": 82.1686784400008,
+  "maximum_drawdown_pct": 0.8216867844000081,
+  "net_pnl": 112.78576332,
+  "no_trade_reasons": {
+    "Maximum trades for today reached": 1
+  },
+  "open_position_count": 0,
+  "pending_entry_count": 0,
+  "profit_factor": 2.3726125996094334,
+  "profit_factor_unavailable_reason": null,
+  "proposal_rejection_reasons": {},
+  "provider_requests": 0,
+  "rejected_actual_entries": 0,
+  "rejected_proposals": 0,
+  "schema_version": "ai-led-offline-replay-v1",
+  "total_accepted_trades": 3,
+  "trade_placement_enabled": false,
+  "transaction_costs": 67.21423668,
+  "warnings": [
+    "Execution validation only; no profitability inference.",
+    "Sample is insufficient for AI predictive-performance conclusions.",
+    "Drawdown uses sampled decision-clock equity including estimated liquidation costs; intrabar drawdown is unknown.",
+    "Stop gaps and execution uncertainty can exceed planned risk and daily loss limits."
+  ],
+  "win_rate_pct": 66.66666666666667
+}

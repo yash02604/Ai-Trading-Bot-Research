@@ -1,0 +1,1 @@
+{"decision_id": "rejected-1", "classification": "PROSPECTIVE_ENTRY_REJECTED", "entry_timestamp": "2026-10-28T10:00:00+05:30", "entry_price": 1100.0, "rejection_reason": "entry cash requirement exceeds configured capital", "quantitative_baseline_trade": {"taken": false, "quantity": 0}, "deepseek_assisted_trade": {"taken": false, "quantity": 0}}

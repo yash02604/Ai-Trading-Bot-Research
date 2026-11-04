@@ -1,0 +1,113 @@
+import requests
+from requests.exceptions import JSONDecodeError
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+from app.config import get_settings
+
+BASE_URL = "https://api.upstox.com"
+
+
+class UpstoxRequestError(RuntimeError):
+    """Sanitized, machine-readable failure from the read-only Upstox client."""
+
+    def __init__(self, message, *, stage, category, status_code=None):
+        super().__init__(message)
+        self.stage = stage
+        self.category = category
+        self.status_code = status_code
+
+
+def get_headers():
+    token = get_settings().upstox_access_token
+    if not token:
+        raise UpstoxRequestError("Upstox access token is not configured", stage="authentication",
+                                 category="authentication")
+
+    return {
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+
+
+def _get(url, *, params=None):
+    settings = get_settings()
+    session = requests.Session()
+    retry = Retry(
+        total=2,
+        connect=2,
+        read=0,
+        status=2,
+        backoff_factor=0.3,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=frozenset({"GET"}),
+        respect_retry_after_header=True,
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+    try:
+        response = session.get(
+            url,
+            headers=get_headers(),
+            params=params,
+            timeout=settings.request_timeout_seconds,
+        )
+    except UpstoxRequestError:
+        raise
+    except requests.RequestException as exc:
+        # Exception text can embed the complete URL (including query parameters).
+        if isinstance(exc, requests.exceptions.RetryError):
+            category = "rate_limit" if "429" in str(exc) else "http_error"
+            message = "Upstox rate limit retries were exhausted" if category == "rate_limit" else "Upstox HTTP retries were exhausted"
+            raise UpstoxRequestError(message, stage="upstox_http", category=category) from None
+        raise UpstoxRequestError("Upstox transport request failed", stage="upstox_http",
+                                 category="network_error") from None
+    if response.status_code in (401, 403):
+        raise UpstoxRequestError("Upstox authentication failed; refresh the access token",
+                                 stage="upstox_http", category="authentication",
+                                 status_code=response.status_code)
+    if response.status_code == 429:
+        raise UpstoxRequestError("Upstox rate limit reached", stage="upstox_http",
+                                 category="rate_limit", status_code=429)
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as exc:
+        status = getattr(getattr(exc, "response", None), "status_code", response.status_code)
+        raise UpstoxRequestError("Upstox returned an HTTP error", stage="upstox_http",
+                                 category="http_error", status_code=status) from None
+    try:
+        return response.json()
+    except (JSONDecodeError, ValueError):
+        raise UpstoxRequestError("Upstox response was not valid JSON", stage="response_json",
+                                 category="json_decode", status_code=response.status_code) from None
+
+
+def get_profile():
+    return _get(f"{BASE_URL}/v2/user/profile")
+
+
+def get_quote(instrument_key):
+    return _get(
+        f"{BASE_URL}/v3/market-quote/quotes",
+        params={"instrument_key": instrument_key},
+    )
+
+
+def get_intraday_candles(instrument_key, interval=5):
+    url = (
+        f"{BASE_URL}/v3/historical-candle/intraday/"
+        f"{instrument_key}/minutes/{interval}"
+    )
+
+    return _get(url)
+
+def get_historical_candles(
+    instrument_key,
+    date,
+    interval=5,
+):
+    url = (
+        f"{BASE_URL}/v3/historical-candle/"
+        f"{instrument_key}/minutes/{interval}/{date}"
+    )
+
+    return _get(url)

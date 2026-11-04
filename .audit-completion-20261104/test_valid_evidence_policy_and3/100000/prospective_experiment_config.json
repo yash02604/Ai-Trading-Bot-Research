@@ -1,0 +1,47 @@
+{
+  "currency": "INR",
+  "experiment_spec": {
+    "cost_assumptions": {
+      "brokerage_cap": 20.0,
+      "brokerage_rate": 0.001,
+      "gst_on_sebi": false,
+      "gst_rate": 0.18,
+      "ipft_per_lakh": null,
+      "sebi_rate": 1e-06,
+      "slippage_bps_per_side": 5.0,
+      "stamp_buy_rate": 3e-05,
+      "stt_sell_rate": 0.00025
+    },
+    "frozen_decline_candles": 3,
+    "frozen_decline_pct_bounds": [
+      -2.0,
+      -1.0
+    ],
+    "frozen_rsi_bounds": [
+      20.0,
+      25.0
+    ],
+    "horizon_bars": 6,
+    "model_id": "deepseek-flash",
+    "prompt_version": "deepseek-research-eval-v1",
+    "source_sha256": {
+      "app/candle_integrity.py": "f0e3374d5fa783fcaa01ce6f7aa437293853d3721af35d0039481e3f5cd42650",
+      "app/client_attestation.py": "49393dd5560ceada5066503bbdb8984958cfdac5ca7ee2ac8ec006883a357bf9",
+      "app/cost_model.py": "94b839a3ded2b457df3c0919cb1145c2ac9dc2b61e25692fb3d74394860902d8",
+      "app/market_analysis.py": "2d74abd9609f28954ff65f7a794527833f2b1ed7e51e3b39c967fc5dfdfca91c",
+      "app/research/deepseek_eval_v1.py": "cd7b3141dde042665831a287f8e067aa247189b263ac4124b87ff72a2be5c1ad",
+      "app/research/deepseek_prospective.py": "b7922f4778c16a2fbaeb43d20786e867cd8876ccb81044df3e821c451058a28f",
+      "app/research/offline_session_calendar.py": "decaf7a7502eb244f40f8e5553d4bad25354cd1417a70d158c10642012fd816a",
+      "app/research/prospective_preflight.py": "c459dca1540287a68d5045e73802d041ad2cd7d233dbb60dae6feac64b6f8476",
+      "app/reversal_detector.py": "b364361fbbf1fa6f36e7232b2cebb2412076bf51aa1e8a482046f411d9ebd0ee",
+      "app/risk_engine.py": "7980c4ede7417d03e34ee33356ebd0be3258f8ced0ce57129f372bef0f3fba1f",
+      "app/session_manifest_v3.py": "e8aa822290ccf553866ce81c5a946021d1a3076ca69859abc5ed8959e2af4b46",
+      "app/upstox_client.py": "4a4ecf561e785aeb43a5a8fb6fb4c7a3bb30ea146865abf7e1574b7925148e3b",
+      "app/v2/provider.py": "cdf1e1af244016d03ecf96dca4c0edfa85e96cd6787ee5d53dc923d56e3d19fd"
+    },
+    "stop_pct": 1.0
+  },
+  "initial_capital": 100000.0,
+  "request_policy_sha256": "4d82500a157055cf18f36efed157b5a959476c3d7a849e932a5a1ef7a318f7a5",
+  "schema_version": "deepseek-prospective-experiment-config-v1"
+}

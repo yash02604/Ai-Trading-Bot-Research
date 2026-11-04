@@ -1,0 +1,17 @@
+{
+  "cache_hits": 0,
+  "classification": "PROSPECTIVE_OBSERVATION",
+  "decision_id": "1c06cc147f37ff385817e071b0857992bb8bbb88c004fdded423d3571d8479b9",
+  "historical_backtest": false,
+  "mode": "PROSPECTIVE_PAPER",
+  "model_id": "deepseek-flash",
+  "observation_path": "backtests\\deepseek_prospective_session_02\\observations.jsonl",
+  "outcome_path": "backtests\\deepseek_prospective_session_02\\outcomes.jsonl",
+  "prospective_observation": true,
+  "request_attempted": false,
+  "request_budget_used": 0,
+  "settled_outcomes": 0,
+  "snapshot_path": "backtests\\deepseek_prospective_session_02\\snapshots\\RELIANCE_20261028T094850347730Z.json",
+  "status": "COMPLETED",
+  "trade_placement_enabled": false
+}

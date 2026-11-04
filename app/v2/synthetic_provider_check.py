@@ -1,4 +1,4 @@
-"""Four-scenario, paper-only OpenRouter decision-path check on synthetic inputs."""
+"""Four-scenario, paper-only DeepSeek decision-path check on synthetic inputs."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -185,11 +185,21 @@ def run_synthetic_decisions(provider, *, now: datetime, session_manifest_path: P
             "response_valid": envelope.failure_type is None and evidence_valid,
             "decision_action": recommendation.action.value,
             "validation_failure": validation_failure,
+            "failure_stage": envelope.failure_stage,
+            "failure_code": envelope.failure_code,
+            "response_finish_reason": envelope.response_finish_reason,
+            "response_bytes": envelope.response_bytes,
+            "provider_http_status": envelope.provider_http_status,
+            "provider_error_code": envelope.provider_error_code,
+            "provider_error_type": envelope.provider_error_type,
             "risk_outcome": risk,
         })
+    all_scenarios_passed = all(row["response_valid"] for row in results)
     return {
-        "schema_version": "openrouter-synthetic-decision-check-v1",
-        "status": "COMPLETED",
+        "schema_version": "deepseek-synthetic-decision-check-v1",
+        "status": "COMPLETED" if all_scenarios_passed else "COMPLETED_WITH_FAILURES",
+        "workflow_completed": True,
+        "provider_test_passed": all_scenarios_passed,
         "input_origin": "DETERMINISTIC_SYNTHETIC",
         "synthetic_test_time": now.isoformat(),
         "max_model_requests": MAX_MODEL_REQUESTS,
@@ -201,24 +211,31 @@ def run_synthetic_decisions(provider, *, now: datetime, session_manifest_path: P
         "max_response_bytes": getattr(provider, "max_response_bytes", DEFAULT_MAX_RESPONSE_BYTES),
         "timeout_seconds": getattr(provider, "timeout_seconds", None),
         "performance_evidence": False,
+        "request_metadata": {
+            "endpoint": "https://api.deepseek.com/chat/completions",
+            "http_method": "POST",
+            "response_format": "json_object",
+            "messages_included": True,
+            "authorization_included": False,
+        },
         "scenarios": results,
     }
 
 
 def build_preflight_report(*, settings, checked_at: datetime) -> dict:
-    model = getattr(settings, "openrouter_model", "")
-    key = getattr(settings, "openrouter_api_key", None)
+    model = getattr(settings, "deepseek_model", "")
+    key = getattr(settings, "deepseek_api_key", None)
     key_present = isinstance(key, str) and bool(key.strip())
     timeout = getattr(settings, "request_timeout_seconds", None)
     blockers = []
     if not isinstance(model, str) or not model.strip():
         blockers.append("configured model ID is missing")
     if not key_present:
-        blockers.append("OPENROUTER_API_KEY is unavailable through the existing settings loader")
+        blockers.append("DEEPSEEK_API_KEY is unavailable through the existing settings loader")
     if (isinstance(timeout, bool) or not isinstance(timeout, (int, float)) or timeout <= 0):
         blockers.append("configured timeout is invalid")
     return {
-        "schema_version": "openrouter-synthetic-decision-check-v1",
+        "schema_version": "deepseek-synthetic-decision-check-v1",
         "status": "BLOCKED" if blockers else "READY",
         "checked_at_utc": checked_at.astimezone(timezone.utc).isoformat(),
         "configured_model_id": model if isinstance(model, str) else "",

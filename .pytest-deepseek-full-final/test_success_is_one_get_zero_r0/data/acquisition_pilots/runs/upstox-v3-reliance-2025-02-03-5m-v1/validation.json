@@ -1,0 +1,32 @@
+{
+  "counts": {
+    "UNRESOLVED": 0,
+    "VERIFIED_INVALID": 0,
+    "VERIFIED_VALID": 75
+  },
+  "coverage": [
+    {
+      "classification": "VERIFIED_VALID",
+      "date": "2025-02-03",
+      "expected_count": 75,
+      "instrument_key": "NSE_EQ|INE002A01018",
+      "missing_start_labels": [],
+      "observed_count": 75,
+      "reason": "complete_expected_start_labels"
+    }
+  ],
+  "http_status": 200,
+  "normalized_rows_sha256": "8a380b8b3564c4066eba19990f7940380ca0c67c19d352f6755358c485db646f",
+  "pilot_id": "upstox-v3-reliance-2025-02-03-5m-v1",
+  "raw_response_path": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/raw/response-bfa41b380b22f462e7fb9dd409465c2fbb5ea339a3ee60f44e3df0a635a174cf.json",
+  "request_count": 1,
+  "request_id": "upstox-v3-reliance-2025-02-03-5m-v1-3adf41569eb24e328872f3e13cbc9a79",
+  "request_manifest_path": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/requests/upstox-v3-reliance-2025-02-03-5m-v1-3adf41569eb24e328872f3e13cbc9a79.json",
+  "response_bytes": 4919,
+  "response_sha256": "bfa41b380b22f462e7fb9dd409465c2fbb5ea339a3ee60f44e3df0a635a174cf",
+  "retrieved_at_utc": "2026-10-22T12:00:00Z",
+  "retry_count": 0,
+  "schema_version": 1,
+  "status": "PASS",
+  "validation_errors": []
+}

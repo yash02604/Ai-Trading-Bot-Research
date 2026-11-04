@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research.local/schemas/acquisition-pilot-authorization-v1.schema.json",
+  "title": "Single-pilot source authorization attestation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "pilot_id", "approval_status", "provider_authorization", "research_use", "raw_retention", "request_limits", "instrument_master", "execution_authorization"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "pilot_id": {"const": "upstox-v3-reliance-2025-02-03-5m-v1"},
+    "approval_status": {"const": "APPROVED"},
+    "provider_authorization": {"$ref": "#/$defs/evidence"},
+    "research_use": {"$ref": "#/$defs/evidence"},
+    "raw_retention": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {"type": "object", "required": ["retention_duration"], "properties": {"retention_duration": {"type": "string", "minLength": 1}}}
+      ]
+    },
+    "request_limits": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {"type": "object", "required": ["requests_per_minute", "max_concurrent_requests", "zero_retries_permitted"], "properties": {"requests_per_minute": {"type": "integer", "minimum": 1}, "max_concurrent_requests": {"type": "integer", "minimum": 1}, "zero_retries_permitted": {"const": true}}}
+      ]
+    },
+    "instrument_master": {
+      "allOf": [
+        {"$ref": "#/$defs/evidence"},
+        {"type": "object", "required": ["snapshot_path", "snapshot_sha256", "snapshot_date", "official_source_url", "symbol", "instrument_key", "exchange", "segment"], "properties": {"snapshot_path": {"type": "string", "minLength": 1}, "snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "snapshot_date": {"type": "string", "format": "date"}, "official_source_url": {"type": "string", "format": "uri"}, "symbol": {"const": "RELIANCE"}, "instrument_key": {"const": "NSE_EQ|INE002A01018"}, "exchange": {"const": "NSE"}, "segment": {"enum": ["NSE_EQ", "CM"]}}}
+      ]
+    },
+    "execution_authorization": {
+      "type": "object", "additionalProperties": false,
+      "required": ["approved", "evidence_reference", "pilot_id", "instrument_key", "date", "interval_minutes", "max_http_requests"],
+      "properties": {"approved": {"const": true}, "evidence_reference": {"type": "string", "minLength": 1}, "pilot_id": {"const": "upstox-v3-reliance-2025-02-03-5m-v1"}, "instrument_key": {"const": "NSE_EQ|INE002A01018"}, "date": {"const": "2025-02-03"}, "interval_minutes": {"const": 5}, "max_http_requests": {"const": 1}}
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object", "additionalProperties": true,
+      "required": ["verified", "evidence_reference", "reviewed_at_utc"],
+      "properties": {"verified": {"const": true}, "evidence_reference": {"type": "string", "minLength": 1}, "reviewed_at_utc": {"type": "string", "format": "date-time"}}
+    }
+  }
+}

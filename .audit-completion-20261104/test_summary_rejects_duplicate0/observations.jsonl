@@ -1,0 +1,2 @@
+{"decision_id": "one", "classification": "PROSPECTIVE_OBSERVATION", "capital": 1000, "quantitative_baseline": {"eligible": true}}
+{"decision_id": "two", "classification": "PROSPECTIVE_OBSERVATION", "capital": 5000, "quantitative_baseline": {"eligible": false}}

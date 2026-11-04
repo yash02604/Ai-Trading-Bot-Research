@@ -1,0 +1,24 @@
+{
+  "counts": {
+    "UNRESOLVED": 0,
+    "VERIFIED_INVALID": 0,
+    "VERIFIED_VALID": 0
+  },
+  "coverage": [],
+  "http_status": 200,
+  "normalized_rows_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "pilot_id": "upstox-v3-reliance-2025-02-03-5m-v1",
+  "raw_response_path": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/raw/response-19ce02c8dc6dece544d058ca1d4ae82bf226b8bb0dc6bff9cfecd0d197381593.json",
+  "request_count": 1,
+  "request_id": "upstox-v3-reliance-2025-02-03-5m-v1-d6ea4ae98684412bb3ba4cec56bf664b",
+  "request_manifest_path": "data/acquisition_pilots/runs/upstox-v3-reliance-2025-02-03-5m-v1/requests/upstox-v3-reliance-2025-02-03-5m-v1-d6ea4ae98684412bb3ba4cec56bf664b.json",
+  "response_bytes": 4984,
+  "response_sha256": "19ce02c8dc6dece544d058ca1d4ae82bf226b8bb0dc6bff9cfecd0d197381593",
+  "retrieved_at_utc": "2026-10-28T09:29:12.759076Z",
+  "retry_count": 0,
+  "schema_version": 1,
+  "status": "FAIL",
+  "validation_errors": [
+    "response_row_limit_exceeded"
+  ]
+}

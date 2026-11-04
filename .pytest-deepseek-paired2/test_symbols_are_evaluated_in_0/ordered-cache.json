@@ -1,0 +1,16 @@
+{
+ "8f99251e18841724894da2f993f7b4fbe34844cbbc90f728da97af95fe07089d": {
+  "confidence": 0.75,
+  "decision": "BUY",
+  "model": "fixture-model-v1",
+  "provider_failure": false,
+  "reason": "deterministic mock response"
+ },
+ "f5518d307152d122a41ee399cb87b413bd035e7cc47a5fb46b9f48050a330671": {
+  "confidence": 0.75,
+  "decision": "BUY",
+  "model": "fixture-model-v1",
+  "provider_failure": false,
+  "reason": "deterministic mock response"
+ }
+}

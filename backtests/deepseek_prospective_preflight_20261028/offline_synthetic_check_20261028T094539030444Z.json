@@ -1,0 +1,46 @@
+{
+  "api_requests": 0,
+  "cases": [
+    {
+      "case": "BUY",
+      "classification": "SYNTHETIC",
+      "decision": "BUY",
+      "evidence_type": "SYNTHETIC_FIXTURE",
+      "safe_fallback": false
+    },
+    {
+      "case": "SELL",
+      "classification": "SYNTHETIC",
+      "decision": "SELL",
+      "evidence_type": "SYNTHETIC_FIXTURE",
+      "safe_fallback": false
+    },
+    {
+      "case": "HOLD",
+      "classification": "SYNTHETIC",
+      "decision": "HOLD",
+      "evidence_type": "SYNTHETIC_FIXTURE",
+      "safe_fallback": false
+    },
+    {
+      "case": "malformed",
+      "classification": "SYNTHETIC",
+      "decision": "HOLD",
+      "evidence_type": "SYNTHETIC_FIXTURE",
+      "safe_fallback": true
+    },
+    {
+      "case": "timeout",
+      "classification": "SYNTHETIC",
+      "decision": "HOLD",
+      "evidence_type": "SYNTHETIC_FIXTURE",
+      "safe_fallback": true
+    }
+  ],
+  "classification": "SYNTHETIC",
+  "note": "Deterministic synthetic test results; not prospective observations or historical performance.",
+  "schema_version": "deepseek-offline-synthetic-check-v1",
+  "status": "COMPLETED",
+  "synthetic_inputs_only": true,
+  "trade_placement_enabled": false
+}

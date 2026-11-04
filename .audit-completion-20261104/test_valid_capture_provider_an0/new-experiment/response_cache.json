@@ -1,0 +1,19 @@
+{
+  "09e4a697d80576716c1c1a75f7c7a4e6bde33410ee1e17beee9452693f782fdd": {
+    "decision": {
+      "confidence": 0.9,
+      "decision": "BUY",
+      "reason": "mock"
+    },
+    "provider_metadata": {
+      "completion_tokens": null,
+      "latency_ms": 0,
+      "prompt_tokens": null,
+      "provider_id": "mock",
+      "requested_model_id": "deepseek-flash",
+      "response_bytes": null,
+      "returned_model_id": "deepseek-flash"
+    },
+    "raw_response": "{\"decision\":\"BUY\",\"confidence\":0.9,\"reason\":\"mock\"}"
+  }
+}

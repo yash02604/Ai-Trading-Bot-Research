@@ -1,0 +1,1 @@
+{"category":"http_error","http_status":503,"kind":"upstox_candles","message":"Request failed; details redacted","received_at_utc":"2026-10-28T12:10:01+05:30","request_id":"2592f81df44db076121c025d0c04fe00266d44fa3a5fef12f25739749675a0e5","response_sha256":"74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b","status":"FAILED"}

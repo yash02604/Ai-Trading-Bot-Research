@@ -1,3 +1,5 @@
+> **Superseded (2026-10-25):** the AI provider migrated from OpenRouter to the official DeepSeek API (`https://api.deepseek.com`, `DEEPSEEK_API_KEY`/`DEEPSEEK_MODEL`). This document and the `backtests/openrouter_synthetic_decision_check/` artifacts are retained as a historical record of the pre-migration state; new runs write to `backtests/deepseek_synthetic_decision_check/` via `scripts/run_deepseek_synthetic_decision_test.py`.
+
 # OpenRouter synthetic decision integration check
 
 Date: 2026-10-23

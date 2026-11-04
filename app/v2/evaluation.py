@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from app.cost_model import CostAssumptions, estimate_round_trip_costs, nse_transaction_rate
+from app.cost_model import CostAssumptions, estimate_round_trip_costs, nse_ipft_per_lakh, nse_transaction_rate
 from app.research.execution_integrity import ExecutionIntegrityError, TimestampSemanticsEvidence
 from app.research.sharp_reversal_experiment import load_session_dates
 from .ai_led_research import AIResearchDecision, AIResearchRequest, ResearchAction, safe_no_trade
@@ -207,7 +207,10 @@ def _validate_request_lineage(request: AIResearchRequest, recorded_at: datetime,
     if recorded_at < cutoff + BAR:
         raise EvaluationBlocked("decision record predates completion of its START-labeled data cutoff candle")
     try:
-        request.validate(now=recorded_at, max_data_age_seconds=300)
+        # data_cutoff is a START label. The final five minutes are candle
+        # formation, so allow one bar plus at most five minutes of post-close
+        # processing latency. The strict completion check above remains.
+        request.validate(now=recorded_at, max_data_age_seconds=600)
     except (TypeError, ValueError) as exc:
         raise EvaluationBlocked(f"recorded decision data is stale or temporally invalid: {exc}") from exc
     if signal.date() != cutoff.date() or not _verified_session(cutoff, session_dates):
@@ -268,11 +271,17 @@ def _split_round_trip_costs(entry_price: float, exit_price: float, quantity: int
         turnover = price * quantity
         brokerage = min(assumptions.brokerage_cap, turnover * assumptions.brokerage_rate)
         exchange = turnover * nse_transaction_rate(trade_date)
-        ipft = turnover / 100_000.0 * assumptions.ipft_per_lakh
+        ipft_rate = assumptions.ipft_per_lakh
+        if ipft_rate is None:
+            ipft_rate = nse_ipft_per_lakh(trade_date)
+        ipft = turnover / 100_000.0 * ipft_rate
         sebi = turnover * assumptions.sebi_rate
         stt = turnover * assumptions.stt_sell_rate if side == "exit" else 0.0
         stamp = turnover * assumptions.stamp_buy_rate if side == "entry" else 0.0
-        gst = assumptions.gst_rate * (brokerage + exchange + ipft)
+        gst_base = brokerage + exchange + ipft
+        if assumptions.gst_on_sebi:
+            gst_base += sebi
+        gst = assumptions.gst_rate * gst_base
         slippage = turnover * assumptions.slippage_bps_per_side / 10_000.0
         values = {"brokerage": brokerage, "stt": stt, "exchange": exchange,
                   "ipft": ipft, "sebi": sebi, "stamp_duty": stamp, "gst": gst,
@@ -300,7 +309,10 @@ def evaluate_recorded_decisions(*, decision_ledger: Path, source_files: Mapping[
     read-only. New results are never written over an existing output directory.
     """
     decision_ledger, output_dir = Path(decision_ledger), Path(output_dir)
-    limits, costs = limits or RiskLimits(), costs or CostAssumptions()
+    # Recorded START-labeled five-minute data is already five minutes old at
+    # candle completion; allow a bounded additional five-minute replay delay.
+    # This is local to offline evaluation and does not widen shared/live gates.
+    limits, costs = limits or RiskLimits(max_data_age_seconds=600), costs or CostAssumptions()
     if kill_switch is None or not hasattr(kill_switch, "enabled"):
         raise EvaluationBlocked("an explicit kill-switch state is required for offline simulation")
     if costs.slippage_bps_per_side != limits.entry_slippage_bps:

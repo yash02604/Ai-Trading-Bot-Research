@@ -1,4 +1,5 @@
-from datetime import date, datetime, time, timedelta
+from datetime import datetime, timedelta
+from pathlib import Path
 from time import sleep
 from zoneinfo import ZoneInfo
 
@@ -10,7 +11,8 @@ from app.market_analysis import (
     candles_to_dataframe,
 )
 from app.reversal_detector import detect_reversal_candidates
-from app.upstox_client import get_historical_candles, get_intraday_candles
+from app.candle_integrity import CandleDataError, merge_raw_candle_batches
+from app.research.offline_session_calendar import OfflineSessionCalendar
 from strategy_backtest import STOCKS
 
 
@@ -18,9 +20,19 @@ TIMEZONE = ZoneInfo("Asia/Kolkata")
 INTERVAL_MINUTES = 5
 POLL_INTERVAL_SECONDS = 60
 EVENT_GAP_MINUTES = 15
-SESSION_START = time(9, 15)
-SESSION_END = time(15, 30)
 HISTORICAL_LOOKBACK_DAYS = 14
+POST_CLOSE_DRAIN_SECONDS = 120
+CALENDAR_PATH = Path(__file__).resolve().parent / "data/audits/nse_cm_session_manifest_v3.json"
+
+
+def _session_labels(calendar, stamp):
+    duration = pd.Timedelta(minutes=INTERVAL_MINUTES)
+    return [label for start, end in calendar.intervals(stamp)
+            for label in pd.date_range(start, end - duration, freq=duration)]
+
+
+def _network_disabled(*args, **kwargs):
+    raise RuntimeError("NETWORK_DISABLED: explicitly supplied offline fetchers required")
 
 
 def _as_ist_timestamp(value):
@@ -31,22 +43,19 @@ def _as_ist_timestamp(value):
 
 
 def _response_candles(response):
-    if not isinstance(response, dict):
-        return []
-    return response.get("data", {}).get("candles", [])
+    if (not isinstance(response, dict)
+            or response.get("status", "success") != "success"
+            or not isinstance(response.get("data"), dict)
+            or not isinstance(response["data"].get("candles"), list)):
+        raise ValueError("INVALID_CANDLE_RESPONSE")
+    return response["data"]["candles"]
 
 
 def _deduplicate_candles(candles):
-    unique = {}
-    for candle in candles:
-        if not candle or len(candle) < 7:
-            continue
-        try:
-            timestamp = _as_ist_timestamp(candle[0])
-        except (TypeError, ValueError):
-            continue
-        unique[timestamp.value] = [timestamp.isoformat(), *candle[1:]]
-    return [unique[key] for key in sorted(unique)]
+    if not candles:
+        return []
+    merged, _ = merge_raw_candle_batches([("monitor", candles)], "MONITOR")
+    return merged
 
 
 def _completed_candles(candles, now):
@@ -62,13 +71,10 @@ def _completed_candles(candles, now):
     return completed
 
 
-def _is_regular_session_candle(candle, session_date):
+def _is_regular_session_candle(candle, session_date, calendar=None):
     timestamp = _as_ist_timestamp(candle[0])
-    local_time = timestamp.timetz().replace(tzinfo=None)
-    return (
-        timestamp.date() == session_date
-        and SESSION_START <= local_time < SESSION_END
-    )
+    calendar = calendar if calendar is not None else OfflineSessionCalendar(CALENDAR_PATH)
+    return timestamp.date() == session_date and timestamp in _session_labels(calendar, timestamp)
 
 
 def is_frozen_signal(row):
@@ -85,13 +91,10 @@ def is_frozen_signal(row):
     )
 
 
-def is_regular_session(now):
+def is_regular_session(now, calendar=None):
     now = _as_ist_timestamp(now)
-    local_time = now.timetz().replace(tzinfo=None)
-    return (
-        now.weekday() < 5
-        and SESSION_START <= local_time <= SESSION_END
-    )
+    calendar = calendar if calendar is not None else OfflineSessionCalendar(CALENDAR_PATH)
+    return any(start <= now <= end for start, end in calendar.intervals(now))
 
 
 class SignalMonitor:
@@ -102,12 +105,19 @@ class SignalMonitor:
         historical_fetcher=None,
         output=None,
         poll_interval_seconds=POLL_INTERVAL_SECONDS,
+        calendar=None,
+        post_close_drain_seconds=POST_CLOSE_DRAIN_SECONDS,
     ):
         self.stocks = stocks if stocks is not None else STOCKS
-        self.intraday_fetcher = intraday_fetcher or get_intraday_candles
-        self.historical_fetcher = historical_fetcher or get_historical_candles
+        self.intraday_fetcher = intraday_fetcher or _network_disabled
+        self.historical_fetcher = historical_fetcher or _network_disabled
         self.output = output if output is not None else print
         self.poll_interval_seconds = poll_interval_seconds
+        if not 0 < poll_interval_seconds <= 60 or not 0 < post_close_drain_seconds <= 300:
+            raise ValueError("bounded positive poll/drain intervals required")
+        self.calendar = calendar if calendar is not None else OfflineSessionCalendar(CALENDAR_PATH)
+        self.post_close_drain = pd.Timedelta(seconds=post_close_drain_seconds)
+        self.statuses = {}
 
         self.last_processed = {}
         self.last_signal_at = {}
@@ -115,9 +125,13 @@ class SignalMonitor:
         self.historical_cache_date = {}
 
     def _log_error(self, stock, now, error):
+        status = "CONFLICTING_CANDLES" if isinstance(error, CandleDataError) and error.details else "SCAN_FAILED"
+        self.statuses[stock] = {"status": status, "error_type": type(error).__name__}
+        # Only validated conflict timestamps are copied; arbitrary exception text may contain credentials.
+        timestamps = [str(item["timestamp"]) for item in getattr(error, "details", [])]
         self.output(
             f"[{now.strftime('%H:%M')}] {stock}: "
-            f"scan failed ({type(error).__name__})"
+            f"{status} ({type(error).__name__}) conflicts={timestamps}"
         )
 
     def _load_historical_context(self, stock, instrument_key, session_date):
@@ -132,20 +146,42 @@ class SignalMonitor:
             len(_deduplicate_candles(candles)) < REQUIRED_CANDLES
             and attempts < HISTORICAL_LOOKBACK_DAYS
         ):
-            if cursor.weekday() < 5:
+            day = pd.Timestamp(cursor, tz=TIMEZONE)
+            if self.calendar.intervals(day):
                 response = self.historical_fetcher(
                     instrument_key,
                     cursor.isoformat(),
                     interval=INTERVAL_MINUTES,
                 )
-                candles.extend(_response_candles(response))
+                batch = _deduplicate_candles(_response_candles(response))
+                if not batch:
+                    raise ValueError("INCOMPLETE_HISTORY")
+                for candle in batch:
+                    stamp = _as_ist_timestamp(candle[0])
+                    if stamp.date() >= session_date or not _is_regular_session_candle(candle, stamp.date(), self.calendar):
+                        raise ValueError("INVALID_HISTORY_SESSION")
+                candles = _deduplicate_candles(candles + batch)
                 attempts += 1
             cursor -= timedelta(days=1)
 
         context = _deduplicate_candles(candles)
+        if len(context) < REQUIRED_CANDLES:
+            raise ValueError("INSUFFICIENT_HISTORY")
+        self._require_contiguous(context)
         self.historical_cache[stock] = context
         self.historical_cache_date[stock] = session_date
         return context
+
+    def _require_contiguous(self, candles):
+        by_day = {}
+        for candle in candles:
+            stamp = _as_ist_timestamp(candle[0])
+            by_day.setdefault(stamp.date(), []).append(stamp)
+        for stamps in by_day.values():
+            expected = [label for label in _session_labels(self.calendar, stamps[0])
+                        if stamps[0] <= label <= stamps[-1]]
+            if stamps != expected:
+                raise ValueError("INCOMPLETE_SESSION_CANDLES")
 
     def _signal_rows(self, detected):
         return detected[
@@ -174,18 +210,27 @@ class SignalMonitor:
             instrument_key,
             interval=INTERVAL_MINUTES,
         )
-        intraday = _response_candles(response)
+        intraday = _deduplicate_candles(_response_candles(response))
         today_candles = [
             candle
             for candle in intraday
-            if _is_regular_session_candle(candle, now.date())
+            if _is_regular_session_candle(candle, now.date(), self.calendar)
         ]
         completed_intraday = _completed_candles(today_candles, now)
-        if not completed_intraday:
-            return [], False
-
         completed_intraday = _deduplicate_candles(completed_intraday)
-        latest_timestamp = _as_ist_timestamp(completed_intraday[-1][0])
+        labels = _session_labels(self.calendar, now)
+        eligible = [label for label in labels
+                    if label + pd.Timedelta(minutes=INTERVAL_MINUTES) <= now]
+        expected = eligible[-1]
+        latest_timestamp = _as_ist_timestamp(completed_intraday[-1][0]) if completed_intraday else None
+        if latest_timestamp != expected:
+            self.statuses[stock] = {"status": "STALE_MARKET_DATA", "latest_received": latest_timestamp,
+                                    "expected": expected,
+                                    "delay_seconds": (expected - latest_timestamp).total_seconds() if latest_timestamp is not None else None}
+            self.output(f"[{now.strftime('%H:%M')}] {stock}: STALE_MARKET_DATA latest={latest_timestamp} expected={expected}")
+            return [], False
+        if [_as_ist_timestamp(c[0]) for c in completed_intraday] != eligible:
+            raise ValueError("INCOMPLETE_SESSION_CANDLES")
         previous_timestamp = self.last_processed.get(stock)
         is_first_scan_today = (
             previous_timestamp is None
@@ -198,17 +243,7 @@ class SignalMonitor:
         ):
             return [], False
 
-        try:
-            context = self._load_historical_context(
-                stock,
-                instrument_key,
-                now.date(),
-            )
-        except Exception as error:
-            self.historical_cache[stock] = []
-            self.historical_cache_date[stock] = now.date()
-            self._log_error(stock, now, error)
-            context = []
+        context = self._load_historical_context(stock, instrument_key, now.date())
 
         candles = _deduplicate_candles(context + completed_intraday)
         df = candles_to_dataframe(candles)
@@ -262,7 +297,7 @@ class SignalMonitor:
             )
             self.last_signal_at[stock] = timestamp
 
-            if is_new_event:
+            if is_new_event and timestamp == expected:
                 alerts.append(
                     {
                         "stock": stock,
@@ -276,16 +311,28 @@ class SignalMonitor:
                 )
 
         self.last_processed[stock] = processed_timestamp or latest_timestamp
+        self.statuses[stock] = {"status": "EVALUATED", "timestamp": self.last_processed[stock],
+                                "signal_count": len(alerts)}
         return alerts, True
 
     def scan_once(self, now=None):
         now = _as_ist_timestamp(now or datetime.now(TIMEZONE))
-        if not is_regular_session(now):
+        try:
+            intervals = self.calendar.intervals(now)
+        except ValueError:
+            self.output(f"[{now.strftime('%H:%M')}] SESSION_UNVERIFIED")
+            return []
+        if not any(start <= now <= end + self.post_close_drain for start, end in intervals):
+            return []
+        labels = _session_labels(self.calendar, now)
+        if not any(label + pd.Timedelta(minutes=INTERVAL_MINUTES) <= now for label in labels):
             return []
 
         alerts = []
         processed_any = False
         for stock, instrument_key in self.stocks.items():
+            if now >= intervals[-1][1] and self.last_processed.get(stock) == labels[-1]:
+                continue
             try:
                 stock_alerts, processed = self._scan_stock(
                     stock,
@@ -309,12 +356,23 @@ class SignalMonitor:
 
         return alerts
 
-    def run(self):
+    def run(self, now_fn=None, sleep_fn=None):
+        now_fn = now_fn or (lambda: datetime.now(TIMEZONE))
+        sleep_fn = sleep_fn or sleep
         while True:
-            now = datetime.now(TIMEZONE)
-            if is_regular_session(now):
-                self.scan_once(now)
-            sleep(self.poll_interval_seconds)
+            now = _as_ist_timestamp(now_fn())
+            try:
+                intervals = self.calendar.intervals(now)
+            except ValueError:
+                self.output("SESSION_UNVERIFIED")
+                return
+            if not intervals or now > intervals[-1][1] + self.post_close_drain:
+                return
+            self.scan_once(now)
+            labels = _session_labels(self.calendar, now)
+            if now >= intervals[-1][1] and all(self.last_processed.get(stock) == labels[-1] for stock in self.stocks):
+                return
+            sleep_fn(self.poll_interval_seconds)
 
 
 def main():

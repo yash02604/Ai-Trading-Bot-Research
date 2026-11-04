@@ -1,6 +1,6 @@
 # AI Trading Assistant
 
-An experimental, Indian-stock intraday research and paper-trading project. The system keeps quantitative eligibility and risk controls ahead of OpenRouter context analysis. **There is no real-order execution path.** Do not treat historical results as a forecast or as approval for live trading.
+An experimental, Indian-stock intraday research and paper-trading project. The system keeps quantitative eligibility and risk controls ahead of DeepSeek context analysis. **There is no real-order execution path.** Do not treat historical results as a forecast or as approval for live trading.
 
 ## Architecture and workflow
 
@@ -8,29 +8,34 @@ An experimental, Indian-stock intraday research and paper-trading project. The s
 2. `app.market_analysis` normalizes candles and calculates EMA 9/20, RSI 14, MACD (12/26/9), MACD signal/histogram, and 20-bar volume average.
 3. `app.reversal_detector` looks for a three-candle decline and a close above the preceding candle. The researched/frozen setup used for decisions further requires a decline from 1% inclusive to 2% exclusive and RSI from 20 inclusive to 25 exclusive.
 4. `app.risk_engine` checks daily loss, open positions, daily trade count, stop placement, per-trade risk, and available capital. A rejected risk check stops the pipeline before AI.
-5. OpenRouter may confirm an eligible candidate. It can only return decision support; unavailable, invalid, or non-BUY answers become HOLD.
+5. DeepSeek may confirm an eligible candidate. It can only return decision support; unavailable, invalid, or non-BUY answers become HOLD.
 6. `app.paper_trader` simulates whole-share long entries, stop exits, P&L, trade counts, capital, and history. Broker order APIs are not called.
 7. Decisions are appended to `logs/decisions.jsonl`; closed paper trades go to `logs/paper_trades.csv`. Both files are ignored by Git.
 
 ## Setup
 
-From the repository's parent directory in PowerShell:
+From the repository root in PowerShell (a fresh checkout):
 
 ```powershell
+py -3.13 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-cd .\ai-tarding-assistant
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+The current verified development environment uses Python 3.13.2 and pip 24.3.1. `requirements.txt` contains unpinned package names, so dependency resolution is not yet locked or reproducible across installation dates. A clean-environment installation was not run in this audit.
 
 Create a local `.env` based on `.env.example`. `.env` is excluded by `.gitignore`.
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
 | `UPSTOX_ACCESS_TOKEN` | For Upstox reads | Current Upstox API access token |
-| `OPENROUTER_API_KEY` | For live AI context | OpenRouter API key |
-| `OPENROUTER_MODEL` | No | Model identifier; defaults to `openrouter/free` |
+| `DEEPSEEK_API_KEY` | For live AI context | DeepSeek API key |
+| `DEEPSEEK_MODEL` | No | Model identifier; defaults to `deepseek-flash` |
 | `API_TIMEOUT_SECONDS` | No | Positive request timeout; defaults to 10 seconds |
 | `PAPER_TRADING` | Yes for paper session | Must be explicitly `true`; missing, invalid, or false blocks the runner. |
+
+`DEEPSEEK_API_KEY` is used only when an explicitly enabled DeepSeek research command is invoked. Offline tests and synthetic checks use fixtures/mocks and do not call the provider.
 
 Never put credentials in source, test fixtures, logs, or documentation. Access-token renewal/OAuth is not implemented; refresh a token through the official Upstox flow and update the environment.
 
@@ -96,6 +101,29 @@ Run tests:
 python -m pytest -q
 ```
 
+### DeepSeek prospective research
+
+Run the synthetic decision-handling matrix without API calls:
+
+```powershell
+python scripts/run_deepseek_prospective_research.py --mode offline-test --output backtests/deepseek_prospective_research_v1
+```
+
+For a prospective capture, first obtain a current Upstox snapshot during an authorized market-data session, then validate it and confirm the quantitative baseline:
+
+```powershell
+$snapshot = "snapshots\deepseek\current.json"
+python scripts/validate_deepseek_prospective_snapshot.py --snapshot $snapshot
+```
+
+Only after the local preflight reports `READY`, explicitly opt in to a bounded provider request:
+
+```powershell
+python scripts/run_deepseek_prospective_research.py --mode prospective-paper --enable-prospective --allow-provider-requests --snapshot $snapshot --output backtests/deepseek_prospective_one_request --max-total-requests 1
+```
+
+Prospective observations are paper-only and are not historical backtests. The historical-live evaluator remains blocked until its provenance gate passes. See [the prospective experiment plan](docs/DEEPSEEK_PROSPECTIVE_RESEARCH_PLAN.md) for snapshot fields and evidence limits.
+
 ## Risk and strategy limits
 
 The legacy deterministic simulator defaults to ₹1,000; the live paper-validation runner uses the frozen historical ₹100,000 initial capital unless `PAPER_INITIAL_CAPITAL` is configured. V1 risk is 1% per trade, a 2% daily loss cap, at most one open position, and at most three trades per day. Position sizing is whole-share long-only and exposure cannot exceed account capital. The runner uses a 1% stop from the observed ask and the six-candle horizon. Paper state does not reconcile broker balances.
@@ -106,7 +134,8 @@ AI runs only after a quantitative candidate passes risk checks. AI failure retur
 
 - Upstox calls use an existing access token; OAuth/token refresh and full instrument-master management are not implemented.
 - The historical backtest is long-only and uses simplified bar-based fills. No transaction costs or slippage are included.
-- OpenRouter live availability depends on account access, chosen provider/model, and network access.
+- DeepSeek live availability depends on account access, chosen model, and network access.
 - Backtest and paper results require broader out-of-sample validation. No real-money trading is enabled or considered ready.
 
 See [CURRENT_STATUS.md](CURRENT_STATUS.md) for the audit checklist and latest validation state.
+

@@ -99,6 +99,120 @@ def test_ai_response_parsing_and_failure_safe_hold():
     assert ai_engine.analyze_market({}, client=BrokenClient())["decision"] == "HOLD"
 
 
+class _MockCompletion:
+    """Minimal chat.completions mock; queues content strings or exception instances."""
+
+    def __init__(self, outcomes):
+        self._outcomes = list(outcomes)
+        self.captured = []
+
+    def create(self, **kwargs):
+        self.captured.append(kwargs)
+        outcome = self._outcomes.pop(0)
+        if isinstance(outcome, Exception):
+            raise outcome
+        class _Message:
+            pass
+        message = _Message()
+        message.content = outcome
+        choice = _Message()
+        choice.message = message
+        response = _Message()
+        response.choices = [choice]
+        return response
+
+
+class _MockSettings:
+    def __init__(self, key="unit-test-only-key", model="deepseek-flash", timeout=10.0):
+        self.deepseek_api_key = key
+        self.deepseek_model = model
+        self.request_timeout_seconds = timeout
+
+
+def _install_deepseek_mock(monkeypatch, outcomes, settings=None):
+    from types import SimpleNamespace
+    completion = _MockCompletion(outcomes)
+    client = SimpleNamespace(chat=SimpleNamespace(completions=completion))
+    constructed = {}
+
+    def fake_openai(**kwargs):
+        constructed.update(kwargs)
+        return client
+
+    monkeypatch.setattr(ai_engine, "get_settings",
+                        lambda: settings or _MockSettings())
+    monkeypatch.setattr(ai_engine, "OpenAI", fake_openai)
+    return completion, constructed
+
+
+def test_deepseek_client_uses_official_endpoint_and_configurable_model(monkeypatch):
+    completion, constructed = _install_deepseek_mock(
+        monkeypatch, ['{"decision":"HOLD","confidence":0.2,"reason":"flat"}'])
+    result = ai_engine.analyze_market({"close": 100.0})
+    assert result == {"decision": "HOLD", "confidence": 0.2, "reason": "flat"}
+    assert constructed["base_url"] == "https://api.deepseek.com"
+    assert constructed["api_key"] == "unit-test-only-key"
+    assert constructed["timeout"] == 10.0
+    request = completion.captured[0]
+    assert request["model"] == "deepseek-flash"
+    assert request["response_format"] == {"type": "json_object"}
+    assert "json" in request["messages"][0]["content"].lower()
+    # The model stays environment-configurable rather than hardcoded.
+    completion, _ = _install_deepseek_mock(
+        monkeypatch, ['{"decision":"HOLD","confidence":0.1,"reason":"x"}'],
+        settings=_MockSettings(model="deepseek-v4-pro"))
+    ai_engine.analyze_market({"close": 100.0})
+    assert completion.captured[0]["model"] == "deepseek-v4-pro"
+
+
+def test_deepseek_successful_buy_response_is_parsed(monkeypatch):
+    _install_deepseek_mock(monkeypatch, ['{"decision":"BUY","confidence":0.8,"reason":"reversal context"}'])
+    result = ai_engine.analyze_market({"symbol": "TEST", "close": 100.0})
+    assert result == {"decision": "BUY", "confidence": 0.8, "reason": "reversal context"}
+
+
+def test_deepseek_missing_key_fails_closed_without_client(monkeypatch):
+    monkeypatch.setattr(ai_engine, "get_settings", lambda: _MockSettings(key=None))
+    result = ai_engine.analyze_market({"close": 100.0})
+    assert result["decision"] == "HOLD"
+    assert "DEEPSEEK_API_KEY is not configured" in result["reason"]
+
+
+def test_deepseek_authentication_error_falls_back_to_hold(monkeypatch):
+    class AuthenticationError(Exception):
+        pass
+    _install_deepseek_mock(monkeypatch, [AuthenticationError("invalid api key")])
+    result = ai_engine.analyze_market({"close": 100.0})
+    assert result["decision"] == "HOLD"
+    assert result["confidence"] == 0.0
+    assert "AuthenticationError" in result["reason"]
+
+
+def test_deepseek_timeout_falls_back_to_hold(monkeypatch):
+    _install_deepseek_mock(monkeypatch, [TimeoutError("request timed out")])
+    result = ai_engine.analyze_market({"close": 100.0})
+    assert result["decision"] == "HOLD"
+    assert "TimeoutError" in result["reason"]
+
+
+def test_deepseek_malformed_responses_fall_back_to_hold(monkeypatch):
+    malformed = [
+        "",                                        # empty content (documented DeepSeek JSON-mode behavior)
+        "not json at all",
+        '["array", "not", "object"]',
+        '{"decision":"SELL","confidence":"high","reason":"x"}',   # non-numeric confidence
+        '{"decision":"BUY","confidence":1.5,"reason":"x"}',       # out-of-range confidence
+        '{"decision":"BUY","confidence":0.5}',                    # missing reason
+        '{"decision":"SHORT","confidence":0.5,"reason":"x"}',     # unsupported decision
+        None,                                      # missing content field
+    ]
+    for content in malformed:
+        _install_deepseek_mock(monkeypatch, [content])
+        result = ai_engine.analyze_market({"close": 100.0})
+        assert result["decision"] == "HOLD", f"expected HOLD for {content!r}"
+        assert result["confidence"] == 0.0
+
+
 def test_upstox_auth_error_is_explicit(monkeypatch):
     monkeypatch.setattr(upstox_client, "get_settings", lambda: type("S", (), {"upstox_access_token": "token", "request_timeout_seconds": 1})())
 
@@ -112,8 +226,11 @@ def test_upstox_auth_error_is_explicit(monkeypatch):
         def get(self, *args, **kwargs): return Response()
 
     monkeypatch.setattr(upstox_client.requests, "Session", Session)
-    with pytest.raises(PermissionError, match="refresh"):
+    with pytest.raises(upstox_client.UpstoxRequestError, match="refresh") as error:
         upstox_client.get_profile()
+    assert error.value.category == "authentication"
+    assert error.value.stage == "upstox_http"
+    assert error.value.status_code == 401
 
 
 def test_pipeline_requires_strategy_risk_and_ai_before_paper_entry(monkeypatch):

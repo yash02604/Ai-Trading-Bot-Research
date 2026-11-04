@@ -1,0 +1,76 @@
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+from app.config import get_settings
+
+BASE_URL = "https://api.upstox.com"
+
+
+def get_headers():
+    token = get_settings().upstox_access_token
+    if not token:
+        raise RuntimeError("UPSTOX_ACCESS_TOKEN is missing")
+
+    return {
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+
+
+def _get(url, *, params=None):
+    settings = get_settings()
+    session = requests.Session()
+    retry = Retry(
+        total=2,
+        connect=2,
+        read=0,
+        status=2,
+        backoff_factor=0.3,
+        status_forcelist=(429, 500, 502, 503, 504),
+        allowed_methods=frozenset({"GET"}),
+        respect_retry_after_header=True,
+    )
+    session.mount("https://", HTTPAdapter(max_retries=retry))
+    response = session.get(
+        url,
+        headers=get_headers(),
+        params=params,
+        timeout=settings.request_timeout_seconds,
+    )
+    if response.status_code in (401, 403):
+        raise PermissionError("Upstox authentication failed; refresh the access token")
+    response.raise_for_status()
+    return response.json()
+
+
+def get_profile():
+    return _get(f"{BASE_URL}/v2/user/profile")
+
+
+def get_quote(instrument_key):
+    return _get(
+        f"{BASE_URL}/v3/market-quote/quotes",
+        params={"instrument_key": instrument_key},
+    )
+
+
+def get_intraday_candles(instrument_key, interval=5):
+    url = (
+        f"{BASE_URL}/v3/historical-candle/intraday/"
+        f"{instrument_key}/minutes/{interval}"
+    )
+
+    return _get(url)
+
+def get_historical_candles(
+    instrument_key,
+    date,
+    interval=5,
+):
+    url = (
+        f"{BASE_URL}/v3/historical-candle/"
+        f"{instrument_key}/minutes/{interval}/{date}"
+    )
+
+    return _get(url)

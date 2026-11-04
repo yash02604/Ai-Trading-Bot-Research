@@ -1,0 +1,3 @@
+{"kind":"upstox_candles","received_at_utc":"2026-10-28T12:10:01+05:30","request_id":"bb611cf99b9b1a7f660d3909606104231dcfb039fae4e9dad694ddc61ad18766","response_sha256":"065f2090d1e866ea778987518c113613c797e76f72a5d8b37e95da3893aecfa6","status":"RECEIVED"}
+{"kind":"upstox_candles","received_at_utc":"2026-10-28T12:10:01+05:30","request_id":"3fc39e44787f98afefdb0453ca06324131b97717169fe6415af158ef853d57dc","response_sha256":"065f2090d1e866ea778987518c113613c797e76f72a5d8b37e95da3893aecfa6","status":"RECEIVED"}
+{"kind":"deepseek","received_at_utc":"2026-10-28T12:10:01+05:30","request_id":"79f03c715b92006233c91bd7aa2f9aed8599a13fdbd0ca60071a1bd24def3802","response_sha256":"be302461cda285db3ed2d45fb767b23e08ca8808b35a638009937df22b332d73","status":"RECEIVED"}

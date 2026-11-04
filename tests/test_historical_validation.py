@@ -36,15 +36,16 @@ def test_indicators_at_a_timestamp_do_not_change_when_future_bars_are_appended()
         assert full_row[column] == pytest.approx(prefix_row[column])
 
 
-def test_cost_model_is_itemized_and_uses_conservative_published_nse_rate():
+def test_cost_model_is_itemized_and_uses_dated_published_nse_rate():
     costs = estimate_round_trip_costs(100, 100, 1, pd.Timestamp("2025-02-03"))
     assert costs["brokerage"] == pytest.approx(0.2)
     assert costs["stt"] == pytest.approx(0.025)
     assert costs["stamp_duty"] == pytest.approx(0.003)
     assert costs["slippage"] == pytest.approx(0.1)
     assert costs["total_cost"] == pytest.approx(sum(v for k, v in costs.items() if k != "total_cost"))
-    assert nse_transaction_rate(pd.Timestamp("2023-12-01")) == pytest.approx(0.0000322)
-    assert nse_transaction_rate(pd.Timestamp("2025-12-01")) == pytest.approx(0.0000322)
+    with pytest.raises(ValueError, match="unresolved before 2024-04-01"):
+        nse_transaction_rate(pd.Timestamp("2023-12-01"))
+    assert nse_transaction_rate(pd.Timestamp("2025-12-01")) == pytest.approx(0.0000297)
 
 
 def test_metrics_distinguish_gross_and_after_cost_performance():

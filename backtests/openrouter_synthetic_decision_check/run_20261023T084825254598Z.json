@@ -1,0 +1,104 @@
+{
+  "automatic_retries": 0,
+  "configured_model_id": "openrouter/free",
+  "executed_at_utc": "2026-10-23T08:48:25.254598+00:00",
+  "input_origin": "DETERMINISTIC_SYNTHETIC",
+  "max_completion_tokens": 512,
+  "max_model_requests": 4,
+  "max_response_bytes": 16384,
+  "model_substitution_allowed": false,
+  "performance_evidence": false,
+  "provider_test_passed": false,
+  "request_metadata": {
+    "authorization_included": false,
+    "endpoint": "https://openrouter.ai/api/v1/chat/completions",
+    "http_method": "POST",
+    "messages_included": true,
+    "response_format": "json_object"
+  },
+  "requested_model_id": "openrouter/free",
+  "requests_made": 4,
+  "scenarios": [
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "failure_stage": "response_extraction",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: ValueError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "bullish_reversal",
+      "validation_failure": "ValueError"
+    },
+    {
+      "completion_tokens": 512,
+      "decision_action": "NO_TRADE",
+      "failure_stage": "response_validation",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": 10403.58159999596,
+      "prompt_tokens": 592,
+      "provider_id": "openrouter",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "poolside/laguna-s-2.1:free",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: ModelSubstitutionError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "continuing_downtrend",
+      "validation_failure": "ModelSubstitutionError"
+    },
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "failure_stage": "response_extraction",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: ValueError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "sideways_low_opportunity",
+      "validation_failure": "ValueError"
+    },
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "failure_stage": "response_extraction",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: ValueError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "ambiguous_insufficient",
+      "validation_failure": "ValueError"
+    }
+  ],
+  "schema_version": "openrouter-synthetic-decision-check-v1",
+  "status": "COMPLETED_WITH_FAILURES",
+  "synthetic_test_time": "2025-02-03T10:01:00+05:30",
+  "timeout_seconds": 10.0,
+  "workflow_completed": true
+}

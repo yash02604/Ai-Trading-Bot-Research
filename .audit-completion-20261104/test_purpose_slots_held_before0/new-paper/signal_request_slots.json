@@ -1,0 +1,1 @@
+{"record":{"experiment_sha256":"377a8af3ba1a490e40c0e416c47f5281c809b23cb0fdb5904e4f1334f29f3070","physical_attempts_per_slot":1,"slots":[{"purpose":"INITIAL_SNAPSHOT","symbol":"RELIANCE"},{"purpose":"FUTURE_OBSERVATION","symbol":"RELIANCE"}],"version":"signal-purpose-slots-v1"},"sha256":"0de433e55b249ca45dc0a1dd5687f8ae1ab25e102432a1af9489fa5d50f6373b"}

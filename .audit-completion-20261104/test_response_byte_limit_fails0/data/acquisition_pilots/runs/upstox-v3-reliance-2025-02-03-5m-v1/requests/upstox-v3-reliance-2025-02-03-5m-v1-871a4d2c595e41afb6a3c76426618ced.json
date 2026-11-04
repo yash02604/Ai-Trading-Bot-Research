@@ -1,0 +1,52 @@
+{
+  "acquisition_request_id": "upstox-v3-reliance-2025-02-03-5m-v1-871a4d2c595e41afb6a3c76426618ced",
+  "api_version": "v3",
+  "endpoint": "https://api.upstox.com/v3/historical-candle/NSE_EQ%7CINE002A01018/minutes/5/2025-02-03/2025-02-03",
+  "instrument": {
+    "exchange": "NSE",
+    "instrument_key": "NSE_EQ|INE002A01018",
+    "instrument_master_snapshot_date": "2026-10-20",
+    "instrument_master_snapshot_sha256": "9efb4aab79235307b08556575c91b2278250ad8e5bbcec8a762c2091eb689e5f",
+    "segment": "CM",
+    "symbol": "RELIANCE"
+  },
+  "interval": {
+    "unit": "minutes",
+    "value": 5
+  },
+  "normalized_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "normalizer_version": "offline-market-data-v1",
+  "parser_version": "upstox-v3-pilot-parser-v1",
+  "provider_id": "upstox",
+  "raw_response_retention": {
+    "enabled": true,
+    "policy_version": "attested-execution-v1",
+    "provider_terms_reviewed": true
+  },
+  "raw_response_sha256": null,
+  "redacted_parameter_names": [],
+  "request_parameters": {
+    "from_date": "2025-02-03",
+    "instrument_key": "NSE_EQ|INE002A01018",
+    "interval_minutes": 5,
+    "timestamp_label": "START",
+    "to_date": "2025-02-03"
+  },
+  "requested_date_range": {
+    "from_date": "2025-02-03",
+    "to_date": "2025-02-03"
+  },
+  "response": {
+    "http_status": 200,
+    "request_id": null,
+    "status": "FAILED"
+  },
+  "retrieved_at_utc": "2026-11-04T07:35:46.238572Z",
+  "retry_metadata": {
+    "attempts": 1,
+    "retries": 0,
+    "retry_delays_seconds": []
+  },
+  "schema_version": 1,
+  "session_manifest_version": "nse-cm-2023-12-01_2026-10-01-v2"
+}

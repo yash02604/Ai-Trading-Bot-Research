@@ -1,0 +1,1 @@
+STOCKS = {"TEST": "NSE_EQ|TEST"}

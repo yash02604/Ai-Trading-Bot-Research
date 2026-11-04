@@ -1,0 +1,47 @@
+{
+  "candle_count": 39,
+  "classification": "PROVIDER_CONNECTIVITY_TEST",
+  "decision_time": "2025-02-03T12:26:01+05:30",
+  "evidence_note": "Provider connectivity/JSON acknowledgement only; not a trading decision, strategy observation, backtest, or performance evidence.",
+  "historical_backtest": false,
+  "instrument_key": "NSE_EQ|INE002A01018",
+  "mode": "PROVIDER_SMOKE_TEST",
+  "paper_trade_simulated": false,
+  "prospective_observation": false,
+  "provider_configuration": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "provider_id": "mock-deepseek",
+    "retries": 0,
+    "timeout_seconds": null
+  },
+  "provider_error_type": null,
+  "provider_metadata": {
+    "completion_tokens": 5,
+    "latency_ms": 1.5,
+    "prompt_tokens": 20,
+    "requested_model_id": "deepseek-flash",
+    "response_bytes": null,
+    "returned_model_id": "deepseek-flash"
+  },
+  "provider_request": {
+    "system_prompt": "This is a provider connectivity and JSON-format test only. Do not analyze the market, recommend a trade, or return BUY/SELL/HOLD. Return exactly the JSON object {\"status\":\"ok\"} and nothing else.",
+    "user_payload": "{\"instrument_key\":\"NSE_EQ|INE002A01018\",\"observed_at\":\"2025-02-03T12:26:00+05:30\",\"recent_completed_candles\":[{\"close\":567.6000000000003,\"high\":571.5000000000002,\"low\":567.3000000000002,\"open\":571.2000000000003,\"timestamp\":\"2025-02-03T12:15:00+05:30\",\"volume\":1000},{\"close\":564.0000000000003,\"high\":567.9000000000002,\"low\":563.7000000000004,\"open\":567.6000000000003,\"timestamp\":\"2025-02-03T12:20:00+05:30\",\"volume\":1000},{\"close\":565.2000000000004,\"high\":565.5000000000003,\"low\":563.7000000000004,\"open\":564.0000000000003,\"timestamp\":\"2025-02-03T12:25:00+05:30\",\"volume\":1000}],\"symbol\":\"RELIANCE\",\"test_type\":\"NON_TRADING_PROVIDER_CONNECTIVITY_TEST\"}"
+  },
+  "provider_request_attempted": true,
+  "provider_response_redacted": "{\"status\":\"ok\"}",
+  "provider_skip_reason": null,
+  "request_budget_used": 1,
+  "request_id": "b0d7c7ab70343e2b63a22291a1cf1a8889fd291427f1f7316dd7520be70a5836",
+  "response_parse_status": "VALID_ACK",
+  "schema_version": "deepseek-provider-smoke-v1",
+  "snapshot_observed_at": "2025-02-03T12:26:00+05:30",
+  "snapshot_sha256": "19421ec20488881fb759eee1ff26af2b4e19e8f426ff5c4b411f05e7917be8ec",
+  "snapshot_source": "smoke-cli-snapshot",
+  "status": "COMPLETED",
+  "strategy_performance_evidence": false,
+  "symbol": "RELIANCE",
+  "synthetic": false,
+  "trade_placement_enabled": false,
+  "trading_decision_created": false
+}

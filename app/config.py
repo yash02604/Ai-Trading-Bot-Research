@@ -14,11 +14,13 @@ load_dotenv(PROJECT_ROOT / ".env")
 @dataclass(frozen=True)
 class Settings:
     upstox_access_token: str | None
-    openrouter_api_key: str | None
-    openrouter_model: str
+    deepseek_api_key: str | None
+    deepseek_model: str
     request_timeout_seconds: float
     paper_trading: bool
     paper_initial_capital: float = 100_000.0
+    upstox_total_deadline_seconds: float = 20.0
+    upstox_max_retry_delay_seconds: float = 1.0
 
     @classmethod
     def from_env(cls):
@@ -27,12 +29,14 @@ class Settings:
             raise ValueError("API_TIMEOUT_SECONDS must be positive")
         return cls(
             upstox_access_token=os.getenv("UPSTOX_ACCESS_TOKEN") or None,
-            openrouter_api_key=os.getenv("OPENROUTER_API_KEY") or None,
-            openrouter_model=os.getenv("OPENROUTER_MODEL", "openrouter/free"),
+            deepseek_api_key=os.getenv("DEEPSEEK_API_KEY") or None,
+            deepseek_model=os.getenv("DEEPSEEK_MODEL", "deepseek-flash"),
             request_timeout_seconds=timeout,
             paper_trading=os.getenv("PAPER_TRADING", "").strip().lower()
             in {"1", "true", "yes", "on"},
             paper_initial_capital=float(os.getenv("PAPER_INITIAL_CAPITAL", "100000")),
+            upstox_total_deadline_seconds=float(os.getenv("UPSTOX_TOTAL_DEADLINE_SECONDS", "20")),
+            upstox_max_retry_delay_seconds=float(os.getenv("UPSTOX_MAX_RETRY_DELAY_SECONDS", "1")),
         )
 
 

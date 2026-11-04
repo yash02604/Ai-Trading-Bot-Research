@@ -1,0 +1,2 @@
+{"decision_id": "baseline-open", "classification": "PROSPECTIVE_OBSERVATION", "capital": 1000, "quantitative_baseline": {"eligible": true}, "ai_assisted_eligible": true}
+{"decision_id": "awaiting-entry", "classification": "PROSPECTIVE_OBSERVATION", "capital": 1000, "quantitative_baseline": {"eligible": true}, "ai_assisted_eligible": true}

@@ -1,0 +1,47 @@
+--- reviewed-v2
++++ reviewed-v3
+@@ -18,11 +18,13 @@
+ 
+ 
+ @contextmanager
+-def request_window(*, end, before_attempt):
++def request_window(*, end, before_attempt, max_attempts=3, before_send=None):
+     """Bind physical GET attempts to a verified acquisition window in the caller."""
+-    if end.tzinfo is None or not callable(before_attempt):
++    if (end.tzinfo is None or not callable(before_attempt)
++            or type(max_attempts) is not int or not 1 <= max_attempts <= 3
++            or (before_send is not None and not callable(before_send))):
+         raise ValueError("verified request window required")
+-    token = _WINDOW.set((end, before_attempt))
++    token = _WINDOW.set((end, before_attempt, max_attempts, before_send))
+     try:
+         yield
+     finally:
+@@ -164,7 +166,8 @@
+     window = _WINDOW.get()
+     if window is not None:
+         deadline = min(deadline, time.monotonic() + max(0, (window[0] - _utc_now()).total_seconds()))
+-    for attempt in range(3):
++    max_attempts = window[2] if window is not None else 3
++    for attempt in range(max_attempts):
+         if window is not None:
+             try:
+                 window[1]()
+@@ -173,6 +176,8 @@
+         remaining = deadline - time.monotonic()
+         if remaining <= 0:
+             raise UpstoxRequestError("Upstox total request deadline exceeded", stage="upstox_http", category="network_error")
++        if window is not None and window[3] is not None:
++            window[3]()  # Durable physical-attempt checkpoint, immediately before I/O.
+         result = _bounded_get(url, headers, params, min(settings.request_timeout_seconds, remaining), remaining)
+         if time.monotonic() >= deadline:
+             raise UpstoxRequestError("Upstox total request deadline exceeded", stage="upstox_http", category="network_error")
+@@ -182,7 +187,7 @@
+                                      category="authentication", status_code=status)
+         category = "rate_limit" if status == 429 else "http_error" if status is not None else "network_error"
+         retryable = status in (429, 500, 502, 503, 504) or result.get("retryable") is True
+-        if retryable and attempt < 2:
++        if retryable and attempt < max_attempts - 1:
+             delay = _retry_delay(result.get("retry_after"), attempt, maximum_delay)
+             if delay is not None and delay < deadline - time.monotonic():
+                 time.sleep(delay)

@@ -1,0 +1,91 @@
+{
+  "automatic_retries": 0,
+  "configured_model_id": "openrouter/free",
+  "executed_at_utc": "2026-10-23T08:41:11.329072+00:00",
+  "input_origin": "DETERMINISTIC_SYNTHETIC",
+  "max_completion_tokens": 512,
+  "max_model_requests": 4,
+  "max_response_bytes": 16384,
+  "model_substitution_allowed": false,
+  "performance_evidence": false,
+  "requested_model_id": "openrouter/free",
+  "requests_made": 4,
+  "scenarios": [
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: ValueError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "bullish_reversal",
+      "validation_failure": "ValueError"
+    },
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: APIConnectionError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "continuing_downtrend",
+      "validation_failure": "APIConnectionError"
+    },
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: APIConnectionError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "sideways_low_opportunity",
+      "validation_failure": "APIConnectionError"
+    },
+    {
+      "completion_tokens": null,
+      "decision_action": "NO_TRADE",
+      "input_origin": "DETERMINISTIC_SYNTHETIC",
+      "latency_ms": null,
+      "prompt_tokens": null,
+      "provider_id": "unknown",
+      "requested_model_id": "openrouter/free",
+      "response_valid": false,
+      "returned_model_id": "unavailable",
+      "risk_outcome": {
+        "approved": false,
+        "reason": "decision validation failed: APIConnectionError",
+        "status": "NOT_RUN"
+      },
+      "scenario_id": "ambiguous_insufficient",
+      "validation_failure": "APIConnectionError"
+    }
+  ],
+  "schema_version": "openrouter-synthetic-decision-check-v1",
+  "status": "COMPLETED",
+  "synthetic_test_time": "2025-02-03T10:01:00+05:30",
+  "timeout_seconds": 10.0
+}

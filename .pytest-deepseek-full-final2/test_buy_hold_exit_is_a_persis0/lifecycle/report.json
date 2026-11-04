@@ -1,0 +1,195 @@
+{
+  "average_net_per_trade": -31.744634848000004,
+  "comparison_blocker": "No frozen V1 action ledger generated on the same verified inputs and execution assumptions; no fair AI-versus-V1 result is available.",
+  "comparison_status": "BLOCKED",
+  "complete": true,
+  "config": {
+    "allow_model_substitution": false,
+    "cost_assumptions": {
+      "brokerage_cap": 20.0,
+      "brokerage_rate": 0.001,
+      "gst_on_sebi": false,
+      "gst_rate": 0.18,
+      "ipft_per_lakh": null,
+      "sebi_rate": 1e-06,
+      "slippage_bps_per_side": 5.0,
+      "stamp_buy_rate": 3e-05,
+      "stt_sell_rate": 0.00025
+    },
+    "execution_assumptions": {
+      "entry_condition": "NEXT_ELIGIBLE_BAR_OPEN",
+      "max_entry_deviation_pct": 0.25,
+      "same_bar_precedence": [
+        "opening_gap_stop",
+        "opening_gap_target",
+        "ai_exit_at_open",
+        "intrabar_stop_loss",
+        "intrabar_target",
+        "maximum_holding_close",
+        "session_close"
+      ],
+      "same_session_only": true,
+      "stop_first_if_stop_and_target_touch": true
+    },
+    "risk_limits": {
+      "entry_slippage_bps": 5.0,
+      "max_allocation": 0.25,
+      "max_daily_loss": 0.02,
+      "max_data_age_seconds": 600,
+      "max_holding_bars": 12,
+      "max_open_positions": 1,
+      "max_risk_per_trade": 0.01,
+      "max_stop_distance_pct": 1.0,
+      "max_target_distance_pct": 5.0,
+      "max_trades_per_day": 3,
+      "min_holding_bars": 1,
+      "min_stop_distance_pct": 0.05
+    },
+    "session_manifest_sha256": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "source_hashes": {
+      "cost_model_code": "27b1d43e997a7fb533dabb8675abbd4fa9bb1cc7ee07fcfa25942cff7b4cbb9f",
+      "data:bars.csv": "e98db39abdcac99aa131cdeb14a98f76fd699c3f76986d5905969face08793a7",
+      "decision_ledger": "cc88535e13a49a6ebf0903cfa3b685e62a0964aef24c1987f047ad5bb6132261",
+      "evaluator_code": "1deb62de5f97cbb76bef40370269dd25e22367f06de868cc4beeab5f40ff54c4",
+      "execution_integrity_code": "289abb475a77c507da88e2e65507b09e0f9e29e99dfb028d5361a69cf4b4f27d",
+      "frozen_v1_backtester_code": "5b810bb94887f32cb99a99fc0e7a99991f5bccfd4e2d82aff42adc328ac3230d",
+      "frozen_v1_strategy_code": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d",
+      "risk_gate_code": "5be6f9b2adebdeb07f251640e40884e0b178696b1306472f5916d8927239186b",
+      "session_manifest": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+      "timestamp_evidence": "d75fcc6390624c926145b3bfa31b4a50c29177343af66dff1d018f9bdde7fcf6"
+    },
+    "version": "ai-led-paper-evaluation-v1.1"
+  },
+  "costs_by_component": {
+    "brokerage": 40.0,
+    "exchange": 1.4270256000000001,
+    "gst": 7.465513248,
+    "ipft": 0.04804800000000001,
+    "sebi": 0.048048,
+    "slippage": 24.024,
+    "stamp_duty": 0.72,
+    "stt": 6.0120000000000005
+  },
+  "decision_count": 11,
+  "evaluation_version": "ai-led-paper-evaluation-v1.1",
+  "events_sha256": "3d8214716b4ff3e48595ac5b37b67cf501b05a6f3e5964bb805d5ef5f6676224",
+  "exposure_bar_minutes": 20,
+  "gross_pnl": 48.0,
+  "gross_to_net_deterioration": 79.744634848,
+  "limitations": [
+    "Exploratory paper simulation only; no profitability or independent validation claim.",
+    "Underlying cached data provenance, corporate-action adjustment, and universe coverage remain unresolved.",
+    "AI responses must have been recorded point-in-time; this evaluator cannot fabricate historical AI decisions."
+  ],
+  "market_regime": {
+    "SIDEWAYS": {
+      "costs": 79.744634848,
+      "gross_pnl": 48.0,
+      "net_pnl": -31.744634848000004,
+      "trade_count": 1
+    }
+  },
+  "max_drawdown": 31.744634848000715,
+  "net_pnl": -31.744634848000004,
+  "no_trade_count": 0,
+  "profit_factor": 0.0,
+  "proposed_count": 1,
+  "rejected_count": 0,
+  "run_id": "ai-v2-paper-92bf78438b4587f76312",
+  "source_hashes": {
+    "cost_model_code": "27b1d43e997a7fb533dabb8675abbd4fa9bb1cc7ee07fcfa25942cff7b4cbb9f",
+    "data:bars.csv": "e98db39abdcac99aa131cdeb14a98f76fd699c3f76986d5905969face08793a7",
+    "decision_ledger": "cc88535e13a49a6ebf0903cfa3b685e62a0964aef24c1987f047ad5bb6132261",
+    "evaluator_code": "1deb62de5f97cbb76bef40370269dd25e22367f06de868cc4beeab5f40ff54c4",
+    "execution_integrity_code": "289abb475a77c507da88e2e65507b09e0f9e29e99dfb028d5361a69cf4b4f27d",
+    "frozen_v1_backtester_code": "5b810bb94887f32cb99a99fc0e7a99991f5bccfd4e2d82aff42adc328ac3230d",
+    "frozen_v1_strategy_code": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d",
+    "risk_gate_code": "5be6f9b2adebdeb07f251640e40884e0b178696b1306472f5916d8927239186b",
+    "session_manifest": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+    "timestamp_evidence": "d75fcc6390624c926145b3bfa31b4a50c29177343af66dff1d018f9bdde7fcf6"
+  },
+  "stock": {
+    "ABC": {
+      "costs": 79.744634848,
+      "gross_pnl": 48.0,
+      "net_pnl": -31.744634848000004,
+      "trade_count": 1
+    }
+  },
+  "trade_count": 1,
+  "trades": [
+    {
+      "costs": {
+        "brokerage": 40.0,
+        "exchange": 1.4270256000000001,
+        "gst": 7.465513248,
+        "ipft": 0.04804800000000001,
+        "sebi": 0.048048,
+        "slippage": 24.024,
+        "stamp_duty": 0.72,
+        "stt": 6.0120000000000005,
+        "total_cost": 79.744634848
+      },
+      "entry_costs": {
+        "brokerage": 20.0,
+        "exchange": 0.7128,
+        "gst": 3.7326240000000004,
+        "ipft": 0.024,
+        "sebi": 0.024,
+        "slippage": 12.0,
+        "stamp_duty": 0.72,
+        "stt": 0.0,
+        "total_cost": 37.213424
+      },
+      "entry_decision_id": "sequence-0",
+      "entry_fill": 1000.5,
+      "entry_reference": 1000.0,
+      "entry_signal_id": "sequence-0",
+      "entry_timestamp": "2025-02-03T09:30:00+05:30",
+      "exit_costs": {
+        "brokerage": 20.0,
+        "exchange": 0.7142256,
+        "gst": 3.7328892479999998,
+        "ipft": 0.024048,
+        "sebi": 0.024048,
+        "slippage": 12.024,
+        "stamp_duty": 0.0,
+        "stt": 6.0120000000000005,
+        "total_cost": 42.531210848
+      },
+      "exit_decision_id": "sequence-2",
+      "exit_fill": 1001.499,
+      "exit_reason": "AI_EXIT",
+      "exit_reference": 1002.0,
+      "exit_signal_id": "sequence-2",
+      "exit_timestamp": "2025-02-03T09:50:00+05:30",
+      "gross_pnl": 48.0,
+      "holding_bars": 4,
+      "market_regime": "SIDEWAYS",
+      "maximum_holding_bars": 5,
+      "net_pnl": -31.744634848000004,
+      "position_id": "ai-v2-paper-92bf78438b4587f76312:position:b8231b8186685701",
+      "quantity": 24,
+      "side": "LONG",
+      "source_hashes": {
+        "cost_model_code": "27b1d43e997a7fb533dabb8675abbd4fa9bb1cc7ee07fcfa25942cff7b4cbb9f",
+        "data:bars.csv": "e98db39abdcac99aa131cdeb14a98f76fd699c3f76986d5905969face08793a7",
+        "decision_ledger": "cc88535e13a49a6ebf0903cfa3b685e62a0964aef24c1987f047ad5bb6132261",
+        "evaluator_code": "1deb62de5f97cbb76bef40370269dd25e22367f06de868cc4beeab5f40ff54c4",
+        "execution_integrity_code": "289abb475a77c507da88e2e65507b09e0f9e29e99dfb028d5361a69cf4b4f27d",
+        "frozen_v1_backtester_code": "5b810bb94887f32cb99a99fc0e7a99991f5bccfd4e2d82aff42adc328ac3230d",
+        "frozen_v1_strategy_code": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d",
+        "risk_gate_code": "5be6f9b2adebdeb07f251640e40884e0b178696b1306472f5916d8927239186b",
+        "session_manifest": "5012edfdee4a6db80a531b9c77486448dd305aa641920a6696d9f63a9ea55cbc",
+        "timestamp_evidence": "d75fcc6390624c926145b3bfa31b4a50c29177343af66dff1d018f9bdde7fcf6"
+      },
+      "status": "CLOSED",
+      "stop_loss": 995.0,
+      "strategy_id": "research_only_fixture",
+      "strategy_version": "candidate-v1",
+      "symbol": "ABC",
+      "target_price": 1010.0
+    }
+  ],
+  "win_rate": 0.0
+}

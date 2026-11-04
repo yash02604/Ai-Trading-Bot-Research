@@ -1,0 +1,1 @@
+{"confidence":1.0,"decision":"BUY","partition":"train","reason":"Deterministic offline fixture; not a historical model response.","request_id":"adbd54eab102eb8993955b2b5f91cabb8ca57e3c918c6cab87e21a8142199c60","schema_version":"deepseek-eval-decision-ledger-v1","signal_timestamp":"2025-02-03T12:25:00+05:30","symbol":"SYNTH"}

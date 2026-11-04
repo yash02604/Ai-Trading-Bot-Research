@@ -1,0 +1,53 @@
+{
+  "created_at_utc": "2026-10-30T11:24:24.074345+00:00",
+  "current_source": {
+    "bytes": 4035,
+    "crlf_count": 113,
+    "git_base_commit": "a7fc8b1c8e1598c8753c463702a0bea1ffdb21c9",
+    "lf_normalized_sha256": "e52b2b85eeb8aedeb881dd25f314e5902bbe3f29378f3956036132838daa232b",
+    "line_endings": "CRLF",
+    "path": "app/upstox_client.py",
+    "sha256": "27ccb06e8777296edfbb2ebc56153dac291e4111d311fa424cc41813e03d9ccb",
+    "snapshot": "current_client.crlf.py.snapshot",
+    "working_tree_state": "tracked file modified; uncommitted diagnostic changes"
+  },
+  "historical_audit": {
+    "path": "backtests/provenance_integrity_v1/input_hashes.json",
+    "sha256": "bd18dc02f80dff3b8198c1343c0e0917a70f433081451d40619fd35b5c70d406"
+  },
+  "historical_source": {
+    "git_base_commit": "a7fc8b1c8e1598c8753c463702a0bea1ffdb21c9",
+    "git_blob_lf_sha256": "f8bd383a622c3694ca93378fde01f2eb5e728264597eb21c04f1d31876f93188",
+    "git_blob_oid": "c5b350ad46f9d42740e905b3e1433212c6a787c4",
+    "line_endings": "CRLF",
+    "reconstruction": "Git LF blob represented with CRLF; hash exactly matches retained historical audit",
+    "sha256": "59cfb331c2e1c8bece64ff0c256a7f374698b6e1692b3ea5609f7735883e5ac3",
+    "snapshot": "historical_client.crlf.py.snapshot"
+  },
+  "review": {
+    "findings": [
+      "structured error class added",
+      "authentication exception contract intentionally changed",
+      "HTTP/rate-limit/transport/JSON diagnostics use fixed client messages",
+      "endpoint functions and request arguments unchanged",
+      "retry configuration unchanged",
+      "no broker order path introduced"
+    ],
+    "independent_review_approval": false,
+    "method": "full source and Git diff inspection; AST invariants and offline diagnostics regression",
+    "operational_trading_approval": false,
+    "requirements": [
+      "reviewer verifies retained snapshots, complete diff, unchanged request/retry invariants and offline test results before operational use",
+      "commit or otherwise preserve reviewed working-tree version",
+      "re-attest any later source-byte change; never rewrite the historical audit"
+    ],
+    "reviewer": "Codex technical source review",
+    "scope": "versioned technical review and byte identity; not proof of source authorship, dataset provenance or execution authorization",
+    "source_authentication": false
+  },
+  "reviewed_diff": {
+    "path": "reviewed_diff.patch",
+    "sha256": "293e79f9b5cf2ab9bc09e01f27ba9cbd9050c22ee495d87d58d9f5ac0c094b39"
+  },
+  "schema_version": "upstox-client-source-attestation-v1"
+}

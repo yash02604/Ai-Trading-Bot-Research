@@ -1,0 +1,19 @@
+{
+  "a51600ca86be6e1d176f4f370c991ab6bd2336f6c8b6463decf4316888f967ad": {
+    "decision": {
+      "confidence": 0.0,
+      "decision": "HOLD",
+      "reason": "invalid or unavailable AI response"
+    },
+    "provider_metadata": {
+      "completion_tokens": 5,
+      "latency_ms": 1.5,
+      "prompt_tokens": 20,
+      "provider_id": "mock-deepseek",
+      "requested_model_id": "deepseek-flash",
+      "response_bytes": null,
+      "returned_model_id": "deepseek-flash"
+    },
+    "raw_response": "{\"decision\":\"BUY\",\"confidence\":\"high\",\"reason\":\"bad\"}"
+  }
+}

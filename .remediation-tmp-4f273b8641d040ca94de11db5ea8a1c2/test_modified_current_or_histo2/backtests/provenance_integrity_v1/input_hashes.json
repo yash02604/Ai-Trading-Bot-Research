@@ -1,0 +1,196 @@
+{
+  "algorithm": "SHA-256",
+  "inputs": [
+    {
+      "path": "docs/OFFLINE_MARKET_DATA_PIPELINE_V1.md",
+      "bytes": 6256,
+      "sha256": "074cef6a3c40ea4f59766318351fcf8b98a5d31696b33c80b5866190a0840082"
+    },
+    {
+      "path": "app/provenance_audit.py",
+      "bytes": 5398,
+      "sha256": "592f2f72b99b1babe47bae67e4b6cdfb78b96f9ff8706d4b5731a9334c0b9eee"
+    },
+    {
+      "path": "scripts/run_provenance_integrity_audit.py",
+      "bytes": 30411,
+      "sha256": "8e9fd1a182fe21a64273c874ba96d8258281bce43b6a050d2a32e4c54df92141"
+    },
+    {
+      "path": "app/research/deepseek_eval_v1.py",
+      "bytes": 32550,
+      "sha256": "cd7b3141dde042665831a287f8e067aa247189b263ac4124b87ff72a2be5c1ad"
+    },
+    {
+      "path": "backtests/provenance_integrity_v1/dataset_binding.json",
+      "bytes": 395,
+      "sha256": "9eb35661dcbfbb4139a0502f24a4831d1a0f4bb6c342b52c8b83bf52e819653e"
+    },
+    {
+      "path": "docs/CANDLE_DATA_INTEGRITY.md",
+      "bytes": 2688,
+      "sha256": "fd19d628aaa3f15040c3d23815a761b898095c95b722598ca2d0f44f25b41fcb"
+    },
+    {
+      "path": "docs/NSE_SESSION_AND_DATA_AUDIT_V1.md",
+      "bytes": 6254,
+      "sha256": "108ac12c0a661b0bdc8ca0713caf20d5da5a367ea55549943595307c31629563"
+    },
+    {
+      "path": "RESEARCH_COPY_STATUS.md",
+      "bytes": 2239,
+      "sha256": "08f505b1417a3de29c558a84cf4b2059a11388e1855fd05b2533d9deae91dba1"
+    },
+    {
+      "path": "VALIDATION_REPORT.md",
+      "bytes": 12176,
+      "sha256": "c10fc74bdf3e148d80b386380e8c17797f7d43b6c11af4fd7c23350e31f42968"
+    },
+    {
+      "path": "backtests/validation/VALIDATION_REPORT.md",
+      "bytes": 12176,
+      "sha256": "c10fc74bdf3e148d80b386380e8c17797f7d43b6c11af4fd7c23350e31f42968"
+    },
+    {
+      "path": "backtests/validation/dataset_audit.json",
+      "bytes": 1483,
+      "sha256": "254f317bccdd66efd50244a91063fc69cda962275daf9d5694f17159917aa90f"
+    },
+    {
+      "path": "backtests/research_task9/task9_report.md",
+      "bytes": 9652,
+      "sha256": "aad000b07510ded75740c5668e43e5a88b983ea2f09669ceae389bab44e1d808"
+    },
+    {
+      "path": "backtests/research_task9/source_evidence.csv",
+      "bytes": 3494,
+      "sha256": "48c81a219ce1ee731cdcf37b1d1f407bd17c11ef9f0d5c2c9b201fb39fdd43a0"
+    },
+    {
+      "path": "backtests/research_task9/input_hashes.csv",
+      "bytes": 2401,
+      "sha256": "a4d97e94f2be1022a89e9fcd6abc8740e022c38c5a0187bae98a1c72f45d62ca"
+    },
+    {
+      "path": "backtests/research_task9/record_findings.csv",
+      "bytes": 1491665,
+      "sha256": "94e414eb4782e220568e6af37bbc3c2139545c15e955486970eae813d8beeb5c"
+    },
+    {
+      "path": "backtests/research_task9/gap_intervals.csv",
+      "bytes": 10257,
+      "sha256": "8d339675a2ee116bcfaa175362e0c8a243fb4b48906ced61ce096c77cd49be82"
+    },
+    {
+      "path": "backtests/research_task9/session_assessments.csv",
+      "bytes": 2946,
+      "sha256": "dc238ab636169015b227fa5cae2475ab31219d15c00fee5a9f6bd5b0a6821e56"
+    },
+    {
+      "path": "backtests/research_task9/timestamp_profiles.csv",
+      "bytes": 1887,
+      "sha256": "d13f8219256496311b38241c1ad0e7dff2aec0774e7c2ac8bfb5888a777b0f9b"
+    },
+    {
+      "path": "backtests/research_task9/index_volume_summary.csv",
+      "bytes": 2790,
+      "sha256": "0bff625721fe1a2d7a1f0edfc0ac7d3affb5e7ed0eb149c0b134873e9326905c"
+    },
+    {
+      "path": "backtests/data_validation_v1/audit_report.md",
+      "bytes": 3345,
+      "sha256": "ba949e242ba6d9ab1c87266760879afb7b53b670094069fa49dc362859ec01a2"
+    },
+    {
+      "path": "backtests/data_validation_v1/summary.json",
+      "bytes": 1525,
+      "sha256": "eda58ef9bb27eb0580376633af46d130c5470cc881a0e08a5792f13adb7dc3ee"
+    },
+    {
+      "path": "backtests/data_validation_v1/input_hashes.json",
+      "bytes": 393,
+      "sha256": "61a3d70964f5c3c600f2ac6d1f839fedb06329d43f781c6ae71548f5fd02845d"
+    },
+    {
+      "path": "data/audits/nse_cm_session_manifest_v1.json",
+      "bytes": 494020,
+      "sha256": "2ac081ab4ad4e07891ae10727c2d9247f3ed3f55b329274a933aade491d56e16"
+    },
+    {
+      "path": "app/upstox_client.py",
+      "bytes": 1886,
+      "sha256": "59cfb331c2e1c8bece64ff0c256a7f374698b6e1692b3ea5609f7735883e5ac3"
+    },
+    {
+      "path": "app/candle_integrity.py",
+      "bytes": 10393,
+      "sha256": "f0e3374d5fa783fcaa01ce6f7aa437293853d3721af35d0039481e3f5cd42650"
+    },
+    {
+      "path": "app/historical_validation.py",
+      "bytes": 21563,
+      "sha256": "f7defd3263ecdf93cf4c61021a5392871ef3899047d394711bfa613092d91ab4"
+    },
+    {
+      "path": "scripts/download_oos_stock_data.py",
+      "bytes": 3177,
+      "sha256": "d1cf9c4f3eb8bb14aba68d4bf5ea622711333a9b68fc2dc08a4734cf2b6965cb"
+    },
+    {
+      "path": "scripts/download_market_context.py",
+      "bytes": 3112,
+      "sha256": "78cc262f7da140eb572a299c144549a5e3b43b8ffb75a4987951a72ececa81da"
+    },
+    {
+      "path": "scripts/analyze_market_context.py",
+      "bytes": 6747,
+      "sha256": "4e040cc759f7ad20a6db8fd204ae5d893a68512b595e6158e981a1444915668c"
+    },
+    {
+      "path": "extended_historical_robustness_test.py",
+      "bytes": 18314,
+      "sha256": "323a29f992bb476d66699d9a4d755f1719583351f41c0ee482e45d891a796872"
+    },
+    {
+      "path": "strategy_backtest.py",
+      "bytes": 8867,
+      "sha256": "767ed5a01de1920130f94a78e3d2c46192687dcad7aeb7a6ce28b5f0b7399b5d"
+    },
+    {
+      "path": "data/research/extended_historical_robustness_candles.csv",
+      "bytes": 47032720,
+      "sha256": "30924b7f53e295de813b859bc81998e196d9ee33cde64ee83d94585911100065"
+    },
+    {
+      "path": "data/research/extended_historical_robustness_oos_candles.csv",
+      "bytes": 19612316,
+      "sha256": "7a37d5bb6816a2bf2666017df8d54b95d8c75cda6944fea87d86e3405788c2d5"
+    },
+    {
+      "path": "data/research/market_context/india_vix_5min.csv",
+      "bytes": 3445009,
+      "sha256": "0d371fe283e804a458f98a7840f19d221f09790de73ceaab417f5ce62ffa05d8"
+    },
+    {
+      "path": "data/research/market_context/nifty50_5min.csv",
+      "bytes": 3996033,
+      "sha256": "bb8598aa2a127a910afa8ab1d85b1b5e0b85563779e4bb9a6dbde54e9ee15328"
+    },
+    {
+      "path": "data/research/market_context/nifty_bank_5min.csv",
+      "bytes": 3995618,
+      "sha256": "d1b5d7bf152e3b80810710db8647558e7a50d7106fb43e7e7abce363945ff939"
+    },
+    {
+      "path": "data/research/market_context/nifty_it_5min.csv",
+      "bytes": 3995477,
+      "sha256": "193846542acd8bffaa30c22bc639310c31078e59eef0e4695343b8d45ce042aa"
+    },
+    {
+      "path": "data/research/market_context/sensex_5min.csv",
+      "bytes": 4079728,
+      "sha256": "a3b97ce20ab0b932376cd7e7eedbb1fc743dd560c1569557ba6f782d096f063e"
+    }
+  ],
+  "missing_inputs": []
+}

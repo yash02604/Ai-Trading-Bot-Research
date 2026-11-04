@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 from app.v2.ai_led_research import DECISION_CONTRACT_VERSION
-from app.v2.provider import OpenRouterProvider
+from app.v2.provider import DeepSeekProvider
 from app.v2.synthetic_provider_check import (
     SCENARIOS, SYNTHETIC_TEST_TIME, _synthetic_request, build_preflight_report,
     run_synthetic_decisions,
@@ -44,7 +44,7 @@ def decision(action, *, entry_price=None, stop_loss=None, target_price=None,
 
 
 class MockProvider:
-    provider_id = "openrouter-mock"
+    provider_id = "deepseek-mock"
     model_id = "fixture-model"
     timeout_seconds = 1.0
     max_completion_tokens = 64
@@ -97,6 +97,8 @@ def test_four_deterministic_synthetic_scenarios_parse_and_run_python_risk():
                for row in report["scenarios"])
     assert all(row["response_valid"] for row in report["scenarios"])
     assert report["performance_evidence"] is False
+    assert report["status"] == "COMPLETED"
+    assert report["provider_test_passed"] is True
 
 
 def test_invalid_buy_is_rejected_by_python_risk_gate():
@@ -116,6 +118,8 @@ def test_model_substitution_fails_closed_for_all_scenarios():
     assert all(row["decision_action"] == "NO_TRADE" and not row["response_valid"]
                for row in report["scenarios"])
     assert all(row["validation_failure"] == "ModelSubstitutionError" for row in report["scenarios"])
+    assert all(row["failure_stage"] == "model_identity_validation" for row in report["scenarios"])
+    assert all(row["failure_code"] == "model_identity_mismatch" for row in report["scenarios"])
     assert all(row["returned_model_id"] == "different-model" for row in report["scenarios"])
 
 
@@ -151,10 +155,112 @@ def test_provider_errors_do_not_leak_error_text_and_are_not_retried():
     serialized = json.dumps(report)
     assert provider.calls == report["requests_made"] == 4
     assert all(row["decision_action"] == "NO_TRADE" for row in report["scenarios"])
+    assert report["status"] == "COMPLETED_WITH_FAILURES"
+    assert report["provider_test_passed"] is False
+    assert all(row["failure_stage"] == "provider_request" for row in report["scenarios"])
     assert "secret-bearing fake error" not in serialized
 
 
-def test_openrouter_provider_sends_token_cap_and_rejects_oversized_content():
+@pytest.mark.parametrize("error,stage", [
+    (ValueError("sensitive request detail"), "request_submission_or_transport"),
+    (RuntimeError("secret-bearing connection detail"), "request_submission_or_transport"),
+])
+def test_provider_transport_errors_are_classified_without_message_leak(error, stage):
+    class BrokenCompletions:
+        def create(self, **_kwargs):
+            raise error
+
+    provider = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=2,
+        client=SimpleNamespace(chat=SimpleNamespace(completions=BrokenCompletions())))
+    with pytest.raises(type(error)) as caught:
+        provider.complete({"system_prompt": "synthetic", "user_payload": "synthetic"})
+    assert caught.value.provider_stage == stage
+    assert "sensitive request detail" in str(caught.value) or "secret-bearing connection detail" in str(caught.value)
+
+
+def test_http_404_provider_diagnostics_keep_status_and_safe_codes_only():
+    class NotFoundError(Exception):
+        status_code = 404
+        code = "model_not_found"
+        type = "invalid_request_error"
+
+        def __init__(self):
+            super().__init__("Authorization: Bearer secret-value; echoed request payload")
+
+    class BrokenCompletions:
+        def create(self, **_kwargs):
+            raise NotFoundError()
+
+    provider = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=2,
+        client=SimpleNamespace(chat=SimpleNamespace(completions=BrokenCompletions())))
+    report = run(provider)
+    serialized = json.dumps(report)
+    # The integration report carries only safe metadata, never exception text.
+    assert all(row["provider_http_status"] == 404 for row in report["scenarios"])
+    assert all(row["provider_error_code"] == "model_not_found" for row in report["scenarios"])
+    assert all(row["provider_error_type"] == "invalid_request_error" for row in report["scenarios"])
+    assert "secret-value" not in serialized
+    assert "Authorization" not in serialized
+    assert "echoed request payload" not in serialized
+
+    with pytest.raises(NotFoundError) as caught:
+        provider.complete({"system_prompt": "synthetic", "user_payload": "synthetic"})
+    assert caught.value.provider_http_status == 404
+    assert caught.value.provider_error_code == "model_not_found"
+
+
+def test_decision_validation_failure_is_classified_and_status_is_failure():
+    provider = MockProvider([{"malformed": True}] * 4)
+    report = run(provider)
+    assert report["status"] == "COMPLETED_WITH_FAILURES"
+    assert all(row["failure_stage"] == "decision_validation" for row in report["scenarios"])
+    assert all(row["failure_code"] == "invalid_decision" for row in report["scenarios"])
+    assert all(row["validation_failure"] == "ValueError" for row in report["scenarios"])
+    assert report["request_metadata"]["authorization_included"] is False
+
+
+@pytest.mark.parametrize("response,limit,code", [
+    (SimpleNamespace(choices=[]), 100, "empty_response"),
+    (SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=None))]), 100,
+     "missing_content"),
+    (SimpleNamespace(), 100, "unexpected_sdk_structure"),
+    (SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="{}"),
+                                               finish_reason="length")]), 100, "truncated_output"),
+    (SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="x" * 11),
+                                               finish_reason="stop")]), 10, "response_exceeds_byte_limit"),
+    (SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content=""),
+                                               finish_reason="stop")]), 100, "empty_response"),
+])
+def test_provider_response_extraction_has_bounded_diagnostic(response, limit, code):
+    client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(
+        create=lambda **_kwargs: response)))
+    provider = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=2,
+                                  client=client, max_response_bytes=limit)
+    with pytest.raises(ValueError) as caught:
+        provider.complete({"system_prompt": "synthetic", "user_payload": "synthetic"})
+    assert caught.value.provider_stage == "response_extraction"
+    assert caught.value.provider_diagnostic_code == code
+
+
+def test_malformed_response_json_is_classified_without_recording_content():
+    from app.v2.provider import ProviderResult
+
+    class InvalidJsonProvider:
+        provider_id = "deepseek-mock"
+        model_id = "fixture-model"
+
+        def complete(self, _payload):
+            return ProviderResult("sensitive body {", self.provider_id, self.model_id,
+                                  self.model_id, 1.0, finish_reason="stop", response_bytes=15)
+
+    report = run(InvalidJsonProvider())
+    assert report["scenarios"][0]["failure_stage"] == "response_parsing"
+    assert report["scenarios"][0]["failure_code"] == "invalid_json"
+    assert report["scenarios"][0]["response_finish_reason"] == "stop"
+    assert "sensitive body" not in json.dumps(report)
+
+
+def test_deepseek_provider_sends_token_cap_and_rejects_oversized_content():
     captured = {}
 
     class Completions:
@@ -165,18 +271,23 @@ def test_openrouter_provider_sends_token_cap_and_rejects_oversized_content():
                 usage=SimpleNamespace(prompt_tokens=3, completion_tokens=2), model="fixture-model")
 
     client = SimpleNamespace(chat=SimpleNamespace(completions=Completions()))
-    provider = OpenRouterProvider(api_key="unit-test-only", model_id="fixture-model",
+    provider = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model",
         timeout_seconds=2, client=client, max_completion_tokens=12, max_response_bytes=100)
     provider.complete({"system_prompt": "synthetic", "user_payload": "synthetic"})
     assert captured["model"] == "fixture-model"
     assert captured["max_tokens"] == 12
+    assert captured["response_format"] == {"type": "json_object"}
+    assert captured["messages"] == [
+        {"role": "system", "content": "synthetic"},
+        {"role": "user", "content": "synthetic"},
+    ]
 
     large_client = SimpleNamespace(chat=SimpleNamespace(completions=SimpleNamespace(create=lambda **_:
         SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(content="x" * 101))],
                         usage=None, model="fixture-model"))))
-    bounded = OpenRouterProvider(api_key="unit-test-only", model_id="fixture-model",
+    bounded = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model",
         timeout_seconds=2, client=large_client, max_response_bytes=100)
-    with pytest.raises(ValueError, match="byte limit"):
+    with pytest.raises(ValueError, match="response_exceeds_byte_limit"):
         bounded.complete({"system_prompt": "synthetic", "user_payload": "synthetic"})
 
 
@@ -185,15 +296,18 @@ def test_provider_timeout_is_bounded_and_retry_is_disabled(monkeypatch):
     class FakeOpenAI:
         def __init__(self, **kwargs):
             captured.update(kwargs)
-    monkeypatch.setitem(__import__("sys").modules, "openai", SimpleNamespace(OpenAI=FakeOpenAI))
-    provider = OpenRouterProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=5)
+    monkeypatch.setitem(__import__("sys").modules, "openai", SimpleNamespace(
+        OpenAI=FakeOpenAI, DefaultHttpxClient=lambda **kwargs: SimpleNamespace(**kwargs)))
+    provider = DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=5)
     provider._get_client()
     assert captured["timeout"] == 5
     assert captured["max_retries"] == 0
+    assert captured["http_client"].follow_redirects is False
+    assert captured["base_url"] == "https://api.deepseek.com"
     with pytest.raises(ValueError, match="timeout"):
-        OpenRouterProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=21)
+        DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=21)
     with pytest.raises(ValueError, match="timeout"):
-        OpenRouterProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=float("nan"))
+        DeepSeekProvider(api_key="unit-test-only", model_id="fixture-model", timeout_seconds=float("nan"))
 
 
 def test_stale_synthetic_request_fails_before_provider_call():
@@ -217,8 +331,8 @@ def test_stale_synthetic_request_fails_before_provider_call():
 
 def test_missing_or_blank_credential_preflight_is_blocked_without_provider_requests():
     for key in (None, "   "):
-        settings = SimpleNamespace(openrouter_model="openrouter/free",
-                                   openrouter_api_key=key, request_timeout_seconds=10.0)
+        settings = SimpleNamespace(deepseek_model="deepseek-flash",
+                                   deepseek_api_key=key, request_timeout_seconds=10.0)
         report = build_preflight_report(settings=settings, checked_at=NOW)
         assert report["status"] == "BLOCKED"
         assert report["api_key_configured"] is False

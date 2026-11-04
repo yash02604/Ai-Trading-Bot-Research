@@ -1,0 +1,27 @@
+{
+  "cache_hits": 0,
+  "classification": "PROSPECTIVE_OBSERVATION",
+  "decision_id": "d8e8409413020b0adbd2bf03ee7637b0900b68a0020d6c84de5a9448dfe17f49",
+  "historical_backtest": false,
+  "mode": "PROSPECTIVE_PAPER",
+  "model_id": "deepseek-flash",
+  "observation_path": "backtests\\deepseek_prospective_session_05\\observations.jsonl",
+  "outcome_path": "backtests\\deepseek_prospective_session_05\\outcomes.jsonl",
+  "prospective_observation": true,
+  "provider_configuration": {
+    "configured": true,
+    "model_id": "deepseek-flash",
+    "provider_id": null,
+    "retries": 0,
+    "timeout_seconds": 10.0
+  },
+  "provider_request_attempted": false,
+  "provider_response_redacted": null,
+  "provider_skip_reason": "quantitative_baseline_ineligible",
+  "request_attempted": false,
+  "request_budget_used": 0,
+  "settled_outcomes": 0,
+  "snapshot_path": "backtests\\deepseek_prospective_session_05\\snapshots\\RELIANCE_20261030T064054371121Z.json",
+  "status": "COMPLETED",
+  "trade_placement_enabled": false
+}

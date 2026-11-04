@@ -1,0 +1,9 @@
+{
+ "b67856de2a8237dc18b380808656eb8ea1b1d8f35c57a99af56bc3a5d5846f2a": {
+  "confidence": 0.0,
+  "decision": "HOLD",
+  "model": "fixture-model-v1",
+  "provider_failure": true,
+  "reason": "provider failure (RuntimeError)"
+ }
+}

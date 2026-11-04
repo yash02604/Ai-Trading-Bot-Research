@@ -1,0 +1,1 @@
+{"schema_version": "ai-led-offline-paper-v1", "action": "BUY", "proposals": [{"symbol": "RELIANCE", "score": 0.8, "entry_price": 600.0, "stop_loss": 594.0, "target_price": 612.0, "holding_bars": 6}, {"symbol": "HDFCBANK", "score": 0.8, "entry_price": 600.0, "stop_loss": 594.0, "target_price": 612.0, "holding_bars": 6}]}

@@ -1,0 +1,11 @@
+{
+  "14a2ab4613eeaf6dd0739ee2f5803f6bca41c9790c54844871a5e1f0e589e870": {
+    "decision": {
+      "confidence": 0.0,
+      "decision": "HOLD",
+      "reason": "provider failure (TimeoutError)"
+    },
+    "provider_metadata": null,
+    "raw_response": null
+  }
+}

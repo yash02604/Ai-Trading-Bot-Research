@@ -1,0 +1,49 @@
+{
+  "observations": 2,
+  "unique_signals": 1,
+  "collection_start": "2026-10-12T09:25:01+05:30",
+  "collection_end": "2026-10-12T09:25:02+05:30",
+  "valid_quotes": 2,
+  "valid_quote_rate": 1.0,
+  "missing_quotes": 0,
+  "missing_quote_rate": 0.0,
+  "quotes_with_spread": 2,
+  "spread_available_rate": 1.0,
+  "provider_response_age_ms": {
+    "median": 1000.0,
+    "p95": 1000.0
+  },
+  "spread_bps": {
+    "median": 19.98,
+    "p95": 19.98
+  },
+  "bid_depth_missing": 0,
+  "ask_depth_missing": 0,
+  "bid_quantity": {
+    "median": 40.0,
+    "p95": 40
+  },
+  "ask_quantity": {
+    "median": 75.0,
+    "p95": 75
+  },
+  "ask_vs_reference_bps": {
+    "median": 9.990009990009993,
+    "p95": 9.990009990009993
+  },
+  "ask_quantity_sufficiency": {
+    "comparable_observations": 2,
+    "sufficient": 2,
+    "insufficient": 0
+  },
+  "paper_entry_eligible": 2,
+  "paper_entry_eligibility_rate": 1.0,
+  "source_quote_timestamp_available": 0,
+  "quote_reasons": {
+    "valid": 2
+  },
+  "eligibility_reasons": {
+    "simulated_paper_fill": 2
+  },
+  "timestamp_note": "quote_age_ms uses Upstox's response-generated timestamp; source order-book age is not exposed by this endpoint."
+}

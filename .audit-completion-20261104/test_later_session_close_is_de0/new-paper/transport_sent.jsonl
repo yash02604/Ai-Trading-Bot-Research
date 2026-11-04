@@ -1,0 +1,5 @@
+{"kind":"upstox_candles","request_id":"b0feebd54546a0b4c6ce0fa46f8db2145893cc8c6847e9161c23afc015de891c","sent_at_utc":"2026-12-07T15:20:01+05:30","symbol":"RELIANCE","trade_placement_enabled":false}
+{"kind":"upstox_quote","request_id":"7c98aae1f0cfacfef7e95760a424c99fcedc8745270c74e65b0d6db4638fe77e","sent_at_utc":"2026-12-07T15:20:01+05:30","symbol":"RELIANCE","trade_placement_enabled":false}
+{"kind":"upstox_candles","request_id":"ad2a1f29ff98556eb32b4382fe78314df9da7789aeacaf7c5db600dec315c7f1","sent_at_utc":"2026-12-07T15:20:01+05:30","symbol":"HDFCBANK","trade_placement_enabled":false}
+{"kind":"upstox_quote","request_id":"9114e0d502b833d2dc3ac95a30cbd51696315fd0d317a8a9f0e991fee8bdef8a","sent_at_utc":"2026-12-07T15:20:01+05:30","symbol":"HDFCBANK","trade_placement_enabled":false}
+{"kind":"deepseek","request_id":"ac1fb4c4e5d718c58be33f4357a4e7279cafa7347bed1bac1b8725eef5310171","sent_at_utc":"2026-12-07T15:20:01+05:30","symbol":null,"trade_placement_enabled":false}

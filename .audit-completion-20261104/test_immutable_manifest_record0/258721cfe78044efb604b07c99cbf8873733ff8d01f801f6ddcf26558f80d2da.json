@@ -1,0 +1,50 @@
+{
+  "acquisition_request_id": "req-test-uuid",
+  "api_version": "v3",
+  "endpoint": "https://api.upstox.com/v3/historical-candle/NSE_EQ%7CINE000A01000/minutes/5/2025-02-03",
+  "instrument": {
+    "exchange": "NSE",
+    "instrument_key": "NSE_EQ|INE000A01000",
+    "instrument_master_snapshot_sha256": null,
+    "isin": "INE000A01000",
+    "segment": "CM",
+    "symbol": "TEST"
+  },
+  "interval": {
+    "unit": "minutes",
+    "value": 5
+  },
+  "normalized_output_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "normalizer_version": "normalizer-v1",
+  "parser_version": "raw-v1",
+  "provider_id": "upstox",
+  "raw_response_retention": {
+    "enabled": false,
+    "policy_version": "retention-v1",
+    "provider_terms_reviewed": false
+  },
+  "raw_response_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "redacted_parameter_names": [
+    "access_token"
+  ],
+  "request_parameters": {
+    "instrument_key": "NSE_EQ|INE000A01000",
+    "interval": 5
+  },
+  "requested_date_range": {
+    "from_date": "2025-02-03",
+    "to_date": "2025-02-03"
+  },
+  "response": {
+    "http_status": 200,
+    "request_id": "provider-request-id",
+    "status": "SUCCESS"
+  },
+  "retrieved_at_utc": "2026-10-19T12:00:00Z",
+  "retry_metadata": {
+    "attempts": 1,
+    "retry_delays_seconds": []
+  },
+  "schema_version": 1,
+  "session_manifest_version": "nse-cm-2023-12-01_2026-10-01-v2"
+}

@@ -1,0 +1,1 @@
+{"confidence":0.75,"decision":"SELL","partition":"train","reason":"deterministic mock response","request_id":"b67856de2a8237dc18b380808656eb8ea1b1d8f35c57a99af56bc3a5d5846f2a","schema_version":"deepseek-eval-decision-ledger-v1","signal_timestamp":"2025-02-03T12:25:00+05:30","symbol":"SYNTH"}

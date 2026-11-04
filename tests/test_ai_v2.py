@@ -383,7 +383,7 @@ def test_exact_and_beyond_risk_and_capital_boundaries(tmp_path):
 def test_audit_rejects_credential_fields(tmp_path):
     ledger = V2AuditLedger(tmp_path / "audit.sqlite3")
     with pytest.raises(ValueError, match="credential-like"):
-        ledger.append_event("s", "TEST", NOW.isoformat(), {"openrouter_api_key": "no"})
+        ledger.append_event("s", "TEST", NOW.isoformat(), {"deepseek_api_key": "no"})
     ledger.close()
 
 

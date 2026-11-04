@@ -112,18 +112,20 @@ def _write_evidence(path, source):
 
 
 def _ledger(tmp_path, *, count=1, provider=None, second_cutoff=None, second_recorded=None,
-            missing=(), zero_volume=False, allow_model_substitution=False):
+            missing=(), zero_volume=False, allow_model_substitution=False,
+            first_recorded=RECORDED, max_data_age_seconds=300):
     source = _bars(tmp_path / "bars.csv", missing=missing, zero_volume=zero_volume)
     import hashlib
     source_hash = hashlib.sha256(source.read_bytes()).hexdigest()
     registry = StrategyRegistry([StrategyCandidate(STRATEGY, "candidate-v1", "test only")])
     service = AIResearchDecisionService(provider=provider or Provider(), registry=registry,
-                                        allow_model_substitution=allow_model_substitution)
+                                        allow_model_substitution=allow_model_substitution,
+                                        max_data_age_seconds=max_data_age_seconds)
     ledger = V2AuditLedger(tmp_path / "decisions.sqlite3")
     for idx in range(count):
         cutoff = second_cutoff if idx == 1 else SIGNAL
         req = _request(cutoff=cutoff, signal=cutoff, source_hash=source_hash)
-        recorded_text = RECORDED if idx == 0 else (second_recorded or f"{DAY}T09:30:00{IST}")
+        recorded_text = first_recorded if idx == 0 else (second_recorded or f"{DAY}T09:30:00{IST}")
         now = datetime.fromisoformat(recorded_text)
         envelope = service.decide(req, now=now)
         # The historic controller correctly held research-only candidates from paper
@@ -206,6 +208,18 @@ def test_end_to_end_replay_is_causal_costed_and_repeatable(tmp_path):
     repeat_report = json.loads(Path(repeat.report_path).read_text())
     assert repeat.run_id == result.run_id
     assert repeat_report["events_sha256"] == report["events_sha256"]
+
+
+def test_start_labeled_replay_allows_realistic_post_close_recording_delay(tmp_path):
+    recorded = f"{DAY}T09:25:01{IST}"
+    ledger, source, evidence = _ledger(tmp_path, first_recorded=recorded,
+                                       max_data_age_seconds=600)
+    result = _evaluate(tmp_path, ledger=ledger, source=source, evidence=evidence)
+    events = [json.loads(line) for line in Path(result.ledger_path).read_text().splitlines()]
+    proposal = next(event for event in events if event["event_type"] == "TRADE_PROPOSED")
+    fill = next(event for event in events if event["event_type"] == "SIMULATED_FILL")
+    assert proposal["recorded_at"] == recorded
+    assert fill["bar_timestamp"] == f"{DAY}T09:30:00{IST}"
     with pytest.raises(EvaluationBlocked, match="already exists"):
         _evaluate(tmp_path, ledger=ledger, source=source, evidence=evidence)
 
@@ -403,13 +417,14 @@ def test_stale_decision_data_fails_closed(tmp_path):
     registry = StrategyRegistry([StrategyCandidate(STRATEGY, "candidate-v1", "test only")])
     service = AIResearchDecisionService(provider=Provider(), registry=registry, max_data_age_seconds=3600)
     stale = _request(cutoff=f"{DAY}T09:15:00{IST}", source_hash=__import__("hashlib").sha256(source.read_bytes()).hexdigest())
-    late = datetime.fromisoformat(RECORDED)
+    late = datetime.fromisoformat(f"{DAY}T09:25:01{IST}")
     envelope = service.decide(stale, now=late)
     stale_db = V2AuditLedger(tmp_path / "stale.sqlite3")
-    stale_db.append_ai_research_decision("stale-signal", RECORDED, envelope,
+    stale_db.append_ai_research_decision("stale-signal", late.isoformat(), envelope,
                                          GateResult(False, "prior hold"), "HOLD")
     stale_db.close()
-    # Bind unchanged source bytes; evaluation’s 300-second policy is stricter than replay source config.
+    # The start label is 601 seconds old: five minutes for bar formation plus
+    # more than five minutes of post-close delay is stale.
     with pytest.raises(EvaluationBlocked, match="stale"):
         evaluate_recorded_decisions(decision_ledger=tmp_path / "stale.sqlite3",
             source_files={"bars.csv": source}, timestamp_evidence_path=evidence,

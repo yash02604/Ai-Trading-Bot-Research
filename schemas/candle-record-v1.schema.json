@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research.local/schemas/candle-record-v1.schema.json",
+  "title": "Normalized historical candle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source_request_id", "source_row_index", "instrument", "timestamp_original", "timestamp_offset", "timestamp_utc", "timestamp_ist", "interval_minutes", "interval_label", "open", "high", "low", "close", "provider_volume", "open_interest", "adjustment_status", "validation_classification", "validation_reasons"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "source_request_id": {"type": "string", "minLength": 1},
+    "source_row_index": {"type": "integer", "minimum": 0},
+    "instrument": {"type": "object", "required": ["instrument_key"], "properties": {"instrument_key": {"type": "string", "minLength": 1}, "symbol": {"type": ["string", "null"]}, "isin": {"type": ["string", "null"]}, "exchange": {"type": ["string", "null"]}, "segment": {"type": ["string", "null"]}}},
+    "timestamp_original": {"type": "string", "format": "date-time"},
+    "timestamp_offset": {"type": "string", "pattern": "^(Z|[+-][0-9]{2}:?[0-9]{2})$"},
+    "timestamp_utc": {"type": "string", "format": "date-time"},
+    "timestamp_ist": {"type": "string", "format": "date-time"},
+    "interval_minutes": {"type": "integer", "minimum": 1},
+    "interval_label": {"const": "START"},
+    "open": {"type": "number"},
+    "high": {"type": "number"},
+    "low": {"type": "number"},
+    "close": {"type": "number"},
+    "provider_volume": {"type": "number"},
+    "open_interest": {"type": ["number", "null"]},
+    "adjustment_status": {"enum": ["ADJUSTED", "UNADJUSTED", "UNRESOLVED"]},
+    "validation_classification": {"enum": ["VERIFIED_VALID", "VERIFIED_INVALID", "UNRESOLVED"]},
+    "validation_reasons": {"type": "array", "items": {"type": "string"}}
+  }
+}

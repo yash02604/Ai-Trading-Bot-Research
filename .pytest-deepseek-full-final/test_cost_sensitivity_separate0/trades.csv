@@ -1,0 +1,3 @@
+book,symbol,signal_timestamp,entry_timestamp,entry_price,exit_price,quantity,gross_pnl,net_pnl,total_cost,slippage,brokerage,stt,exchange,ipft,sebi,stamp_duty,gst
+portfolio,TEST,2026-10-12T09:20:00+05:30,2026-10-12T09:25:00+05:30,100.0,101.0,10,10.0,6.26587574,3.7341242599999998,1.005,2.01,0.2525,0.061704989999999994,2.0100000000000002e-06,0.00201,0.030000000000000002,0.37290725999999996
+standalone,IGNORED,2026-10-12T09:20:00+05:30,2026-10-12T09:25:00+05:30,100.0,101.0,10,10.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

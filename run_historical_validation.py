@@ -101,7 +101,7 @@ The validator does not fit parameters. The existing 1% stop, six-bar horizon, 1%
 - Risk engine: 1% of current simulated capital maximum planned risk per trade; daily loss limit 2%; one open position globally for portfolio; three trades/day; whole-share position sizing and capital exposure capped to account capital.
 - Stop: 1.0% below entry; no target.
 - Brokerage: Upstox equity intraday ₹20 per executed order or 0.1% of order value, whichever is lower.
-- STT: 0.025% sell side; stamp duty: 0.003% buy side; SEBI turnover fee: ₹10/crore per side; GST: 18% on brokerage/exchange/IPFT charges; NSE turnover charges use a conservative fixed 0.00322% per side (the highest published Upstox schedule shown for the period); IPFT estimated at ₹0.10/lakh turnover for this historical interval.
+- STT: 0.025% sell side; stamp duty: 0.003% buy side; SEBI turnover fee: ₹10/crore per side. GST defaults to 18% on brokerage/exchange/IPFT charges, following the Upstox schedule; a separate option includes SEBI fees in the GST base because an NSE circular also addresses GST on those fees. NSE transaction and IPFT rates are date-dependent in the calculator. Dates before 2024-04-01 fail closed until client transaction pricing is evidenced. Brokerage and 5 bps/side slippage remain assumptions without account-specific historical contract notes or fill data.
 - Slippage: adverse 5 basis points per side, an explicit conservative assumption, not a measured fill spread. Fees use reference turnover; slippage is separately charged on both legs.
 - These are estimates; exact contract-note fees, taxes, exchange/plan differences, liquidity, market impact, and stop-order execution are not modeled.
 - Published charge schedules: [Upstox brokerage and charges](https://upstox.com/brokerage-charges/) and [NSE statutory charges](https://www.nseindia.com/static/invest/first-time-investor-sebi-turnover-fees-stt-other-levies). The 5 bps/side slippage is an assumption, not a published fee.
@@ -167,7 +167,7 @@ Regime coverage days: `{json.dumps(regime_day_counts, sort_keys=True)}`. Zero-tr
 
 ## AI treatment
 
-AI historical replay unavailable/limited. No historical OpenRouter prompts or point-in-time model/provider responses exist, and calling a current model with old candles would introduce temporal leakage. The reported strategy/risk backtest is independent of AI confirmation; actual live signal acceptance may therefore be lower.
+AI historical replay unavailable/limited. No historical AI-provider prompts or point-in-time model/provider responses exist, and calling a current model with old candles would introduce temporal leakage. The reported strategy/risk backtest is independent of AI confirmation; actual live signal acceptance may therefore be lower.
 
 ## Limitations
 

@@ -1,0 +1,40 @@
+{
+  "current_source": {
+    "bytes": 9131,
+    "crlf_count": 228,
+    "path": "app/upstox_client.py",
+    "sha256": "20bf9738577c5e4bf19b04587a609c352514f944bceb0cb0d6df3c5a1ea73580",
+    "snapshot": "current_client.crlf.py.snapshot"
+  },
+  "parent_attestation": {
+    "path": "data/attestations/upstox_client_v1/attestation.json",
+    "sha256": "7fca59d485bcf44fd4eddfef00f52062ed2f4ea9f980c7653f1361fdde9556ef"
+  },
+  "parent_source_sha256": "27ccb06e8777296edfbb2ebc56153dac291e4111d311fa424cc41813e03d9ccb",
+  "review": {
+    "changes": [
+      "Keep get_headers and all four public endpoint bodies unchanged; GET only.",
+      "Replace hidden urllib3 retries with at most three explicit attempts; redirects disabled.",
+      "Spawned killable one-GET worker bounds DNS, headers and streaming body under the monotonic total deadline.",
+      "At most one second of bounded worker cleanup; no background retry loop survives termination.",
+      "Cap response body to 2 MiB; never send original error text or error bodies to parent.",
+      "Retry-After is honored only when valid and within both configured delay and remaining verified acquisition window.",
+      "Revalidate authorization and exchange acquisition window before each physical attempt.",
+      "Preserve sanitized UpstoxRequestError stage/category/status contracts; attempted logical reservations are not refunded."
+    ],
+    "independent_review_approval": false,
+    "operational_trading_approval": false,
+    "reviewer": "Codex scoped source review, 2026-11-02",
+    "tests": [
+      "Offline deadline/worker tests",
+      "Existing authentication, HTTP, JSON and transport diagnostics",
+      "Calendar/attestation tampering and immutable historical audit bindings",
+      "Mocked full reviewed paper transport regressions"
+    ]
+  },
+  "reviewed_diff": {
+    "path": "reviewed_diff.patch",
+    "sha256": "47bf55c6ec175aeb6416552cba2810c0f5fe4a90723d1b4207043ecf10481cc5"
+  },
+  "schema_version": "upstox-client-source-attestation-v2"
+}

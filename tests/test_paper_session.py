@@ -174,6 +174,53 @@ def _mark_latest_candidate(frame, **_kwargs):
     return result
 
 
+def test_delayed_second_quote_expires_first_candidate(tmp_path, monkeypatch):
+    _, now, frame, raw, indices = _candidate_inputs()
+    now += pd.Timedelta(seconds=10)
+    monkeypatch.setattr(paper_session, "calculate_indicators", lambda data: data)
+    monkeypatch.setattr(paper_session, "detect_reversal_candidates", _mark_latest_candidate)
+    store = PaperStore(tmp_path / "delayed.db")
+    frames = {"A": frame, "__raw__A": raw, "B": frame, "__raw__B": raw}
+    later = now + pd.Timedelta(seconds=4)
+
+    def quote(symbol):
+        if symbol == "A":
+            return {**execution_quote(now), "snapshot_at": now - pd.Timedelta(seconds=2)}
+        return execution_quote(later)
+
+    results = PaperSession(store).evaluate(frames, indices, now, execution_quote_provider=quote)
+    assert [r["symbol"] for r in results if r["decision"] == "PAPER_FILL"] == ["B"]
+    assert store.get_position()["entry_time"] == later.isoformat()
+    row = store.db.execute(
+        "SELECT eligibility_reason, simulated_entry_price FROM execution_observations WHERE symbol='A'"
+    ).fetchone()
+    assert tuple(row) == ("quote_expired_before_fill", None)
+    store.close()
+
+
+@pytest.mark.parametrize(("delay", "reason"), [
+    ("5s", "simulated_paper_fill"),
+    ("5.001s", "quote_expired_before_fill"),
+    ("299s", "late_execution_quote"),
+])
+def test_paper_fill_uses_decision_clock(tmp_path, monkeypatch, delay, reason):
+    _, now, frame, raw, indices = _candidate_inputs()
+    monkeypatch.setattr(paper_session, "calculate_indicators", lambda data: data)
+    monkeypatch.setattr(paper_session, "detect_reversal_candidates", _mark_latest_candidate)
+    store = PaperStore(tmp_path / "clock.db")
+    fill_time = now + pd.Timedelta(delay)
+    session = PaperSession(store, clock=lambda: fill_time)
+    session.evaluate({"A": frame, "__raw__A": raw}, indices, now,
+                     execution_quote_provider=lambda symbol: execution_quote(now))
+    assert store.db.execute("SELECT eligibility_reason FROM execution_observations").fetchone()[0] == reason
+    if reason == "simulated_paper_fill":
+        assert store.get_position()["entry_time"] == fill_time.isoformat()
+    else:
+        assert store.get_position() is None
+        assert store.daily_state(now.date(), 100_000)["trades"] == 0
+    store.close()
+
+
 def test_duplicate_signal_is_not_filled_again_after_restart(tmp_path, monkeypatch):
     from app.paper_session import _signal_id
 

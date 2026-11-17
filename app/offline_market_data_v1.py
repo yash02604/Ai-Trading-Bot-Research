@@ -414,7 +414,7 @@ def validate_candle_records(records: list[dict[str, Any]], manifest: dict[str, A
     dates = {entry["date"]: entry for entry in manifest["sessions"]}
     results: list[dict[str, Any]] = []
     duplicate_keys: dict[tuple[str, str], list[int]] = {}
-    parsed_rows: list[tuple[int, dict[str, Any], datetime | None]] = []
+    parsed_rows: list[tuple[int, dict[str, Any], datetime | None, list[str]]] = []
     for idx, original in enumerate(records):
         row = dict(original)
         reasons: list[str] = []
@@ -458,12 +458,12 @@ def validate_candle_records(records: list[dict[str, Any]], manifest: dict[str, A
                 for interval in entry.get("normal_market_intervals", [])
             ):
                 reasons.append("out_of_session_or_unaligned_start_label")
-        parsed_rows.append((idx, row, stamp))
+        parsed_rows.append((idx, row, stamp, reasons))
     for indexes in duplicate_keys.values():
         if len(indexes) > 1:
             for idx in indexes:
-                parsed_rows[idx][1].setdefault("_validation_reasons", []).append("duplicate_instrument_timestamp")
-    for idx, row, stamp in parsed_rows:
+                parsed_rows[idx][3].append("duplicate_instrument_timestamp")
+    for idx, row, stamp, reasons in parsed_rows:
         reasons.extend(row.pop("_validation_reasons", []))
         # Session absence/untrusted calendar is unresolved. All structural,
         # duplicate, and session-rule violations with trusted evidence are invalid.

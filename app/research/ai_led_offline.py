@@ -220,7 +220,7 @@ def _risk_state(state, day):
     return RiskState(math.fsum(losses), int(state["position"] is not None), len(accepted))
 
 
-def _check(state, price, stop, quantity, stamp):
+def _check(state, price, stop, target, quantity, stamp):
     check = _cost_aware_position_check(
         capital=state["config"]["initial_capital"], available_cash=state["cash"],
         entry_price=price, stop_price=stop, quantity=quantity, trade_timestamp=stamp)
@@ -228,6 +228,16 @@ def _check(state, price, stop, quantity, stamp):
         state["cash"], state["config"]["initial_capital"]))), price, stop)
     if quantity > size.quantity:
         check.update(eligible=False, reason="quantity exceeds current RiskEngine maximum")
+    if check["eligible"]:
+        # Use the same reference-price and slippage convention as settlement.
+        fees = estimate_round_trip_costs(price, target, quantity, stamp.date())["total_cost"]
+        net_at_target = (target - price) * quantity - fees
+        if not math.isfinite(net_at_target) or not math.isfinite(fees) or fees < 0:
+            check.update(eligible=False, reason="invalid target cost estimate")
+        else:
+            check.update(estimated_costs_at_target=fees, estimated_net_at_target=net_at_target)
+            if net_at_target <= 0:
+                check.update(eligible=False, reason="target gain does not cover estimated round-trip costs")
     return check
 
 
@@ -252,7 +262,7 @@ def _advance(state, frames, now, calendar=None):
         allowed, _ = check_trade_allowed(RiskConfig(capital=state["config"]["initial_capital"]),
                                         RiskState(_risk_state(state, expected.date()).daily_loss, 0,
                                                   _risk_state(state, expected.date()).trades_today))
-        check = (_check(state, price, pos["stop_loss"], pos["quantity"], expected)
+        check = (_check(state, price, pos["stop_loss"], pos["target_price"], pos["quantity"], expected)
                  if valid and allowed else {"eligible": False, "reason": "invalid or missing actual entry"})
         state["events"].append({"type": "ENTRY_ACCEPTED" if check["eligible"] else "ENTRY_REJECTED",
                                 "decision_id": pos["decision_id"], "timestamp": expected.isoformat(),
@@ -402,7 +412,7 @@ def run_offline_batch(snapshot_paths, *, output_dir, instrument_priority, capita
                 for proposal in ranked:
                     price, stop = proposal["entry_price"], proposal["stop_loss"]
                     size = calculate_position_size(RiskConfig(capital=min(capital, state["cash"])), price, stop)
-                    check = _check(state, price, stop, size.quantity, now)
+                    check = _check(state, price, stop, proposal["target_price"], size.quantity, now)
                     if not entry_authorized:
                         check.update(eligible=False, reason="entry execution window expired during recovery")
                     record["proposals"].append({**proposal, "quantity": size.quantity, "eligibility": check})

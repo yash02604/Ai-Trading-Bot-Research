@@ -36,7 +36,7 @@ def _best_level(levels):
     return None, None
 
 
-def parse_upstox_full_quote(response, received_at, max_age_seconds=5.0):
+def parse_upstox_full_quote(response, received_at, max_age_seconds=5.0, *, expected_instrument_key=None):
     """Parse V3 depth without treating local receipt time as a source timestamp.
 
     Upstox V3's ``timestamp`` is documented as response-generated. The endpoint
@@ -74,6 +74,11 @@ def parse_upstox_full_quote(response, received_at, max_age_seconds=5.0):
         if not isinstance(quote, dict):
             result["quote_reason"] = "malformed_quote_object"
             return result
+        if expected_instrument_key is not None:
+            identities = [quote[field] for field in ("instrument_token", "instrument_key") if field in quote]
+            if not identities or any(key != expected_instrument_key for key in identities):
+                result["quote_reason"] = "instrument_identity_mismatch"
+                return result
 
         raw_timestamp = quote.get("timestamp")
         if raw_timestamp is None:
@@ -126,6 +131,8 @@ def parse_upstox_full_quote(response, received_at, max_age_seconds=5.0):
 
         if timestamp_error:
             result["quote_reason"] = timestamp_error
+        elif result["spread_reason"] == "crossed_market":
+            result["quote_reason"] = "crossed_market"
         elif result["ask_price"] is None:
             result["quote_reason"] = "missing_ask_depth"
         else:

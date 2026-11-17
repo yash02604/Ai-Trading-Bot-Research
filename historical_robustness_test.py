@@ -1,6 +1,7 @@
 import pandas as pd
 
 from app.upstox_client import get_historical_candles
+from app.candle_integrity import merge_raw_candle_batches
 from app.market_analysis import calculate_indicators
 from app.reversal_detector import detect_reversal_candidates
 from strategy_backtest import (
@@ -102,15 +103,8 @@ def collect_early_historical_candles(instrument_key):
     if not all_candles:
         return []
 
-    unique_candles = {
-        candle[0]: candle
-        for candle in all_candles
-    }
-
-    return [
-        unique_candles[timestamp]
-        for timestamp in sorted(unique_candles)
-    ]
+    merged, _ = merge_raw_candle_batches([("historical", all_candles)], instrument_key)
+    return merged
 
 
 def build_signals():

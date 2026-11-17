@@ -1,4 +1,5 @@
 from app.upstox_client import get_historical_candles
+from app.candle_integrity import merge_raw_candle_batches
 from backtester import Backtester
 from app.reversal_detector import detect_reversal_candidates
 
@@ -56,15 +57,8 @@ def collect_historical_candles(instrument_key):
     if not all_candles:
         return []
 
-    unique_candles = {
-        candle[0]: candle
-        for candle in all_candles
-    }
-
-    return [
-        unique_candles[timestamp]
-        for timestamp in sorted(unique_candles)
-    ]
+    merged, _ = merge_raw_candle_batches([("historical", all_candles)], instrument_key)
+    return merged
 
 
 def simulate_trade(df, signal_index, stop_pct):

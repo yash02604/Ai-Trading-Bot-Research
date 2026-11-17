@@ -311,10 +311,11 @@ class _ReviewedRun:
         if type(data) is not dict or len(data) != 1:
             raise guarded.GuardedBatchError("invalid_quote_identity")
         item = next(iter(data.values()))
-        if (type(item) is not dict or item.get("instrument_token", item.get("instrument_key")) != core.STOCKS[symbol]
-                or pd.Timestamp(item.get("timestamp")).tzinfo is None):
+        if type(item) is not dict or pd.Timestamp(item.get("timestamp")).tzinfo is None:
             raise guarded.GuardedBatchError("invalid_quote_identity_or_timestamp")
-        parsed = parse_upstox_full_quote(response, _utc_now())
+        parsed = parse_upstox_full_quote(response, _utc_now(), expected_instrument_key=core.STOCKS[symbol])
+        if parsed["quote_reason"] == "instrument_identity_mismatch":
+            raise guarded.GuardedBatchError("invalid_quote_identity_or_timestamp")
         if parsed["quote_valid"] is not True or parsed["spread_available"] is not True:
             raise guarded.GuardedBatchError("invalid_or_stale_quote")
         return {"instrument_key": core.STOCKS[symbol], "provider_timestamp": parsed["provider_timestamp"].isoformat(),

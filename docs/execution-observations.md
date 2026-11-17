@@ -28,15 +28,14 @@ no position or trade-count increment is committed.
 | `bid_price`, `bid_quantity`, `ask_price`, `ask_quantity` | First valid positive-price, positive-quantity levels in the API's bid/ask depth arrays. |
 | `spread_price`, `spread_bps`, `spread_available`, `spread_reason` | Ask minus bid and spread divided by midpoint; only available for valid, non-crossed two-sided depth. |
 | `quote_age_ms` | Local receipt minus provider response timestamp. It is not verified source-book age. |
-| `quote_valid`, `quote_reason` | Existing paper-entry freshness/ask validity result and the reason when invalid. A bid is not required by the existing simulated-fill gate. |
-| `paper_entry_eligible`, `eligibility_reason` | Outcome after the existing context, duplicate, risk, and quantity gates. |
+| `quote_valid`, `quote_reason` | Quote validity at receipt. The runner requires the requested instrument, a fresh provider timestamp and a positive ask with quantity. If a bid is present, it must be at or below the ask. |
+| `paper_entry_eligible`, `eligibility_reason` | Outcome after context, duplicate, risk, quantity and timing checks. A quote that was valid at receipt can expire before the simulated fill. |
 | `simulated_entry_price`, `simulated_quantity` | Populated only for an accepted simulated paper fill. |
 
-The parser follows the existing five-second provider-timestamp freshness check
-and positive ask-price/quantity requirement. It does not treat local receipt
-time as source time. Upstox documents V3 `data.timestamp` as the time the
-response was generated, and `depth.buy` / `depth.sell` as bid / ask levels; it
-does not document an independent order-book timestamp in this response:
+At the simulated fill, the runner checks that the next five-minute candle is
+still open and that at most five seconds have elapsed since the provider timestamp.
+Upstox defines V3 `data.timestamp` as the response generation time. The age
+of the individual bid and ask levels remains unknown.
 [Upstox Full Market Quotes V3](https://upstox.com/developer/api-documentation/get-full-market-quote-v3/).
 
 ## Synthetic example

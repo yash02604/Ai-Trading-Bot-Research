@@ -12,12 +12,16 @@ def _candle(timestamp, close=100.0):
     return [timestamp, close, close + 1, close - 1, close, 1000, 0]
 
 
-def _historical_candles():
-    start = pd.Timestamp("2026-09-30 09:15:00+05:30")
-    return [
-        _candle((start + pd.Timedelta(minutes=5 * index)).isoformat())
-        for index in range(35)
-    ]
+def _historical_candles(today=NOW):
+    calendar = signal_monitor.OfflineSessionCalendar(signal_monitor.CALENDAR_PATH)
+    labels, sessions = [], 0
+    for offset in range(1, 15):
+        previous = signal_monitor._session_labels(calendar, today.normalize() - pd.Timedelta(days=offset))
+        labels = previous + labels
+        sessions += bool(previous)
+        if sessions >= 2 and len(labels) >= 36:
+            return [_candle(stamp.isoformat()) for stamp in labels]
+    raise AssertionError("fixture calendar insufficient")
 
 
 def _monitor(
@@ -76,6 +80,7 @@ def _monitor(
         intraday_fetcher=fetch_intraday,
         historical_fetcher=fetch_history,
         output=messages.append,
+        offline=True,
     )
     return monitor, messages, history_calls, intraday
 
@@ -138,7 +143,7 @@ def test_same_completed_candle_is_alerted_only_once(monkeypatch):
     first_alerts = monitor.scan_once(NOW)
     second_alerts = monitor.scan_once(NOW + pd.Timedelta(minutes=1))
 
-    assert len(first_alerts) == 1
+    assert len(first_alerts) == 1, (monitor.statuses, messages)
     assert second_alerts == []
     assert sum("FROZEN SIGNAL DETECTED" in message for message in messages) == 1
     assert len(history_calls) == 1
@@ -209,7 +214,7 @@ def _offline_monitor(*, now=NOW, history=None, intraday=None, calendar=None):
 
     monitor = SignalMonitor(stocks={"TEST": "NSE_EQ|TEST"}, calendar=calendar,
                             intraday_fetcher=lambda *a, **k: {"data": {"candles": intraday}},
-                            historical_fetcher=fetch_history, output=messages.append)
+                            historical_fetcher=fetch_history, output=messages.append, offline=True)
     return monitor, history, intraday, requests, messages
 
 
@@ -225,10 +230,11 @@ def test_history_failure_then_recovery_with_real_indicators(failure):
     monitor, history, intraday, requests, messages = _offline_monitor()
     good = monitor.historical_fetcher
     attempts = []
+    recovering = [False]
 
     def recover(*args, **kwargs):
         attempts.append(1)
-        if len(attempts) > 1:
+        if recovering[0]:
             return good(*args, **kwargs)
         if failure == "transport":
             raise TimeoutError("temporary")
@@ -259,15 +265,17 @@ def test_history_failure_then_recovery_with_real_indicators(failure):
     assert "TEST" not in monitor.historical_cache_date
     assert "TEST" not in monitor.historical_cache
     assert "TEST" not in monitor.last_processed
-    assert monitor.statuses["TEST"]["status"] in {"SCAN_FAILED", "CONFLICTING_CANDLES"}
+    assert monitor.statuses["TEST"]["status"] in {"SCAN_FAILED", "CONFLICTING_CANDLES", "INCOMPLETE_HISTORY"}
     if failure == "short":
         monitor.historical_fetcher = recover
+    failed_attempts = len(attempts)
+    recovering[0] = True
     intraday.append(_candle("2026-10-01T09:25:00+05:30", 101.2))
     assert monitor.scan_once(NOW + pd.Timedelta(minutes=5)) == []
-    assert len(attempts) == 2
+    assert len(attempts) == failed_attempts + 1
     assert len(requests) == 1
     assert monitor.historical_cache_date["TEST"] == NOW.date()
-    assert len(monitor.historical_cache["TEST"]) == 35
+    assert len(monitor.historical_cache["TEST"]) == len(monitor._required_history(NOW.date()))
     assert monitor.last_processed["TEST"] == pd.Timestamp("2026-10-01T09:25:00+05:30")
     assert monitor.statuses["TEST"]["status"] == "EVALUATED"
     assert "0 frozen signals" in messages[-1]
@@ -341,7 +349,7 @@ def test_real_indicators_identical_duplicates_order_and_repeat_are_deterministic
         intraday.reverse()
     assert monitor.scan_once(NOW) == []
     assert monitor.last_processed["TEST"] == NOW - pd.Timedelta(minutes=5)
-    assert len(monitor.historical_cache["TEST"]) == 35
+    assert len(monitor.historical_cache["TEST"]) == len(monitor._required_history(NOW.date()))
     assert monitor.statuses["TEST"]["status"] == "EVALUATED"
     assert messages == ["[09:25] Scan complete - 0 frozen signals."]
     assert monitor.scan_once(NOW) == []
@@ -370,9 +378,7 @@ def test_calendar_holiday_weekend_blocked_muhurat_and_unknown_fail_closed(day):
 
 def _closing_monitor(monkeypatch, day="2026-12-08", close="15:30", real=False):
     now = pd.Timestamp(f"{day}T{close}:00+05:30")
-    history_day = "2026-12-07" if day == "2026-12-08" else "2026-09-30"
-    history = [_candle(t.isoformat()) for t in pd.date_range(
-        f"{history_day}T09:15:00+05:30", periods=40, freq="5min")]
+    history = _historical_candles(now)
     monitor, history, intraday, requests, messages = _offline_monitor(now=now, history=history)
     final = intraday.pop()
     if not real:

@@ -86,7 +86,7 @@ def _execution_quote_is_usable(quote, now):
         quantity = int(quote["quantity"])
         return (math.isfinite(price) and price > 0 and quantity > 0 and
                 snapshot_at <= observed_at <= now and
-                now - observed_at <= MAX_EXECUTION_QUOTE_AGE)
+                now - snapshot_at <= MAX_EXECUTION_QUOTE_AGE)
     except (KeyError, TypeError, ValueError, OverflowError):
         return False
 
@@ -169,9 +169,10 @@ def daily_limit_reason(daily):
 
 
 class PaperSession:
-    def __init__(self, store=None, initial_capital=100_000.0):
+    def __init__(self, store=None, initial_capital=100_000.0, *, clock=None):
         self.store = store or PaperStore()
         self.initial_capital = initial_capital
+        self.clock = clock
 
     def _record_execution_observation(self, signal_time, symbol, entry_candle_time,
                                       reference_price, quote, now, eligible,
@@ -222,7 +223,7 @@ class PaperSession:
 
         quote_valid = bool(quote.get("quote_valid", False))
         if quote and "quote_valid" not in quote:
-            quote_valid = _execution_quote_is_usable(quote, now)
+            quote_valid = _execution_quote_is_usable(quote, observed_at)
         quote_reason = quote.get("quote_reason")
         if quote_error:
             quote_reason = f"quote_request_error:{quote_error}"
@@ -377,6 +378,7 @@ class PaperSession:
                     except Exception as exc:
                         quote_error = getattr(exc, "error_type", type(exc).__name__)
                         quote_error_time = getattr(exc, "observed_at", now)
+                        now = max(now, _stamp(quote_error_time))
                         self.store.record_audit(
                             _stamp(quote_error_time).isoformat(), "execution_quote_error",
                             f"{symbol}:{quote_error}",
@@ -399,6 +401,8 @@ class PaperSession:
                 if not _execution_quote_is_usable(quote, now):
                     self.store.record_audit(now.isoformat(), "unavailable_execution_price", f"{symbol}:{expected.isoformat()}")
                     unavailable_reason = (quote.get("quote_reason") if isinstance(quote, dict) else None)
+                    if unavailable_reason == "valid":
+                        unavailable_reason = "quote_expired_before_fill"
                     self._record_execution_observation(
                         signal_time, symbol, expected, reference_price, quote, now, False,
                         unavailable_reason or (f"quote_request_error:{quote_error}" if quote_error
@@ -410,6 +414,7 @@ class PaperSession:
         for candidate_index, (signal_time, symbol, signal, reference_price, quote, quote_error) in enumerate(
             sorted(candidates, key=lambda x: (x[0], x[1]))
         ):
+            expected = signal_time + BAR
             sid = _signal_id(symbol, signal_time)
             seen = self.store.db.execute("SELECT 1 FROM decisions WHERE signal_id=?", (sid,)).fetchone()
             if seen:
@@ -458,6 +463,18 @@ class PaperSession:
                 self.store.record_decision(sid, signal_time.isoformat(), symbol, "rejected", reason, {})
                 self.store.commit()
                 decisions.append({"decision": "REJECTED", "symbol": symbol, "reason": reason})
+                continue
+            # Other symbols' requests and our own context/risk checks take time.
+            # Recheck the selected ask at the simulated execution instant.
+            if self.clock is not None:
+                now = max(now, _stamp(self.clock()))
+            if not (expected <= now < expected + BAR) or not _execution_quote_is_usable(quote, now):
+                reason = "late_execution_quote" if now >= expected + BAR else "quote_expired_before_fill"
+                self.store.record_audit(now.isoformat(), reason, f"{symbol}:{expected.isoformat()}")
+                self._record_execution_observation(
+                    signal_time, symbol, expected, reference_price, quote, now, False, reason,
+                )
+                self.store.commit()
                 continue
             pos = {"signal_id": sid, "symbol": symbol, "quantity": size.quantity,
                    "entry_price": entry, "entry_reference_price": reference_price,
@@ -572,7 +589,7 @@ def run():
     RiskConfig(capital=settings.paper_initial_capital)
     indexes = _index_keys()
     store = PaperStore()
-    runner = PaperSession(store, settings.paper_initial_capital)
+    runner = PaperSession(store, settings.paper_initial_capital, clock=lambda: datetime.now(TZ))
     print("Paper-only V1 session started. Upstox access is read-only; fills are simulated paper fills.", flush=True)
     scan_number = 0
     try:
@@ -646,6 +663,7 @@ def run():
                     return parse_upstox_full_quote(
                         quote_response, received_at,
                         max_age_seconds=MAX_EXECUTION_QUOTE_AGE.total_seconds(),
+                        expected_instrument_key=STOCKS[symbol],
                     )
 
                 for result in runner.evaluate(frames, idx_frames, now, stock_observed_at, execution_quote):

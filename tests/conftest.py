@@ -15,6 +15,17 @@ _GET = requests.Session.get
 
 
 @pytest.fixture(autouse=True)
+def isolated_persistent_logs_and_monitor_state(tmp_path, monkeypatch):
+    from app import trade_logger
+    import signal_monitor
+    root = tmp_path / "isolated-logs"
+    monkeypatch.setattr(trade_logger, "LOG_DIR", str(root))
+    monkeypatch.setattr(trade_logger, "LOG_FILE", str(root / "paper_trades.csv"))
+    monkeypatch.setattr(trade_logger, "DECISION_LOG_FILE", str(root / "decisions.jsonl"))
+    monkeypatch.setattr(signal_monitor, "DEFAULT_STATE_PATH", root / "monitor/checkpoint.json")
+
+
+@pytest.fixture(autouse=True)
 def no_external_sockets(monkeypatch):
     def denied(*args, **kwargs):
         raise AssertionError("offline tests cannot open external sockets")

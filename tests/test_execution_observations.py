@@ -69,12 +69,30 @@ def test_parse_valid_two_sided_depth_and_spread_units():
         (quote_response((OBSERVED - pd.Timedelta(seconds=6)).isoformat()), "stale_provider_timestamp"),
         (quote_response((OBSERVED + pd.Timedelta(seconds=1)).isoformat()), "future_provider_timestamp"),
         (quote_response(OBSERVED.isoformat(), ask=0, ask_quantity=0), "missing_ask_depth"),
+        (quote_response(OBSERVED.isoformat(), bid=101, ask=100), "crossed_market"),
     ],
 )
 def test_invalid_timestamp_or_ask_data_fails_closed(response, reason):
     result = parse_upstox_full_quote(response, OBSERVED)
     assert result["quote_valid"] is False
     assert result["quote_reason"] == reason
+
+
+@pytest.mark.parametrize(("identity", "valid"), [
+    ({"instrument_token": "expected"}, True),
+    ({"instrument_key": "expected"}, True),
+    ({}, False),
+    ({"instrument_token": "different"}, False),
+    ({"instrument_token": "expected", "instrument_key": "different"}, False),
+])
+def test_requested_instrument_matches_quote_body(identity, valid):
+    response = quote_response(OBSERVED.isoformat())
+    response["data"]["NSE_EQ:TEST"].update(identity)
+    result = parse_upstox_full_quote(response, OBSERVED, expected_instrument_key="expected")
+    assert result["quote_valid"] is valid
+    if not valid:
+        assert result["quote_reason"] == "instrument_identity_mismatch"
+        assert result["price"] is None
 
 
 def test_missing_bid_is_recorded_without_changing_existing_ask_validity():

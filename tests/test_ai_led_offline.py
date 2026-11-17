@@ -175,6 +175,24 @@ def test_configurable_capital_and_immutable_resume(tmp_path, capital):
     assert (tmp_path / "account" / "ai_led_offline_state.json").read_bytes() == before
 
 
+def test_after_cost_target_filters_top_proposal_and_rechecks_entry(tmp_path):
+    paths, now = batch(tmp_path)
+    ranked = [proposal(score=0.95, target_price=601), proposal("HDFCBANK", target_price=603, stop_loss=598)]
+    result = run(tmp_path, paths, now, provider(ranked))
+    rejected, selected = [p["eligibility"] for p in result["decision"]["proposals"]]
+    assert rejected["estimated_net_at_target"] < 0 < selected["estimated_net_at_target"]
+    assert result["decision"]["selected_symbol"] == "HDFCBANK"
+
+    def higher_entry(body):
+        body["candles"][-1].update(open=602, high=603)
+    later, clock = batch(tmp_path, count=37, mutate=higher_entry)
+    result = run(tmp_path, later, clock, provider([]))
+    event = state(tmp_path)["events"][0]
+    assert event["type"] == "ENTRY_REJECTED"
+    assert event["cost_eligibility"]["estimated_net_at_target"] < 0
+    assert result["position"] is None and result["available_cash"] == 1000
+
+
 def test_actual_entry_rejection_clears_pending_without_quota(tmp_path):
     paths, now = batch(tmp_path)
     run(tmp_path, paths, now)

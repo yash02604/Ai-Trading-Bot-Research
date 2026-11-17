@@ -5,6 +5,7 @@ from app.upstox_client import get_historical_candles
 from backtester import Backtester
 from app.reversal_detector import detect_reversal_candidates
 from stop_loss_backtest import simulate_stop_loss
+from app.candle_integrity import merge_raw_candle_batches
 
 
 # 14-stock universe. Instrument keys were verified with Upstox.
@@ -61,8 +62,10 @@ def collect_historical_candles(instrument_key):
         print(f"    {date}: {len(candles)} candles")
         all_candles.extend(candles)
 
-    unique = {candle[0]: candle for candle in all_candles}
-    return [unique[t] for t in sorted(unique)]
+    if not all_candles:
+        return []
+    merged, _ = merge_raw_candle_batches([("expanded-history", all_candles)], instrument_key)
+    return merged
 
 
 def build_dataframe(symbol, instrument_key):
